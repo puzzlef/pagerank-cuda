@@ -10,23 +10,19 @@ using std::vector;
 // VERTICES
 // --------
 
-template <class G>
-auto vertices(const G& x) {
-  vector<int> a;
+template <class G, class F>
+auto vertices(const G& x, F fn) {
+  using K = decltype(fn(0));
+  vector<K> a;
   a.reserve(x.order());
   for (int u : x.vertices())
-    a.push_back(u);
+    a.push_back(fn(u));
   return a;
 }
 
-
-template <class G, class F>
-auto verticesBy(const G& x, F fm) {
-  auto a = vertices(x);
-  sort(a.begin(), a.end(), [&](int u, int v) {
-    return fm(u) < fm(v);
-  });
-  return a;
+template <class G>
+auto vertices(const G& x) {
+  return vertices(x, [](int u) { return u; });
 }
 
 
@@ -35,70 +31,84 @@ auto verticesBy(const G& x, F fm) {
 // VERTEX-DATA
 // -----------
 
-template <class G, class J>
-auto vertexData(const G& x, J&& ks, int N) {
-  using V = typename G::TVertex;
+template <class G, class J, class F>
+auto vertexData(const G& x, J&& ks, F fn) {
+  using V = decltype(fn(0));
   vector<V> a;
-  if (N>0) a.reserve(N);
+  a.reserve(x.order());
   for (int u : ks)
-    a.push_back(x.vertexData(u));
+    a.push_back(fn(u));
   return a;
 }
 
 template <class G, class J>
 auto vertexData(const G& x, J&& ks) {
-  return vertexData(x, ks, csize(ks));
+  return vertexData(x, ks, [&](int u) { return x.vertexData(u); });
 }
 
 template <class G>
-auto vertexData(G& x) {
-  return vertexData(x, x.vertices(), x.order());
+auto vertexData(const G& x) {
+  return vertexData(x, x.vertices());
 }
 
 
 
 
-// VERTEX-CONTAINER
-// ----------------
+// CONTAINER
+// ---------
+
+template <class G, class T>
+auto createContainer(const G& x, const T& _) {
+  return vector<T>(x.span());
+}
+
+template <class G, class T>
+auto createCompressedContainer(const G& x, const T& _) {
+  return vector<T>(x.order());
+}
+
 
 template <class G, class T, class J>
-auto vertexContainer(const G& x, const vector<T>& vs, J&& ks) {
-  auto a = x.vertexContainer(T()); int i = 0;
-  for (auto u : ks)
-    a[u] = vs[i++];
+void decompressContainer(vector<T>& a, const G& x, const vector<T>& vs, J&& ks) {
+  scatter(a, vs, ks);
+}
+
+template <class G, class T>
+void decompressContainer(vector<T>& a, const G& x, const vector<T>& vs) {
+  decompressContainer(a, x, vs, x.vertices());
+}
+
+template <class G, class T, class J>
+auto decompressContainer(const G& x, const vector<T>& vs, J&& ks) {
+  auto a = createContainer(x, T());
+  decompressContainer(a, x, vs, ks);
   return a;
 }
 
 template <class G, class T>
-auto vertexContainer(const G& x, const vector<T>& vs) {
-  return vertexContainer(x, vs, x.vertices());
+auto decompressContainer(const G& x, const vector<T>& vs) {
+  return decompressContainer(x, vs, x.vertices());
 }
 
 
+template <class G, class T, class J>
+void compressContainer(vector<T>& a, const G& x, const vector<T>& vs, J&& ks) {
+  gather(a, vs, ks);
+}
 
+template <class G, class T>
+void compressContainer(vector<T>& a, const G& x, const vector<T>& vs) {
+  return compressContainer(a, x, vs, x.vertices());
+}
 
-// SOURCE-OFFSETS
-// --------------
-
-template <class G, class J>
-auto sourceOffsets(const G& x, J&& ks, int N) {
-  int i = 0;
-  vector<int> a;
-  if (N>0) a.reserve(N+1);
-  for (auto u : ks) {
-    a.push_back(i);
-    i += x.degree(u);
-  }
-  a.push_back(i);
+template <class G, class T, class J>
+auto compressContainer(const G& x, const vector<T>& vs, J&& ks) {
+  auto a = createCompressedContainer(x, T());
+  compressContainer(a, x, vs, ks);
   return a;
 }
 
-template <class G, class J>
-auto sourceOffsets(const G& x, J&& ks) {
-  return sourceOffsets(x, ks, csize(ks));
-}
-
-template <class G>
-auto sourceOffsets(const G& x) {
-  return sourceOffsets(x, x.vertices(), x.order());
+template <class G, class T>
+auto compressContainer(const G& x, const vector<T>& vs) {
+  return compressContainer(x, vs, x.vertices());
 }

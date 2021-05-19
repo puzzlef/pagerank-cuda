@@ -3,6 +3,7 @@
 #include "_main.hxx"
 #include "vertices.hxx"
 #include "edges.hxx"
+#include "csr.hxx"
 #include "pagerank.hxx"
 
 using std::swap;
@@ -27,19 +28,19 @@ void pagerankFactor(vector<T>& a, const vector<int>& vfrom, const vector<int>& e
 }
 
 template <class T>
-void pagerankSeqOnce(vector<T>& a, const vector<T>& c, const vector<int>& vfrom, const vector<int>& efrom, const vector<int>& vdata, int N, T c0) {
+void pagerankCalculate(vector<T>& a, const vector<T>& c, const vector<int>& vfrom, const vector<int>& efrom, const vector<int>& vdata, int N, T c0) {
   for (int v=0; v<N; v++)
     a[v] = c0 + sumAt(c, slice(efrom, vfrom[v], vfrom[v+1]));
 }
 
 template <class T>
 int pagerankSeqLoop(vector<T>& a, vector<T>& r, const vector<T>& f, vector<T>& c, const vector<int>& vfrom, const vector<int>& efrom, const vector<int>& vdata, int N, T p, T E, int L) {
-  int l = 0;
+  int l = 1;
   T e0 = T();
   for (; l<L; l++) {
     T c0 = pagerankTeleport(r, vfrom, efrom, vdata, N, p);
     multiply(c, r, f);
-    pagerankSeqOnce(a, c, vfrom, efrom, vdata, N, c0);
+    pagerankCalculate(a, c, vfrom, efrom, vdata, N, c0);
     T e1 = absError(a, r);
     if (e1 < E || e1 == e0) break;
     swap(a, r);
@@ -73,5 +74,5 @@ PagerankResult<T> pagerankSeq(const G& xt, const vector<T> *q=nullptr, PagerankO
   int  N     = xt.order();
   vector<T> a(N), r(N), f(N), c(N);
   float t = measureDuration([&]() { l = pagerankSeqCore(a, r, f, c, vfrom, efrom, vdata, N, q, p, E, L); }, o.repeat);
-  return {vertexContainer(xt, a), l, t};
+  return {decompressContainer(xt, a), l, t};
 }

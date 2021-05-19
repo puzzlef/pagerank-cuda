@@ -1,11 +1,18 @@
 #pragma once
 #include <vector>
+#include <ostream>
+#include <iostream>
 #include "_main.hxx"
 
 using std::vector;
+using std::ostream;
+using std::cout;
 
 
 
+
+// DI-GRAPH
+// --------
 
 template <class V=NONE, class E=NONE>
 class DiGraph {
@@ -98,9 +105,31 @@ class DiGraph {
     vex[u] = false;
     N--;
   }
-
-  // Generate operations
-  public:
-  template <class T>
-  auto vertexContainer(T _) const { return vector<T>(s()); }
 };
+
+
+
+
+// DI-GRAPH PRINT
+// --------------
+
+
+template <class V, class E>
+void write(ostream& a, const DiGraph<V, E>& x, bool all=false) {
+  a << "order: " << x.order() << " size: " << x.size();
+  if (!all) { a << " {}"; return; }
+  a << " {\n";
+  for (int u : x.vertices()) {
+    a << "  " << u << " ->";
+    for (int v : x.edges(u))
+      a << " " << v;
+    a << "\n";
+  }
+  a << "}";
+}
+
+template <class V, class E>
+void print(const DiGraph<V, E>& x, bool all=false) { write(cout, x, all); }
+
+template <class V, class E>
+void println(const DiGraph<V, E>& x, bool all=false) { print(x, all); cout << "\n"; }

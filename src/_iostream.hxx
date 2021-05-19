@@ -49,23 +49,8 @@ void write(ostream& a, const vector<T>& x) {
 template <class T>
 void write(ostream& a, const vector<vector<T>>& x) {
   a << "{\n";
-  for (auto& v : x) {
+  for (const auto& v : x) {
     a << "  "; write(a, v);
-  }
-  a << "}";
-}
-
-
-template <class G>
-void write(ostream& a, const G& x, bool all=false) {
-  a << "order: " << x.order() << " size: " << x.size();
-  if (!all) { a << " {}"; return; }
-  a << " {\n";
-  for (int u : x.vertices()) {
-    a << "  " << u << " ->";
-    for (int v : x.edges(u))
-      a << " " << v;
-    a << "\n";
   }
   a << "}";
 }
@@ -86,10 +71,6 @@ template <class T>
 void print(const vector<vector<T>>& x) { write(cout, x); }
 
 
-template <class G>
-void print(const G& x, bool all=false) { write(cout, x, all); }
-
-
 
 
 // PRINTLN
@@ -103,7 +84,3 @@ void println(const vector<T>& x) { print(x); cout << "\n"; }
 
 template <class T>
 void println(const vector<vector<T>>& x) { print(x); cout << "\n"; }
-
-
-template <class G>
-void println(const G& x, bool all=false) { print(x, all); cout << "\n"; }
