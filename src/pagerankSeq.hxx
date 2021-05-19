@@ -36,13 +36,12 @@ void pagerankCalculate(vector<T>& a, const vector<T>& c, const vector<int>& vfro
 template <class T>
 int pagerankSeqLoop(vector<T>& a, vector<T>& r, const vector<T>& f, vector<T>& c, const vector<int>& vfrom, const vector<int>& efrom, const vector<int>& vdata, int N, T p, T E, int L) {
   int l = 1;
-  T e0 = T();
   for (; l<L; l++) {
     T c0 = pagerankTeleport(r, vfrom, efrom, vdata, N, p);
     multiply(c, r, f);
     pagerankCalculate(a, c, vfrom, efrom, vdata, N, c0);
     T e1 = absError(a, r);
-    if (e1 < E || e1 == e0) break;
+    if (e1 < E) break;
     swap(a, r);
     e0 = e1;
   }

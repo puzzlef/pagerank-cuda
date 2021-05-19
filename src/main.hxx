@@ -8,3 +8,4 @@
 #include "mtx.hxx"
 #include "pagerank.hxx"
 #include "pagerankSeq.hxx"
+#include "pagerankCuda.hxx"

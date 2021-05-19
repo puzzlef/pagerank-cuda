@@ -10,6 +10,15 @@ using std::exit;
 
 
 
+// LAUNCH CONFIG
+// -------------
+
+#define GRID_LIMIT  65535
+#define BLOCK_LIMIT 1024
+
+
+
+
 // TRY
 // ---
 // Log error if CUDA function call fails.
