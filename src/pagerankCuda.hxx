@@ -30,14 +30,14 @@ __global__ void pagerankThreadKernel(T *a, T *r, T *c, int *vfrom, int *efrom, T
   for (int v=B*b+t; v<N; v+=G*B) {
     int ebgn = vfrom[v];
     int ideg = vfrom[v+1]-vfrom[v];
-    a[v] = c0 + (q? q[v]:0) + sumAtKernelLoop(c, efrom+ebgn, ideg, 0, 1);
+    a[v] = c0 + sumAtKernelLoop(c, efrom+ebgn, ideg, 0, 1);
   }
 }
 
 
 template <class T>
-int pagerankCudaLoop(int G, int B, T *e, T *r0, T *eD, T *r0D, T& *aD, T& *rD, T *cD, T *fD, int *vfromD, int *efromD, int *vdataD, int N, T p, T E, int L) {
-  int G1 = G * sizeof(T), l = 0;
+int pagerankCudaLoop(int G, int B, T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, T *fD, int *vfromD, int *efromD, int *vdataD, int N, T p, T E, int L) {
+  int G1 = G * sizeof(T), l = 1;
   for (; l<L; l++) {
     sumIfNotKernel<<<G, B>>>(r0D, rD, vdataD, N);
     multiplyKernel<<<G, B>>>(cD,  rD, fD,     N);
@@ -55,30 +55,29 @@ int pagerankCudaLoop(int G, int B, T *e, T *r0, T *eD, T *r0D, T& *aD, T& *rD, T
 
 
 template <class T>
-int pagerankCudaCore(int G, int B, T *e, T *r0, T *eD, T *r0D, T*& aD, T*& rD, T *cD, T *fD, int *vfromD, int *efromD, int *vdataD, int N, T p, T E, int L) {
+int pagerankCudaCore(int G, int B, T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, T *fD, int *vfromD, int *efromD, int *vdataD, int N, T p, T E, int L) {
   fillKernel<<<G, B>>>(rD, N, T(1)/N);
   pagerankFactorKernel<<<G, B>>>(fD, vdataD, p, N);
   return pagerankCudaLoop(G, B, e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, N, p, E, L);
 }
 
 
-template <class G, class C, class T=float>
-PagerankResult<T> pagerankCuda(G& xt, const vector<T> *q=nullptr, PagerankOptions<T> o=PagerankOptions<T>()) {
-  int G = o.gridSize;
-  int B = o.blockSize;
+template <class H, class T=float>
+PagerankResult<T> pagerankCuda(H& xt, const vector<T> *q=nullptr, PagerankOptions<T> o=PagerankOptions<T>()) {
+  int G = o.gridLimit;
+  int b = o.blockSize;
   T   p = o.damping;
-  T   E = o.convergence;
+  T   E = o.tolerance;
   int L = o.maxIterations, l;
   int N      = xt.order();
+  int g      = min(ceilDiv(N, b), G);
   auto vfrom = sourceOffsets(xt);
   auto efrom = destinationIndices(xt);
   auto vdata = vertexData(xt);
   int VFROM1 = vfrom.size() * sizeof(int);
   int EFROM1 = efrom.size() * sizeof(int);
   int VDATA1 = vdata.size() * sizeof(int);
-  int VROOT1 = vroot.size() * sizeof(int);
-  int VDIST1 = vdist.size() * sizeof(int);
-  int G1     = G * sizeof(T);
+  int G1     = g * sizeof(T);
   int N1     = N * sizeof(T);
   vector<T> a(N);
 
@@ -102,7 +101,7 @@ PagerankResult<T> pagerankCuda(G& xt, const vector<T> *q=nullptr, PagerankOption
   TRY( cudaMemcpy(efromD, efrom.data(), EFROM1, cudaMemcpyHostToDevice) );
   TRY( cudaMemcpy(vdataD, vdata.data(), VDATA1, cudaMemcpyHostToDevice) );
 
-  float t = measureDuration([&]() { l = pagerankCudaCore(G, B, e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, N, p, E, L); }, o.repeat);
+  float t = measureDuration([&]() { l = pagerankCudaCore(g, b, e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, N, p, E, L); }, o.repeat);
   TRY( cudaMemcpy(a.data(), aD, N1, cudaMemcpyDeviceToHost) );
 
   TRY( cudaFreeHost(e) );

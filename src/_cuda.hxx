@@ -13,8 +13,8 @@ using std::exit;
 // LAUNCH CONFIG
 // -------------
 
-#define GRID_LIMIT  65535
-#define BLOCK_LIMIT 1024
+#define GRID_LIMIT  16384
+#define BLOCK_LIMIT 512
 
 
 
@@ -112,3 +112,173 @@ void __syncthreads();
 #ifndef __shared__
 #define __shared__
 #endif
+
+
+
+
+// FILL (CUDA)
+// -----------
+
+template <class T>
+__device__ void fillKernelLoop(T *a, int N, T v, int i, int DI) {
+  for (; i<N; i+=DI)
+    a[i] = v;
+}
+
+
+template <class T>
+__global__ void fillKernel(T *a, int N, T v) {
+  DEFINE(t, b, B, G);
+
+  fillKernelLoop(a, N, v, B*b+t, G*B);
+}
+
+
+
+
+// FILL-AT (CUDA)
+// --------------
+
+template <class T>
+__device__ void fillAtKernelLoop(T *a, T v, int *is, int IS, int i, int DI) {
+  for (; i<IS; i+=DI)
+    a[is[i]] = v;
+}
+
+
+template <class T>
+__global__ void fillAtKernel(T *a, T v, int *is, int IS) {
+  DEFINE(t, b, B, G);
+
+  fillAtKernelLoop(a, v, is, IS, B*b+t, G*B);
+}
+
+
+
+
+// SUM (CUDA)
+// ----------
+
+template <class T>
+__device__ void sumKernelReduce(T* a, int N, int i) {
+  __syncthreads();
+  for (N=N/2; N>0; N/=2) {
+    if (i < N) a[i] += a[N+i];
+    __syncthreads();
+  }
+}
+
+
+template <class T>
+__device__ T sumKernelLoop(T *x, int N, int i, int DI) {
+  T a = T();
+  for (; i<N; i+=DI)
+    a += x[i];
+  return a;
+}
+
+
+template <class T>
+__global__ void sumKernel(T *a, T *x, int N) {
+  DEFINE(t, b, B, G);
+  __shared__ T cache[BLOCK_LIMIT];
+
+  cache[t] = sumKernelLoop(x, N, B*b+t, G*B);
+  sumKernelReduce(cache, B, t);
+  if (t == 0) a[b] = cache[0];
+}
+
+
+
+
+// SUM-AT (CUDA)
+// -------------
+
+template <class T>
+__device__ T sumAtKernelLoop(T *x, int *is, int IS, int i, int DI) {
+  T a = T();
+  for (; i<IS; i+=DI)
+    a += x[is[i]];
+  return a;
+}
+
+
+template <class T>
+__global__ void sumAtKernel(T *a, T *x, T *is, int IS) {
+  DEFINE(t, b, B, G);
+  __shared__ T cache[BLOCK_LIMIT];
+
+  cache[t] = sumAtKernelLoop(x, is, IS, B*b+t, G*B);
+  sumKernelReduce(cache, B, t);
+  if (t == 0) a[b] = cache[0];
+}
+
+
+
+
+// SUM-IF-NOT (CUDA)
+// -----------------
+
+template <class T, class C>
+__device__ T sumIfNotKernelLoop(T *x, C *cs, int N, int i, int DI) {
+  T a = T();
+  for (; i<N; i+=DI)
+    if (!cs[i]) a += x[i];
+  return a;
+}
+
+
+template <class T, class C>
+__global__ void sumIfNotKernel(T *a, T *x, C *cs, int N) {
+  DEFINE(t, b, B, G);
+  __shared__ T cache[BLOCK_LIMIT];
+
+  cache[t] = sumIfNotKernelLoop(x, cs, N, B*b+t, G*B);
+  sumKernelReduce(cache, B, t);
+  if (t == 0) a[b] = cache[0];
+}
+
+
+
+
+// ABS-ERROR (CUDA)
+// ----------------
+
+template <class T>
+__device__ T absErrorKernelLoop(T *x, T *y, int N, int i, int DI) {
+  T a = T();
+  for (; i<N; i+=DI)
+    a += abs(x[i] - y[i]);
+  return a;
+}
+
+
+template <class T>
+__global__ void absErrorKernel(T *a, T *x, T *y, int N) {
+  DEFINE(t, b, B, G);
+  __shared__ T cache[BLOCK_LIMIT];
+
+  cache[t] = absErrorKernelLoop(x, y, N, B*b+t, G*B);
+  sumKernelReduce(cache, B, t);
+  if (t == 0) a[b] = cache[0];
+}
+
+
+
+
+// MULTIPLY (CUDA)
+// ---------------
+
+template <class T>
+__device__ void multiplyKernelLoop(T *a, T *x, T *y, int N, int i, int DI) {
+  for (; i<N; i+=DI)
+    a[i] = x[i] * y[i];
+}
+
+
+template <class T>
+__global__ void multiplyKernel(T *a, T *x, T* y, int N) {
+  DEFINE(t, b, B, G);
+
+  multiplyKernelLoop(a, x, y, N, B*b+t, G*B);
+}

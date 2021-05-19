@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <iostream>
+#include <algorithm>
 #include "src/main.hxx"
 
 using namespace std;
@@ -7,22 +8,25 @@ using namespace std;
 
 
 
+#define REPEAT 5
+
 template <class G, class H>
 void runPagerank(const G& x, const H& xt, bool show) {
-  int repeat = 5;
   vector<float> *init = nullptr;
 
   // Find pagerank using a single thread.
-  auto a1 = pagerankSeq(xt, init, {repeat});
+  auto a1 = pagerankNvgraph(xt, init, {REPEAT});
   auto e1 = absError(a1.ranks, a1.ranks);
-  printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankSeq\n", a1.time, a1.iterations, e1);
-  if (show) println(a1.ranks);
+  printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankNvgraph\n", a1.time, a1.iterations, e1);
 
-  // Find pagerank accelerated using OpenMP.
-  auto a2 = pagerankOmp(xt, init, {repeat});
-  auto e2 = absError(a2.ranks, a1.ranks);
-  printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankOmp\n", a2.time, a2.iterations, e2);
-  if (show) println(a2.ranks);
+  // Find pagerank using CUDA thread-per-vertex.
+  for (int g=1024; g<=GRID_LIMIT; g*=2) {
+    for (int b=32; b<=BLOCK_LIMIT; b*=2) {
+      auto a2 = pagerankCuda(xt, init, {REPEAT, g, b});
+      auto e2 = absError(a2.ranks, a1.ranks);
+      printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda<<<%d, %d>>>\n", a2.time, a2.iterations, e2, g, b);
+    }
+  }
 }
 
 
