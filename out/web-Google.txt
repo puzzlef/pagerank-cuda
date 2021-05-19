@@ -1,0 +1,29 @@
+Loading graph /home/subhajit/data/web-Google.mtx ...
+order: 916428 size: 5105039 {}
+order: 916428 size: 5105039 {} (transposeWithDegree)
+[00021.125 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00036.709 ms; 062 iters.] [1.5231e-06 err.] pagerankCuda<<<1024, 32>>>
+[00030.655 ms; 062 iters.] [1.6893e-06 err.] pagerankCuda<<<1024, 64>>>
+[00028.571 ms; 062 iters.] [1.4806e-06 err.] pagerankCuda<<<1024, 128>>>
+[00028.446 ms; 062 iters.] [1.4794e-06 err.] pagerankCuda<<<1024, 256>>>
+[00027.487 ms; 062 iters.] [1.4753e-06 err.] pagerankCuda<<<1024, 512>>>
+[00030.831 ms; 062 iters.] [1.4928e-06 err.] pagerankCuda<<<2048, 32>>>
+[00028.389 ms; 062 iters.] [1.5070e-06 err.] pagerankCuda<<<2048, 64>>>
+[00028.394 ms; 062 iters.] [1.4799e-06 err.] pagerankCuda<<<2048, 128>>>
+[00028.306 ms; 062 iters.] [1.5154e-06 err.] pagerankCuda<<<2048, 256>>>
+[00028.993 ms; 062 iters.] [1.5529e-06 err.] pagerankCuda<<<2048, 512>>>
+[00029.599 ms; 062 iters.] [1.4607e-06 err.] pagerankCuda<<<4096, 32>>>
+[00028.619 ms; 062 iters.] [1.7608e-06 err.] pagerankCuda<<<4096, 64>>>
+[00028.669 ms; 062 iters.] [1.5332e-06 err.] pagerankCuda<<<4096, 128>>>
+[00029.103 ms; 062 iters.] [1.7908e-06 err.] pagerankCuda<<<4096, 256>>>
+[00028.944 ms; 062 iters.] [1.5529e-06 err.] pagerankCuda<<<4096, 512>>>
+[00029.576 ms; 062 iters.] [1.6992e-06 err.] pagerankCuda<<<8192, 32>>>
+[00029.563 ms; 062 iters.] [2.2200e-06 err.] pagerankCuda<<<8192, 64>>>
+[00029.785 ms; 062 iters.] [1.9791e-06 err.] pagerankCuda<<<8192, 128>>>
+[00029.121 ms; 062 iters.] [1.7908e-06 err.] pagerankCuda<<<8192, 256>>>
+[00028.953 ms; 062 iters.] [1.5529e-06 err.] pagerankCuda<<<8192, 512>>>
+[00033.322 ms; 062 iters.] [1.6789e-06 err.] pagerankCuda<<<16384, 32>>>
+[00033.079 ms; 062 iters.] [1.5656e-06 err.] pagerankCuda<<<16384, 64>>>
+[00029.782 ms; 062 iters.] [1.9791e-06 err.] pagerankCuda<<<16384, 128>>>
+[00029.194 ms; 062 iters.] [1.7908e-06 err.] pagerankCuda<<<16384, 256>>>
+[00029.127 ms; 062 iters.] [1.5529e-06 err.] pagerankCuda<<<16384, 512>>>

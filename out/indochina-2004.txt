@@ -1,0 +1,29 @@
+Loading graph /home/subhajit/data/indochina-2004.mtx ...
+order: 7414866 size: 194109311 {}
+order: 7414866 size: 194109311 {} (transposeWithDegree)
+[00193.619 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00804.260 ms; 061 iters.] [9.7505e-06 err.] pagerankCuda<<<1024, 32>>>
+[00777.558 ms; 061 iters.] [9.7240e-06 err.] pagerankCuda<<<1024, 64>>>
+[00777.896 ms; 061 iters.] [9.5435e-06 err.] pagerankCuda<<<1024, 128>>>
+[00793.261 ms; 061 iters.] [9.5255e-06 err.] pagerankCuda<<<1024, 256>>>
+[00790.327 ms; 061 iters.] [9.4585e-06 err.] pagerankCuda<<<1024, 512>>>
+[00747.702 ms; 061 iters.] [9.5648e-06 err.] pagerankCuda<<<2048, 32>>>
+[00764.496 ms; 061 iters.] [9.8851e-06 err.] pagerankCuda<<<2048, 64>>>
+[00787.835 ms; 061 iters.] [9.6276e-06 err.] pagerankCuda<<<2048, 128>>>
+[00772.668 ms; 061 iters.] [9.6612e-06 err.] pagerankCuda<<<2048, 256>>>
+[00741.835 ms; 061 iters.] [9.7760e-06 err.] pagerankCuda<<<2048, 512>>>
+[00774.053 ms; 061 iters.] [9.6243e-06 err.] pagerankCuda<<<4096, 32>>>
+[00787.744 ms; 061 iters.] [9.4354e-06 err.] pagerankCuda<<<4096, 64>>>
+[00778.210 ms; 061 iters.] [9.8062e-06 err.] pagerankCuda<<<4096, 128>>>
+[00739.506 ms; 061 iters.] [9.7345e-06 err.] pagerankCuda<<<4096, 256>>>
+[00733.578 ms; 061 iters.] [9.7798e-06 err.] pagerankCuda<<<4096, 512>>>
+[00782.130 ms; 061 iters.] [9.5066e-06 err.] pagerankCuda<<<8192, 32>>>
+[00771.563 ms; 061 iters.] [9.5426e-06 err.] pagerankCuda<<<8192, 64>>>
+[00736.079 ms; 061 iters.] [1.0157e-05 err.] pagerankCuda<<<8192, 128>>>
+[00729.060 ms; 061 iters.] [9.8827e-06 err.] pagerankCuda<<<8192, 256>>>
+[00737.440 ms; 061 iters.] [9.5345e-06 err.] pagerankCuda<<<8192, 512>>>
+[00758.698 ms; 061 iters.] [9.2956e-06 err.] pagerankCuda<<<16384, 32>>>
+[00736.683 ms; 061 iters.] [9.8977e-06 err.] pagerankCuda<<<16384, 64>>>
+[00726.209 ms; 061 iters.] [9.2723e-06 err.] pagerankCuda<<<16384, 128>>>
+[00732.802 ms; 061 iters.] [9.2802e-06 err.] pagerankCuda<<<16384, 256>>>
+[00742.255 ms; 061 iters.] [9.3601e-06 err.] pagerankCuda<<<16384, 512>>>

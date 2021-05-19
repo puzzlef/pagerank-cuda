@@ -1,0 +1,29 @@
+Loading graph /home/subhajit/data/coPapersDBLP.mtx ...
+order: 540486 size: 30491458 {}
+order: 540486 size: 30491458 {} (transposeWithDegree)
+[00024.860 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00025.106 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<1024, 32>>>
+[00024.319 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<1024, 64>>>
+[00027.596 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<1024, 128>>>
+[00031.251 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<1024, 256>>>
+[00030.535 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<1024, 512>>>
+[00024.665 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<2048, 32>>>
+[00028.239 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<2048, 64>>>
+[00030.791 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<2048, 128>>>
+[00030.582 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<2048, 256>>>
+[00030.490 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<2048, 512>>>
+[00025.757 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<4096, 32>>>
+[00031.379 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<4096, 64>>>
+[00030.244 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<4096, 128>>>
+[00030.562 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<4096, 256>>>
+[00030.524 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<4096, 512>>>
+[00026.559 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<8192, 32>>>
+[00031.978 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<8192, 64>>>
+[00030.237 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<8192, 128>>>
+[00030.533 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<8192, 256>>>
+[00030.474 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<8192, 512>>>
+[00029.201 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<16384, 32>>>
+[00031.985 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<16384, 64>>>
+[00030.212 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<16384, 128>>>
+[00030.526 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<16384, 256>>>
+[00030.460 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda<<<16384, 512>>>
