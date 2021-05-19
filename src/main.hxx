@@ -7,5 +7,5 @@
 #include "transpose.hxx"
 #include "mtx.hxx"
 #include "pagerank.hxx"
-#include "pagerankSeq.hxx"
+#include "pagerankNvgraph.hxx"
 #include "pagerankCuda.hxx"

@@ -5,4 +5,5 @@
 #include "_cuda.hxx"
 #include "_iostream.hxx"
 #include "_iterator.hxx"
+#include "_nvgraph.hxx"
 #include "_utility.hxx"
