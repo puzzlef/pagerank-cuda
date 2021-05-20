@@ -1,4 +1,4 @@
-Performance of sequential execution based vs OpenMP based PageRank (pull, CSR).
+Performance of sequential execution based vs OpenMP based PageRank ([pull], [CSR]).
 
 This experiment was for comparing the performance between:
 1. Find pagerank using a single thread (**sequential**).
@@ -11,15 +11,14 @@ speedup is definitely not directly proportional to the number of threads, as
 one would normally expect (Amdahl's law). Note that there is still room for
 improvement with **OpenMP** by using sequential versions of certain routines
 instead of OpenMP versions because not all calculations benefit from multiple
-threads (for example, see ["multiply-sequential-vs-openmp"]).
+threads (ex. ["multiply-sequential-vs-openmp"]).
 
 Number of threads for this experiment (using `OMP_NUM_THREADS`) was varied
 from `2` to `48`. All outputs are saved in [out/](out/) and outputs for `4`,
-`48` threads are listed here. See ["pagerank-push-vs-pull"] for a discussion
-on *push* vs *pull* method, and ["pagerank-class-vs-csr"] for a comparision
-between using a C++ DiGraph class directly vs using its CSR representation.
-The input data used for this experiment is available at ["graphs"] (for small
-ones), and the [SuiteSparse Matrix Collection].
+`48` threads are listed here. The input data used for this experiment is
+available at ["graphs"] (for small ones), and the [SuiteSparse Matrix Collection].
+
+<br>
 
 ```bash
 $ g++ -O3 main.cxx
@@ -154,6 +153,8 @@ $ ...
 # [09129.749 ms; 062 iters.] [0.0000e+00 err.] pagerankSeq
 # [02563.671 ms; 062 iters.] [0.0000e+00 err.] pagerankOmp
 ```
+
+<br>
 
 ```bash
 $ g++ -O3 main.cxx
@@ -303,8 +304,8 @@ $ ...
 
 [![](https://i.imgur.com/5vdxPZ3.jpg)](https://www.youtube.com/watch?v=rKv_l1RnSqs)
 
+[pull]: https://github.com/puzzlef/pagerank-push-vs-pull
+[CSR]: https://github.com/puzzlef/pagerank-class-vs-csr
 ["multiply-sequential-vs-openmp"]: https://github.com/puzzlef/multiply-sequential-vs-openmp
-["pagerank-push-vs-pull"]: https://github.com/puzzlef/pagerank-push-vs-pull
-["pagerank-class-vs-csr"]: https://github.com/puzzlef/pagerank-class-vs-csr
 ["graphs"]: https://github.com/puzzlef/graphs
 [SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
