@@ -24,13 +24,16 @@ __global__ void pagerankFactorKernel(T *a, int *vdata, T p, int N) {
 
 
 template <class T>
-__global__ void pagerankThreadKernel(T *a, T *r, T *c, int *vfrom, int *efrom, T c0, int N) {
+__global__ void pageRankBlockKernel(T *a, T *r, T *c, int *vfrom, int *efrom, T c0, int N) {
   DEFINE(t, b, B, G);
+  __shared__ T cache[BLOCK_LIMIT];
 
-  for (int v=B*b+t; v<N; v+=G*B) {
+  for (int v=b; v<N; v+=G) {
     int ebgn = vfrom[v];
     int ideg = vfrom[v+1]-vfrom[v];
-    a[v] = c0 + sumAtKernelLoop(c, efrom+ebgn, ideg, 0, 1);
+    cache[t] = sumAtKernelLoop(c, efrom+ebgn, ideg, t, B);
+    sumKernelReduce(cache, B, t);
+    if (t == 0) a[v] = c0 + cache[0];
   }
 }
 
@@ -43,7 +46,7 @@ int pagerankCudaLoop(int G, int B, T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T
     multiplyKernel<<<G, B>>>(cD,  rD, fD,     N);
     TRY( cudaMemcpy(r0, r0D, G1, cudaMemcpyDeviceToHost) );
     T c0 = (1-p)/N + p*sum(r0, G)/N;
-    pagerankThreadKernel<<<G, B>>>(aD, rD, cD, vfromD, efromD, c0, N);
+    pagerankBlockKernel<<<G, B>>>(aD, rD, cD, vfromD, efromD, c0, N);
     absErrorKernel<<<G, B>>>(eD, rD, aD, N);
     TRY( cudaMemcpy(e, eD, G1, cudaMemcpyDeviceToHost) );
     T e1 = sum(e, G);
