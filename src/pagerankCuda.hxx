@@ -24,7 +24,7 @@ __global__ void pagerankFactorKernel(T *a, int *vdata, T p, int N) {
 
 
 template <class T>
-__global__ void pageRankBlockKernel(T *a, T *r, T *c, int *vfrom, int *efrom, T c0, int N) {
+__global__ void pagerankBlockKernel(T *a, T *r, T *c, int *vfrom, int *efrom, T c0, int N) {
   DEFINE(t, b, B, G);
   __shared__ T cache[BLOCK_LIMIT];
 

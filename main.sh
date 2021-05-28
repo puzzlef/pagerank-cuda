@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-src="pagerank-cuda-thread-adjust-launch"
+src="pagerank-cuda-block-adjust-launch"
 out="/home/resources/Documents/subhajit/$src.log"
 ulimit -s unlimited
 printf "" > "$out"
