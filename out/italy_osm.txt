@@ -1,0 +1,29 @@
+Loading graph /home/subhajit/data/italy_osm.mtx ...
+order: 6686493 size: 14027956 {}
+order: 6686493 size: 14027956 {} (transposeWithDegree)
+[00061.841 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00049.024 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<1024, 32>>>
+[00037.114 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<1024, 64>>>
+[00032.715 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<1024, 128>>>
+[00032.236 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<1024, 256>>>
+[00032.183 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<1024, 512>>>
+[00037.751 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<2048, 32>>>
+[00033.075 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<2048, 64>>>
+[00032.463 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<2048, 128>>>
+[00032.288 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<2048, 256>>>
+[00031.522 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<2048, 512>>>
+[00038.962 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<4096, 32>>>
+[00033.279 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<4096, 64>>>
+[00033.022 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<4096, 128>>>
+[00031.860 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<4096, 256>>>
+[00032.756 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<4096, 512>>>
+[00039.023 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<8192, 32>>>
+[00033.753 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<8192, 64>>>
+[00032.769 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<8192, 128>>>
+[00033.183 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<8192, 256>>>
+[00035.712 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<8192, 512>>>
+[00039.458 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<16384, 32>>>
+[00034.664 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<16384, 64>>>
+[00034.723 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<16384, 128>>>
+[00036.339 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<16384, 256>>>
+[00039.911 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda<<<16384, 512>>>

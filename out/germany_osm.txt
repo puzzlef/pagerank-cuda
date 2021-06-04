@@ -1,0 +1,29 @@
+Loading graph /home/subhajit/data/germany_osm.mtx ...
+order: 11548845 size: 24738362 {}
+order: 11548845 size: 24738362 {} (transposeWithDegree)
+[00113.804 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00100.352 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<1024, 32>>>
+[00078.721 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<1024, 64>>>
+[00071.240 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<1024, 128>>>
+[00070.565 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<1024, 256>>>
+[00070.067 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<1024, 512>>>
+[00080.055 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<2048, 32>>>
+[00072.022 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<2048, 64>>>
+[00071.153 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<2048, 128>>>
+[00070.250 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<2048, 256>>>
+[00067.855 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<2048, 512>>>
+[00081.858 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<4096, 32>>>
+[00072.411 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<4096, 64>>>
+[00071.044 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<4096, 128>>>
+[00068.568 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<4096, 256>>>
+[00067.490 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<4096, 512>>>
+[00082.024 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<8192, 32>>>
+[00072.581 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<8192, 64>>>
+[00070.091 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<8192, 128>>>
+[00068.434 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<8192, 256>>>
+[00069.178 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<8192, 512>>>
+[00080.421 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<16384, 32>>>
+[00072.107 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<16384, 64>>>
+[00070.357 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<16384, 128>>>
+[00069.867 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<16384, 256>>>
+[00074.994 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda<<<16384, 512>>>

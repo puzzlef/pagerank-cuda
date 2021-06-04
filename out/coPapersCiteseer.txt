@@ -1,0 +1,29 @@
+Loading graph /home/subhajit/data/coPapersCiteseer.mtx ...
+order: 434102 size: 32073440 {}
+order: 434102 size: 32073440 {} (transposeWithDegree)
+[00026.160 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00023.083 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<1024, 32>>>
+[00024.036 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<1024, 64>>>
+[00028.041 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<1024, 128>>>
+[00032.050 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<1024, 256>>>
+[00033.573 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<1024, 512>>>
+[00024.346 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<2048, 32>>>
+[00028.764 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<2048, 64>>>
+[00031.706 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<2048, 128>>>
+[00031.504 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<2048, 256>>>
+[00033.637 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<2048, 512>>>
+[00024.930 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<4096, 32>>>
+[00032.301 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<4096, 64>>>
+[00031.188 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<4096, 128>>>
+[00031.502 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<4096, 256>>>
+[00033.491 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<4096, 512>>>
+[00025.404 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<8192, 32>>>
+[00032.186 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<8192, 64>>>
+[00031.130 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<8192, 128>>>
+[00031.473 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<8192, 256>>>
+[00033.497 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<8192, 512>>>
+[00027.189 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<16384, 32>>>
+[00032.251 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<16384, 64>>>
+[00031.150 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<16384, 128>>>
+[00031.524 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<16384, 256>>>
+[00033.517 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda<<<16384, 512>>>
