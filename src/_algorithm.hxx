@@ -9,13 +9,15 @@ using std::vector;
 using std::unordered_map;
 using std::iterator_traits;
 using std::back_inserter;
-using std::find;
+using std::set_difference;
 using std::count;
 using std::count_if;
-using std::set_difference;
+using std::find;
 using std::copy;
-using std::abs;
 using std::swap;
+using std::abs;
+using std::max;
+using std::sqrt;
 
 
 
@@ -431,29 +433,29 @@ void addValueAt(vector<T>& a, int i, const U& v, J&& is) {
 
 
 
-// ABS-ERROR
-// ---------
+// L1-NORM
+// -------
 
 template <class T, class U, class V=T>
-V absError(const T *x, const U *y, int N, V a=V()) {
+V l1Norm(const T *x, const U *y, int N, V a=V()) {
   for (int i=0; i<N; i++)
     a += abs(x[i] - y[i]);
   return a;
 }
 
 template <class T, class U, class V=T>
-V absError(const vector<T>& x, const vector<U>& y, V a=V()) {
-  return absError(x.data(), y.data(), int(x.size()), a);
+V l1Norm(const vector<T>& x, const vector<U>& y, V a=V()) {
+  return l1Norm(x.data(), y.data(), int(x.size()), a);
 }
 
 template <class T, class U, class V=T>
-V absError(const vector<T>& x, const vector<U>& y, int i, int N, V a=V()) {
-  return absError(x.data()+i, y.data()+i, N, a);
+V l1Norm(const vector<T>& x, const vector<U>& y, int i, int N, V a=V()) {
+  return l1Norm(x.data()+i, y.data()+i, N, a);
 }
 
 
 template <class T, class U, class V=T>
-V absErrorOmp(const T *x, const U *y, int N, V a=V()) {
+V l1NormOmp(const T *x, const U *y, int N, V a=V()) {
   #pragma omp parallel for schedule(static,4096) reduction(+:a)
   for (int i=0; i<N; i++)
     a += abs(x[i] - y[i]);
@@ -461,13 +463,97 @@ V absErrorOmp(const T *x, const U *y, int N, V a=V()) {
 }
 
 template <class T, class U, class V=T>
-V absErrorOmp(const vector<T>& x, const vector<U>& y, V a=V()) {
-  return absErrorOmp(x.data(), y.data(), int(x.size()), a);
+V l1NormOmp(const vector<T>& x, const vector<U>& y, V a=V()) {
+  return l1NormOmp(x.data(), y.data(), int(x.size()), a);
 }
 
 template <class T, class U, class V=T>
-V absErrorOmp(const vector<T>& x, const vector<U>& y, int i, int N, V a=V()) {
-  return absErrorOmp(x.data()+i, y.data()+i, N, a);
+V l1NormOmp(const vector<T>& x, const vector<U>& y, int i, int N, V a=V()) {
+  return l1NormOmp(x.data()+i, y.data()+i, N, a);
+}
+
+
+
+
+// L2-NORM
+// -------
+
+template <class T, class U, class V=T>
+V l2Norm(const T *x, const U *y, int N, V a=V()) {
+  for (int i=0; i<N; i++)
+    a += x[i]*x[i] - y[i]*y[i];
+  return sqrt(a);
+}
+
+template <class T, class U, class V=T>
+V l2Norm(const vector<T>& x, const vector<U>& y, V a=V()) {
+  return l2Norm(x.data(), y.data(), int(x.size()), a);
+}
+
+template <class T, class U, class V=T>
+V l2Norm(const vector<T>& x, const vector<U>& y, int i, int N, V a=V()) {
+  return l2Norm(x.data()+i, y.data()+i, N, a);
+}
+
+
+template <class T, class U, class V=T>
+V l2NormOmp(const T *x, const U *y, int N, V a=V()) {
+  #pragma omp parallel for schedule(static,4096) reduction(+:a)
+  for (int i=0; i<N; i++)
+    a += x[i]*x[i] - y[i]*y[i];
+  return sqrt(a);
+}
+
+template <class T, class U, class V=T>
+V l2NormOmp(const vector<T>& x, const vector<U>& y, V a=V()) {
+  return l2NormOmp(x.data(), y.data(), int(x.size()), a);
+}
+
+template <class T, class U, class V=T>
+V l2NormOmp(const vector<T>& x, const vector<U>& y, int i, int N, V a=V()) {
+  return l2NormOmp(x.data()+i, y.data()+i, N, a);
+}
+
+
+
+
+// LI-NORM (INFINITY)
+// ------------------
+
+template <class T, class U, class V=T>
+V liNorm(const T *x, const U *y, int N, V a=V()) {
+  for (int i=0; i<N; i++)
+    a = max(a, abs(x[i] - y[i]));
+  return a;
+}
+
+template <class T, class U, class V=T>
+V liNorm(const vector<T>& x, const vector<U>& y, V a=V()) {
+  return liNorm(x.data(), y.data(), int(x.size()), a);
+}
+
+template <class T, class U, class V=T>
+V liNorm(const vector<T>& x, const vector<U>& y, int i, int N, V a=V()) {
+  return liNorm(x.data()+i, y.data()+i, N, a);
+}
+
+
+template <class T, class U, class V=T>
+V liNormOmp(const T *x, const U *y, int N, V a=V()) {
+  #pragma omp parallel for schedule(static,4096) reduction(+:a)
+  for (int i=0; i<N; i++)
+    a = max(a, abs(x[i] - y[i]));
+  return a;
+}
+
+template <class T, class U, class V=T>
+V liNormOmp(const vector<T>& x, const vector<U>& y, V a=V()) {
+  return liNormOmp(x.data(), y.data(), int(x.size()), a);
+}
+
+template <class T, class U, class V=T>
+V liNormOmp(const vector<T>& x, const vector<U>& y, int i, int N, V a=V()) {
+  return liNormOmp(x.data()+i, y.data()+i, N, a);
 }
 
 
