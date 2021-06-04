@@ -1,13 +1,17 @@
-Comparing various launch configs for CUDA block-per-vertex based PageRank ([pull], [CSR]).
+Experimenting the effect of sorting vertices by in-degree for CUDA
+**block-per-vertex** based PageRank ([pull], [CSR], [block-launch]).
 
-This experiment was for finding a suitable **launch config** for
-**CUDA block-per-vertex**. For the launch config, the **block-size** (threads)
-was adjusted from `32`-`512`, and the **grid-limit** (max grid-size) was
-adjusted from `1024`-`16384`. Each config was run 5 times per graph to get a
-good time measure. `4096x64` appears to be a good config for most graphs. Here
-`4096` is the *grid-limit*, and `64` is the *block-size*. Note that this
-applies to **Tesla V100 PCIe 16GB**, and would be different for other GPUs. In
-order to measure error, [nvGraph] pagerank is taken as a reference.
+This experiment was for comparing the performance between:
+1. Find pagerank using [nvGraph].
+2. Find pagerank using *CUDA block-per-vertex*.
+3. Find pagerank using *CUDA block-per-vertex*, with **vertices sorted by in-degree**.
+
+Each approach is run on multiple graphs, running each 5 times per graph for
+good time measure. For CUDA pagerank `4096x64` launch config is used (see
+[block-launch]). As expected, it appears sorting vertices by in-degree has
+**no consisten**t performance advantage. This is most likely because blocks
+run independently. In order to measure error, [nvGraph] pagerank is taken as
+a reference.
 
 All outputs are saved in [out](out/) and a small part of the output is listed
 here. Some [charts] are also included below, generated from [sheets]. The input
@@ -23,9 +27,28 @@ $ ./a.out ~/data/min-2SCC.mtx
 $ ...
 
 # ...
+#
+# Loading graph /home/subhajit/data/web-Stanford.mtx ...
+# order: 281903 size: 2312497 {}
+# order: 281903 size: 2312497 {} (transposeWithDegree)
+# [00011.535 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+# [00032.638 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda
+# [00036.698 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda [vert-indeg]
+#
+# ...
+#
+# Loading graph /home/subhajit/data/soc-LiveJournal1.mtx ...
+# order: 4847571 size: 68993773 {}
+# order: 4847571 size: 68993773 {} (transposeWithDegree)
+# [00168.664 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+# [00317.467 ms; 051 iters.] [3.2594e-06 err.] pagerankCuda
+# [00318.697 ms; 051 iters.] [3.1462e-06 err.] pagerankCuda [vert-indeg]
+#
+#...
 ```
 
-[![](https://i.imgur.com/H3cJmIc.gif)][sheets]
+[![](https://i.imgur.com/zLPn59G.gif)][sheets]
+[![](https://i.imgur.com/yETw7mA.gif)][sheets]
 
 <br>
 <br>
@@ -41,12 +64,13 @@ $ ...
 <br>
 <br>
 
-[![](https://i.imgur.com/QIUy2ds.jpg)](https://www.youtube.com/watch?v=4EG2up-jcKM&t=12897s)
+[![](https://i.imgur.com/aEQNi9z.jpg)](https://www.youtube.com/watch?v=Q5hnBsUWmAI)
 
 [nvGraph]: https://github.com/rapidsai/nvgraph
 [pull]: https://github.com/puzzlef/pagerank-push-vs-pull
 [csr]: https://github.com/puzzlef/pagerank-class-vs-csr
-[charts]: https://photos.app.goo.gl/Sj5u3P9dYzMk2tM8A
-[sheets]: https://docs.google.com/spreadsheets/d/1Vqa9Kt1jU7Te9cB29HDZF8O_VfiwJOkNb1eu6mcUDrY/edit?usp=sharing
+[block-launch]: https://github.com/puzzlef/pagerank-cuda-block-adjust-launch
+[charts]: https://photos.app.goo.gl/kCxgy62fFNjWqc8u7
+[sheets]: https://docs.google.com/spreadsheets/d/1vcdBUAa_XQh3G3JVCQMSWhSZmeCffEqXz7EYN30FRZ0/edit?usp=sharing
 ["graphs"]: https://github.com/puzzlef/graphs
 [SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
