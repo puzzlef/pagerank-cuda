@@ -13,8 +13,9 @@ using std::exit;
 // LAUNCH CONFIG
 // -------------
 
-#define GRID_LIMIT  16384
-#define BLOCK_LIMIT 512
+// For regular data
+#define BLOCK_DIM 256
+#define GRID_DIM  4096
 
 
 
@@ -181,7 +182,7 @@ __device__ T sumKernelLoop(T *x, int N, int i, int DI) {
 template <class T>
 __global__ void sumKernel(T *a, T *x, int N) {
   DEFINE(t, b, B, G);
-  __shared__ T cache[BLOCK_LIMIT];
+  __shared__ T cache[BLOCK_DIM];
 
   cache[t] = sumKernelLoop(x, N, B*b+t, G*B);
   sumKernelReduce(cache, B, t);
@@ -206,7 +207,7 @@ __device__ T sumAtKernelLoop(T *x, int *is, int IS, int i, int DI) {
 template <class T>
 __global__ void sumAtKernel(T *a, T *x, T *is, int IS) {
   DEFINE(t, b, B, G);
-  __shared__ T cache[BLOCK_LIMIT];
+  __shared__ T cache[BLOCK_DIM];
 
   cache[t] = sumAtKernelLoop(x, is, IS, B*b+t, G*B);
   sumKernelReduce(cache, B, t);
@@ -231,7 +232,7 @@ __device__ T sumIfNotKernelLoop(T *x, C *cs, int N, int i, int DI) {
 template <class T, class C>
 __global__ void sumIfNotKernel(T *a, T *x, C *cs, int N) {
   DEFINE(t, b, B, G);
-  __shared__ T cache[BLOCK_LIMIT];
+  __shared__ T cache[BLOCK_DIM];
 
   cache[t] = sumIfNotKernelLoop(x, cs, N, B*b+t, G*B);
   sumKernelReduce(cache, B, t);
@@ -241,11 +242,11 @@ __global__ void sumIfNotKernel(T *a, T *x, C *cs, int N) {
 
 
 
-// ABS-ERROR (CUDA)
-// ----------------
+// L1-NORM (CUDA)
+// --------------
 
 template <class T>
-__device__ T absErrorKernelLoop(T *x, T *y, int N, int i, int DI) {
+__device__ T l1NormKernelLoop(T *x, T *y, int N, int i, int DI) {
   T a = T();
   for (; i<N; i+=DI)
     a += abs(x[i] - y[i]);
@@ -254,11 +255,11 @@ __device__ T absErrorKernelLoop(T *x, T *y, int N, int i, int DI) {
 
 
 template <class T>
-__global__ void absErrorKernel(T *a, T *x, T *y, int N) {
+__global__ void l1NormKernel(T *a, T *x, T *y, int N) {
   DEFINE(t, b, B, G);
-  __shared__ T cache[BLOCK_LIMIT];
+  __shared__ T cache[BLOCK_DIM];
 
-  cache[t] = absErrorKernelLoop(x, y, N, B*b+t, G*B);
+  cache[t] = l1NormKernelLoop(x, y, N, B*b+t, G*B);
   sumKernelReduce(cache, B, t);
   if (t == 0) a[b] = cache[0];
 }

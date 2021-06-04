@@ -4,7 +4,7 @@ const path = require('path');
 
 const RGRAPH = /^Loading graph .*\/(.+?)\.mtx \.\.\./m;
 const RORDER = /^order: (\d+) size: (\d+) \{\}$/m;
-const RRESLT = /^\[(.+?) ms; (.+?) iters\.\] \[(.+?) err\.\] (\w+)(?:<<<(\d+), (\d+)>>>)?/m;
+const RRESLT = /^\[(.+?) ms; (.+?) iters\.\] \[(.+?) err\.\] (.+)/m;
 
 
 
@@ -54,14 +54,12 @@ function readLogLine(ln, data, state) {
     state.size  = parseFloat(size);
   }
   else if (RRESLT.test(ln)) {
-    var [, time, iterations, error, technique, blocks, threads] = RRESLT.exec(ln);
+    var [, time, iterations, error, technique] = RRESLT.exec(ln);
     data.get(state.graph).push(Object.assign({}, state, {
       time:       parseFloat(time),
       iterations: parseFloat(iterations),
       error:      parseFloat(error),
-      technique,
-      blocks:     parseFloat(blocks||'0'),
-      threads:    parseFloat(threads||'0')
+      technique
     }));
   }
   return state;
