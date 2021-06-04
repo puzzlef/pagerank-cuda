@@ -29,7 +29,7 @@ auto vertices(const G& x) {
 template <class G, class F>
 auto verticesByDegree(const G& x, F fm) {
   auto a = vertices(x, fm);
-  sort(a.begin(), a.end(), [&](int u, int v) { x.degree(u) < x.degree(v); });
+  sort(a.begin(), a.end(), [&](int u, int v) { return x.degree(u) < x.degree(v); });
   return a;
 }
 
