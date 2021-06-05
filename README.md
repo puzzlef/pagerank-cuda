@@ -1,16 +1,18 @@
-Comparing various launch configs for CUDA thread-per-vertex based PageRank ([pull], [CSR]).
+Experimenting the effect of sorting vertices by in-degree for **CUDA**
+**thread-per-vertex** based PageRank ([pull], [CSR], [thread-launch]).
 
-This experiment was for finding a suitable **launch config** for
-**CUDA thread-per-vertex**. For the launch config, the **block-size** (threads)
-was adjusted from `32`-`512`, and the **grid-limit** (max grid-size) was
-adjusted from `1024`-`16384`. Each config was run 5 times per graph to get a
-good time measure. On average, the launch config doesn't seem to have a good
-enough impact on performance. However `4096x128` appears to be a good config.
-Here `4096` is the *grid-limit*, and `128` is the *block-size*. Maybe, sorting
-the vertices by degree can have a good effect (due to less warp divergence).
-Note that this applies to **Tesla V100 PCIe 16GB**, and would be different
-for other GPUs. In order to measure error, [nvGraph] pagerank is taken as a
-reference.
+This experiment was for comparing the performance between:
+1. Find pagerank using [nvGraph].
+2. Find pagerank using *CUDA thread-per-vertex*.
+3. Find pagerank using *CUDA thread-per-vertex*, with **vertices sorted by in-degree**.
+
+Each approach is run on multiple graphs, running each 5 times per graph for
+good time measure. For CUDA pagerank `4096x64` launch config is used (see
+[thread-launch]). I expected that sorting vertices by in-degree would allow
+threads to be assigned similar amount of work, and thus reduce warp divergence.
+However, it appears sorting vertices by in-degree has a **detrimental effect**
+instead. Possibly because memory access pattern becomes worse somehow? In order
+to measure error, [nvGraph] pagerank is taken as a reference.
 
 All outputs are saved in [out](out/) and a small part of the output is listed
 here. Some [charts] are also included below, generated from [sheets]. The input
@@ -46,23 +48,8 @@ $ ...
 # ...
 ```
 
-[![](https://i.imgur.com/lOHnic2.gif)][sheets]
-[![](https://i.imgur.com/RjGOcNQ.gif)][sheets]
-[![](https://i.imgur.com/N4tJvq4.gif)][sheets]
-[![](https://i.imgur.com/voJ7Yfd.gif)][sheets]
-[![](https://i.imgur.com/QF9N3eG.gif)][sheets]
-[![](https://i.imgur.com/0wCENO6.gif)][sheets]
-[![](https://i.imgur.com/q6hu6fb.gif)][sheets]
-[![](https://i.imgur.com/Dv4QLap.gif)][sheets]
-[![](https://i.imgur.com/iWYMnqg.gif)][sheets]
-[![](https://i.imgur.com/9luV2Jj.gif)][sheets]
-[![](https://i.imgur.com/E6O8Y2f.gif)][sheets]
-[![](https://i.imgur.com/gt1Wzzw.gif)][sheets]
-[![](https://i.imgur.com/1YO2pix.gif)][sheets]
-[![](https://i.imgur.com/wDALNSS.gif)][sheets]
-[![](https://i.imgur.com/BcyvXG9.gif)][sheets]
-[![](https://i.imgur.com/dRSKZMc.gif)][sheets]
-[![](https://i.imgur.com/TyeTcDq.gif)][sheets]
+[![](https://i.imgur.com/NiKuLu9.gif)][sheets]
+[![](https://i.imgur.com/i9g5HX2.gif)][sheets]
 
 <br>
 <br>
@@ -78,12 +65,13 @@ $ ...
 <br>
 <br>
 
-[![](https://i.imgur.com/XbhF5s7.jpg)](https://www.youtube.com/watch?v=4EG2up-jcKM)
+[![](https://i.imgur.com/RTLTH4Q.jpg)](https://www.youtube.com/watch?v=1b8F1qa5-eM)
 
 [nvGraph]: https://github.com/rapidsai/nvgraph
 [pull]: https://github.com/puzzlef/pagerank-push-vs-pull
 [csr]: https://github.com/puzzlef/pagerank-class-vs-csr
-[charts]: https://photos.app.goo.gl/k4vQDiMwF3awyhJZA
-[sheets]: https://docs.google.com/spreadsheets/d/1NutV_Pe4WGBrYhkqU5Yu-bqCAcWbfP-qahI3ZnxVASo/edit?usp=sharing
+[thread-launch]: https://github.com/puzzlef/pagerank-cuda-thread-adjust-launch
+[charts]: https://photos.app.goo.gl/iHRgoDbdS5ETqz8h8
+[sheets]: https://docs.google.com/spreadsheets/d/1ksf6UjOCtheCWxguuGFqMQ2OtkDZ31ZPuWHykEzi01k/edit?usp=sharing
 ["graphs"]: https://github.com/puzzlef/graphs
 [SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
