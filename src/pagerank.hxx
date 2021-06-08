@@ -26,12 +26,14 @@ using std::move;
 template <class T>
 struct PagerankOptions {
   int repeat;
+  int switchDegree;
+  int switchLimit;
   T   damping;
   T   tolerance;
   int maxIterations;
 
-  PagerankOptions(int repeat=1, T damping=0.85, T tolerance=1e-6, int maxIterations=500) :
-  repeat(repeat), damping(damping), tolerance(tolerance), maxIterations(maxIterations) {}
+  PagerankOptions(int repeat=1, int switchDegree=BLOCK_DIM_B, int switchLimit=BLOCK_DIM_T, T damping=0.85, T tolerance=1e-6, int maxIterations=500) :
+  repeat(repeat), switchDegree(switchDegree), switchLimit(switchLimit), damping(damping), tolerance(tolerance), maxIterations(maxIterations) {}
 };
 
 
