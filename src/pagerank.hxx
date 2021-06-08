@@ -13,11 +13,11 @@ using std::move;
 // Good launch config.
 
 // For pagerank cuda block-per-vertex
-#define BLOCK_DIM_B 64
+#define BLOCK_DIM_B 256
 #define GRID_DIM_B  4096
 
 // For pagerank cuda thread-per-vertex
-#define BLOCK_DIM_T 128
+#define BLOCK_DIM_T 256
 #define GRID_DIM_T  4096
 
 
