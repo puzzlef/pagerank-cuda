@@ -29,7 +29,7 @@ using std::exit;
 #define GRID_DIM_RM  1024
 
 // For reduce-like operations (in-place)
-#define BLOCK_DIM_RI 256
+#define BLOCK_DIM_RI 128
 #define GRID_DIM_RI  1024
 
 // Maximum for map-like operations
@@ -37,7 +37,7 @@ using std::exit;
 #define GRID_MAX_M  GRID_LIMIT
 
 // Maximum for reduce-like operations
-#define BLOCK_MAX_R 256
+#define BLOCK_MAX_R 128
 #define GRID_MAX_R  1024
 
 // Preffered maximum
@@ -259,7 +259,7 @@ void sumInplaceCu(T *a, const T *x, int N) {
 
 template <class T>
 void sumCu(T *a, const T *x, int N) {
-  sumInplaceCu(a, x, N);
+  sumMemcpyCu(a, x, N);
 }
 
 
@@ -304,7 +304,7 @@ void sumAtInplaceCu(T *a, const T *x, const T *is, int IS) {
 
 template <class T>
 void sumAtCu(T *a, const T *x, const T *is, int IS) {
-  sumAtInplaceCu(a, x, is, IS);
+  sumAtMemcpyCu(a, x, is, IS);
 }
 
 
@@ -332,14 +332,14 @@ __global__ void sumIfNotKernel(T *a, const T *x, const C *cs, int N) {
 }
 
 
-template <class T>
+template <class T, class C>
 void sumIfNotMemcpyCu(T *a, const T *x, const C *cs, int N) {
   int B = BLOCK_DIM_RM;
   int G = min(ceilDiv(N, B), GRID_DIM_RM);
   sumIfNotKernel<<<G, B>>>(a, x, cs, N);
 }
 
-template <class T>
+template <class T, class C>
 void sumIfNotInplaceCu(T *a, const T *x, const C *cs, int N) {
   int B = BLOCK_DIM_RI;
   int G = min(ceilDiv(N, B), GRID_DIM_RI);
@@ -347,9 +347,9 @@ void sumIfNotInplaceCu(T *a, const T *x, const C *cs, int N) {
   sumKernel<<<1, G>>>(a, a, G);
 }
 
-template <class T>
+template <class T, class C>
 void sumIfNotCu(T *a, const T *x, const C *cs, int N) {
-  sumIfNotInplaceCu(a, x, cs, N);
+  sumIfNotMemcpyCu(a, x, cs, N);
 }
 
 
@@ -394,7 +394,7 @@ void l1NormInplaceCu(T *a, const T *x, const T *y, int N) {
 
 template <class T>
 void l1NormCu(T *a, const T *x, const T *y, int N) {
-  l1NormInplaceCu(a, x, y, N);
+  l1NormMemcpyCu(a, x, y, N);
 }
 
 
