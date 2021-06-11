@@ -16,14 +16,14 @@ void runPagerank(const G& x, const H& xt, bool show) {
 
   // Find pagerank using a single thread.
   auto a1 = pagerankNvgraph(xt, init, {REPEAT});
-  auto e1 = absError(a1.ranks, a1.ranks);
+  auto e1 = l1Norm(a1.ranks, a1.ranks);
   printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankNvgraph\n", a1.time, a1.iterations, e1);
 
   // Find pagerank using CUDA thread-per-vertex.
   for (int g=1024; g<=GRID_LIMIT; g*=2) {
     for (int b=32; b<=BLOCK_LIMIT; b*=2) {
       auto a2 = pagerankCuda(xt, init, {REPEAT, g, b});
-      auto e2 = absError(a2.ranks, a1.ranks);
+      auto e2 = l1Norm(a2.ranks, a1.ranks);
       printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda<<<%d, %d>>>\n", a2.time, a2.iterations, e2, g, b);
     }
   }
