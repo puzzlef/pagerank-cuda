@@ -27,32 +27,43 @@ $ ...
 # Loading graph /home/subhajit/data/web-Stanford.mtx ...
 # order: 281903 size: 2312497 {}
 # order: 281903 size: 2312497 {} (transposeWithDegree)
-# [00011.269 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
-# [00060.501 ms; 063 iters.] [6.9758e-07 err.] pagerankCuda<<<1024, 32>>>
-# [00042.322 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda<<<1024, 64>>>
-# [00038.928 ms; 063 iters.] [6.9899e-07 err.] pagerankCuda<<<1024, 128>>>
-# [00065.365 ms; 063 iters.] [6.8456e-07 err.] pagerankCuda<<<1024, 256>>>
-# [00143.340 ms; 063 iters.] [6.8647e-07 err.] pagerankCuda<<<1024, 512>>>
-# [00051.605 ms; 063 iters.] [6.9758e-07 err.] pagerankCuda<<<2048, 32>>>
-# [00035.179 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda<<<2048, 64>>>
-# [00036.248 ms; 063 iters.] [6.9899e-07 err.] pagerankCuda<<<2048, 128>>>
-# [00062.885 ms; 063 iters.] [6.8456e-07 err.] pagerankCuda<<<2048, 256>>>
-# [00143.210 ms; 063 iters.] [6.8647e-07 err.] pagerankCuda<<<2048, 512>>>
-# [00047.988 ms; 063 iters.] [6.9758e-07 err.] pagerankCuda<<<4096, 32>>>
-# [00031.465 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda<<<4096, 64>>>
-# [00038.244 ms; 063 iters.] [6.9899e-07 err.] pagerankCuda<<<4096, 128>>>
-# [00062.871 ms; 063 iters.] [6.8456e-07 err.] pagerankCuda<<<4096, 256>>>
-# [00143.173 ms; 063 iters.] [6.8647e-07 err.] pagerankCuda<<<4096, 512>>>
-# [00051.371 ms; 063 iters.] [6.9758e-07 err.] pagerankCuda<<<8192, 32>>>
-# [00031.552 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda<<<8192, 64>>>
-# [00038.243 ms; 063 iters.] [6.9899e-07 err.] pagerankCuda<<<8192, 128>>>
-# [00062.835 ms; 063 iters.] [6.8456e-07 err.] pagerankCuda<<<8192, 256>>>
-# [00143.185 ms; 063 iters.] [6.8647e-07 err.] pagerankCuda<<<8192, 512>>>
-# [00051.492 ms; 063 iters.] [6.9758e-07 err.] pagerankCuda<<<16384, 32>>>
-# [00031.478 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda<<<16384, 64>>>
-# [00038.268 ms; 063 iters.] [6.9899e-07 err.] pagerankCuda<<<16384, 128>>>
-# [00062.825 ms; 063 iters.] [6.8456e-07 err.] pagerankCuda<<<16384, 256>>>
-# [00143.263 ms; 063 iters.] [6.8647e-07 err.] pagerankCuda<<<16384, 512>>>
+# [00011.441 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+# [00061.493 ms; 063 iters.] [6.9684e-07 err.] pagerankCuda<<<1024, 32>>>
+# [00042.466 ms; 063 iters.] [7.1421e-07 err.] pagerankCuda<<<1024, 64>>>
+# [00039.030 ms; 063 iters.] [6.9823e-07 err.] pagerankCuda<<<1024, 128>>>
+# [00065.472 ms; 063 iters.] [6.8380e-07 err.] pagerankCuda<<<1024, 256>>>
+# [00145.954 ms; 063 iters.] [6.8548e-07 err.] pagerankCuda<<<1024, 512>>>
+# [00329.866 ms; 063 iters.] [6.8467e-07 err.] pagerankCuda<<<1024, 1024>>>
+# [00051.042 ms; 063 iters.] [6.9684e-07 err.] pagerankCuda<<<2048, 32>>>
+# [00034.991 ms; 063 iters.] [7.1421e-07 err.] pagerankCuda<<<2048, 64>>>
+# [00036.222 ms; 063 iters.] [6.9823e-07 err.] pagerankCuda<<<2048, 128>>>
+# [00065.839 ms; 063 iters.] [6.8380e-07 err.] pagerankCuda<<<2048, 256>>>
+# [00133.297 ms; 063 iters.] [6.8548e-07 err.] pagerankCuda<<<2048, 512>>>
+# [00307.478 ms; 063 iters.] [6.8467e-07 err.] pagerankCuda<<<2048, 1024>>>
+# [00046.739 ms; 063 iters.] [6.9684e-07 err.] pagerankCuda<<<4096, 32>>>
+# [00030.503 ms; 063 iters.] [7.1421e-07 err.] pagerankCuda<<<4096, 64>>>
+# [00035.438 ms; 063 iters.] [6.9823e-07 err.] pagerankCuda<<<4096, 128>>>
+# [00060.317 ms; 063 iters.] [6.8380e-07 err.] pagerankCuda<<<4096, 256>>>
+# [00126.383 ms; 063 iters.] [6.8548e-07 err.] pagerankCuda<<<4096, 512>>>
+# [00306.623 ms; 063 iters.] [6.8467e-07 err.] pagerankCuda<<<4096, 1024>>>
+# [00048.424 ms; 063 iters.] [6.9684e-07 err.] pagerankCuda<<<8192, 32>>>
+# [00032.419 ms; 063 iters.] [7.1421e-07 err.] pagerankCuda<<<8192, 64>>>
+# [00033.686 ms; 063 iters.] [6.9823e-07 err.] pagerankCuda<<<8192, 128>>>
+# [00059.334 ms; 063 iters.] [6.8380e-07 err.] pagerankCuda<<<8192, 256>>>
+# [00125.928 ms; 063 iters.] [6.8548e-07 err.] pagerankCuda<<<8192, 512>>>
+# [00304.776 ms; 063 iters.] [6.8467e-07 err.] pagerankCuda<<<8192, 1024>>>
+# [00050.515 ms; 063 iters.] [6.9684e-07 err.] pagerankCuda<<<16384, 32>>>
+# [00034.612 ms; 063 iters.] [7.1421e-07 err.] pagerankCuda<<<16384, 64>>>
+# [00034.573 ms; 063 iters.] [6.9823e-07 err.] pagerankCuda<<<16384, 128>>>
+# [00059.193 ms; 063 iters.] [6.8380e-07 err.] pagerankCuda<<<16384, 256>>>
+# [00126.409 ms; 063 iters.] [6.8548e-07 err.] pagerankCuda<<<16384, 512>>>
+# [00304.214 ms; 063 iters.] [6.8467e-07 err.] pagerankCuda<<<16384, 1024>>>
+# [00051.362 ms; 063 iters.] [6.9684e-07 err.] pagerankCuda<<<32768, 32>>>
+# [00035.592 ms; 063 iters.] [7.1421e-07 err.] pagerankCuda<<<32768, 64>>>
+# [00036.476 ms; 063 iters.] [6.9823e-07 err.] pagerankCuda<<<32768, 128>>>
+# [00058.218 ms; 063 iters.] [6.8380e-07 err.] pagerankCuda<<<32768, 256>>>
+# [00126.185 ms; 063 iters.] [6.8548e-07 err.] pagerankCuda<<<32768, 512>>>
+# [00306.288 ms; 063 iters.] [6.8467e-07 err.] pagerankCuda<<<32768, 1024>>>
 #
 # ...
 ```
