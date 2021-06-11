@@ -2,15 +2,17 @@ Comparing various launch configs for CUDA thread-per-vertex based PageRank ([pul
 
 This experiment was for finding a suitable **launch config** for
 **CUDA thread-per-vertex**. For the launch config, the **block-size** (threads)
-was adjusted from `32`-`512`, and the **grid-limit** (max grid-size) was
-adjusted from `1024`-`16384`. Each config was run 5 times per graph to get a
+was adjusted from `32`-`1024`, and the **grid-limit** (max grid-size) was
+adjusted from `1024`-`32768`. Each config was run 5 times per graph to get a
 good time measure. On average, the launch config doesn't seem to have a good
-enough impact on performance. However `4096x128` appears to be a good config.
-Here `4096` is the *grid-limit*, and `128` is the *block-size*. Maybe, sorting
-the vertices by degree can have a good effect (due to less warp divergence).
-Note that this applies to **Tesla V100 PCIe 16GB**, and would be different
-for other GPUs. In order to measure error, [nvGraph] pagerank is taken as a
-reference.
+enough impact on performance. However `8192x128` appears to be a good config.
+Here `8192` is the *grid-limit*, and `128` is the *block-size*. Comparing with
+[graph properties], seems it would be better to use `8192x512` for graphs with
+**high** *avg. density*, and `8192x32` for graphs with **high** *avg. degree*.
+Maybe, sorting the vertices by degree can have a good effect (due to less warp
+divergence). Note that this applies to **Tesla V100 PCIe 16GB**, and would be
+different for other GPUs. In order to measure error, [nvGraph] pagerank is
+taken as a reference.
 
 All outputs are saved in [out](out/) and a small part of the output is listed
 here. Some [charts] are also included below, generated from [sheets]. The input
@@ -71,7 +73,24 @@ $ ...
 # ...
 ```
 
-[![](https://i.imgur.com/lOHnic2.gif)][sheets]
+[![](https://i.imgur.com/MgbYwZW.gif)][sheets]
+[![](https://i.imgur.com/noDgSTU.gif)][sheets]
+[![](https://i.imgur.com/iip3nyk.gif)][sheets]
+[![](https://i.imgur.com/jhxGnSj.gif)][sheets]
+[![](https://i.imgur.com/yewTKTf.gif)][sheets]
+[![](https://i.imgur.com/2WjE3xU.gif)][sheets]
+[![](https://i.imgur.com/sQKOoCi.gif)][sheets]
+[![](https://i.imgur.com/EfACavn.gif)][sheets]
+[![](https://i.imgur.com/xd9AUaf.gif)][sheets]
+[![](https://i.imgur.com/EEQ5May.gif)][sheets]
+[![](https://i.imgur.com/iiPBesX.gif)][sheets]
+[![](https://i.imgur.com/KiVeTer.gif)][sheets]
+[![](https://i.imgur.com/7cfd36t.gif)][sheets]
+[![](https://i.imgur.com/ZIPdnuR.gif)][sheets]
+[![](https://i.imgur.com/g5dcDf5.gif)][sheets]
+[![](https://i.imgur.com/FiTwKuL.gif)][sheets]
+[![](https://i.imgur.com/4B3LROo.gif)][sheets]
+
 
 <br>
 <br>
@@ -87,12 +106,13 @@ $ ...
 <br>
 <br>
 
-[![](https://i.imgur.com/XbhF5s7.jpg)](https://www.youtube.com/watch?v=4EG2up-jcKM)
+[![](https://i.imgur.com/4Slx4Ma.jpg)](https://www.youtube.com/watch?v=4EG2up-jcKM)
 
+[SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
 [nvGraph]: https://github.com/rapidsai/nvgraph
+["graphs"]: https://github.com/puzzlef/graphs
 [pull]: https://github.com/puzzlef/pagerank-push-vs-pull
 [csr]: https://github.com/puzzlef/pagerank-class-vs-csr
+[graph properties]: https://docs.google.com/spreadsheets/d/16viria4blm3e4AsF0iaPk03i_OXCFN8optcrOPwbCJ8/edit?usp=sharing
 [charts]: https://photos.app.goo.gl/k4vQDiMwF3awyhJZA
-[sheets]: https://docs.google.com/spreadsheets/d/1NutV_Pe4WGBrYhkqU5Yu-bqCAcWbfP-qahI3ZnxVASo/edit?usp=sharing
-["graphs"]: https://github.com/puzzlef/graphs
-[SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
+[sheets]: https://docs.google.com/spreadsheets/d/1S818mfYL_zUbgWB-jxk1BIFDnB6oYH8IhrlGp4wHMsw/edit?usp=sharing
