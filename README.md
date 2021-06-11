@@ -2,10 +2,10 @@ Comparing various launch configs for CUDA block-per-vertex based PageRank ([pull
 
 This experiment was for finding a suitable **launch config** for
 **CUDA block-per-vertex**. For the launch config, the **block-size** (threads)
-was adjusted from `32`-`512`, and the **grid-limit** (max grid-size) was
-adjusted from `1024`-`16384`. Each config was run 5 times per graph to get a
-good time measure. `4096x64` appears to be a good config for most graphs. Here
-`4096` is the *grid-limit*, and `64` is the *block-size*. Note that this
+was adjusted from `32`-`1024`, and the **grid-limit** (max grid-size) was
+adjusted from `1024`-`32768`. Each config was run 5 times per graph to get a
+good time measure. `MAXx64` appears to be a good config for most graphs. Here
+`MAX` is the *grid-limit*, and `64` is the *block-size*. Note that this
 applies to **Tesla V100 PCIe 16GB**, and would be different for other GPUs. In
 order to measure error, [nvGraph] pagerank is taken as a reference.
 
@@ -68,23 +68,23 @@ $ ...
 # ...
 ```
 
-[![](https://i.imgur.com/H3cJmIc.gif)][sheets]
-[![](https://i.imgur.com/dlIWium.gif)][sheets]
-[![](https://i.imgur.com/mhXIjGv.gif)][sheets]
-[![](https://i.imgur.com/uvZvq1M.gif)][sheets]
-[![](https://i.imgur.com/ed0AeO0.gif)][sheets]
-[![](https://i.imgur.com/iopCtfm.gif)][sheets]
-[![](https://i.imgur.com/OPoy5Nv.gif)][sheets]
-[![](https://i.imgur.com/XxIXsm1.gif)][sheets]
-[![](https://i.imgur.com/iKLC9XN.gif)][sheets]
-[![](https://i.imgur.com/vkUDtHx.gif)][sheets]
-[![](https://i.imgur.com/3F44wku.gif)][sheets]
-[![](https://i.imgur.com/7fDcELX.gif)][sheets]
-[![](https://i.imgur.com/tvoqR83.gif)][sheets]
-[![](https://i.imgur.com/OwlDvLt.gif)][sheets]
-[![](https://i.imgur.com/fxypucV.gif)][sheets]
-[![](https://i.imgur.com/xLPVBVs.gif)][sheets]
-[![](https://i.imgur.com/K5QNR1H.gif)][sheets]
+[![](https://i.imgur.com/bwedZN8.gif)][sheets]
+[![](https://i.imgur.com/SYY0VTV.gif)][sheets]
+[![](https://i.imgur.com/0ThK2pd.gif)][sheets]
+[![](https://i.imgur.com/a7AKdLx.gif)][sheets]
+[![](https://i.imgur.com/sxbRgJF.gif)][sheets]
+[![](https://i.imgur.com/crTZjmn.gif)][sheets]
+[![](https://i.imgur.com/cxLbgqj.gif)][sheets]
+[![](https://i.imgur.com/m9KGsyj.gif)][sheets]
+[![](https://i.imgur.com/V5Xp74C.gif)][sheets]
+[![](https://i.imgur.com/LW2qAcp.gif)][sheets]
+[![](https://i.imgur.com/Kt1Uzyk.gif)][sheets]
+[![](https://i.imgur.com/UGah41u.gif)][sheets]
+[![](https://i.imgur.com/o9maK87.gif)][sheets]
+[![](https://i.imgur.com/GQJRono.gif)][sheets]
+[![](https://i.imgur.com/rou4VBX.gif)][sheets]
+[![](https://i.imgur.com/D73ZUaf.gif)][sheets]
+[![](https://i.imgur.com/sX2dCEb.gif)][sheets]
 
 <br>
 <br>
@@ -105,7 +105,7 @@ $ ...
 [nvGraph]: https://github.com/rapidsai/nvgraph
 [pull]: https://github.com/puzzlef/pagerank-push-vs-pull
 [csr]: https://github.com/puzzlef/pagerank-class-vs-csr
-[charts]: https://photos.app.goo.gl/Sj5u3P9dYzMk2tM8A
+[charts]: https://photos.app.goo.gl/8uvRf81gpiBFNjFS6
 [sheets]: https://docs.google.com/spreadsheets/d/1Vqa9Kt1jU7Te9cB29HDZF8O_VfiwJOkNb1eu6mcUDrY/edit?usp=sharing
 ["graphs"]: https://github.com/puzzlef/graphs
 [SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
