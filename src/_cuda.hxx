@@ -1,9 +1,12 @@
 #pragma once
+#include <algorithm>
 #include <cstdio>
 #include <cstdlib>
 #include <cuda_runtime.h>
 #include <cuda_profiler_api.h>
+#include "_main.hxx"
 
+using std::min;
 using std::fprintf;
 using std::exit;
 
@@ -13,8 +16,33 @@ using std::exit;
 // LAUNCH CONFIG
 // -------------
 
-#define GRID_LIMIT  16384
-#define BLOCK_LIMIT 512
+// Limits
+#define BLOCK_LIMIT 1024
+#define GRID_LIMIT  65535
+
+// For map-like operations
+#define BLOCK_DIM_M 256
+#define GRID_DIM_M  GRID_LIMIT
+
+// For reduce-like operations (memcpy)
+#define BLOCK_DIM_RM 128
+#define GRID_DIM_RM  1024
+
+// For reduce-like operations (in-place)
+#define BLOCK_DIM_RI 256
+#define GRID_DIM_RI  1024
+
+// Maximum for map-like operations
+#define BLOCK_MAX_M 256
+#define GRID_MAX_M  GRID_LIMIT
+
+// Maximum for reduce-like operations
+#define BLOCK_MAX_R 256
+#define GRID_MAX_R  1024
+
+// Preffered maximum
+#define BLOCK_MAX 256
+#define GRID_MAX  GRID_LIMIT
 
 
 
@@ -50,19 +78,19 @@ void tryCuda(cudaError err, const char* exp, const char* func, int line, const c
 
 #ifndef DEFINE_CUDA
 #define DEFINE_CUDA(t, b, B, G) \
-  int t = threadIdx.x; \
-  int b = blockIdx.x; \
-  int B = blockDim.x; \
-  int G = gridDim.x;
+  const int t = threadIdx.x; \
+  const int b = blockIdx.x; \
+  const int B = blockDim.x; \
+  const int G = gridDim.x;
 #define DEFINE_CUDA2D(tx, ty, bx, by, BX, BY, GX, GY) \
-  int tx = threadIdx.x; \
-  int ty = threadIdx.y; \
-  int bx = blockIdx.x; \
-  int by = blockIdx.y; \
-  int BX = blockDim.x; \
-  int BY = blockDim.y; \
-  int GX = gridDim.x;  \
-  int GY = gridDim.y;
+  const int tx = threadIdx.x; \
+  const int ty = threadIdx.y; \
+  const int bx = blockIdx.x; \
+  const int by = blockIdx.y; \
+  const int BX = blockDim.x; \
+  const int BY = blockDim.y; \
+  const int GX = gridDim.x;  \
+  const int GY = gridDim.y;
 #endif
 
 #ifndef DEFINE
@@ -116,8 +144,20 @@ void __syncthreads();
 
 
 
-// FILL (CUDA)
-// -----------
+// REDUCE
+// ------
+
+int reduceSizeCu(int N) {
+  int B = BLOCK_DIM_RM;
+  int G = min(ceilDiv(N, B), GRID_DIM_RM);
+  return G;
+}
+
+
+
+
+// FILL
+// ----
 
 template <class T>
 __device__ void fillKernelLoop(T *a, int N, T v, int i, int DI) {
@@ -129,35 +169,49 @@ __device__ void fillKernelLoop(T *a, int N, T v, int i, int DI) {
 template <class T>
 __global__ void fillKernel(T *a, int N, T v) {
   DEFINE(t, b, B, G);
-
   fillKernelLoop(a, N, v, B*b+t, G*B);
+}
+
+
+template <class T>
+void fillCu(T *a, int N, T v) {
+  int B = BLOCK_DIM_M;
+  int G = min(ceilDiv(N, B), GRID_DIM_M);
+  fillKernel<<<G, B>>>(a, N, v);
 }
 
 
 
 
-// FILL-AT (CUDA)
-// --------------
+// FILL-AT
+// -------
 
 template <class T>
-__device__ void fillAtKernelLoop(T *a, T v, int *is, int IS, int i, int DI) {
+__device__ void fillAtKernelLoop(T *a, T v, const int *is, int IS, int i, int DI) {
   for (; i<IS; i+=DI)
     a[is[i]] = v;
 }
 
 
 template <class T>
-__global__ void fillAtKernel(T *a, T v, int *is, int IS) {
+__global__ void fillAtKernel(T *a, T v, const int *is, int IS) {
   DEFINE(t, b, B, G);
-
   fillAtKernelLoop(a, v, is, IS, B*b+t, G*B);
+}
+
+
+template <class T>
+void fillAtCu(T *a, T v, const int *is, int IS) {
+  int B = BLOCK_DIM_M;
+  int G = min(ceilDiv(IS, B), GRID_DIM_M);
+  fillAtKernel<<<G, B>>>(a, v, is, IS);
 }
 
 
 
 
-// SUM (CUDA)
-// ----------
+// SUM
+// ---
 
 template <class T>
 __device__ void sumKernelReduce(T* a, int N, int i) {
@@ -170,7 +224,7 @@ __device__ void sumKernelReduce(T* a, int N, int i) {
 
 
 template <class T>
-__device__ T sumKernelLoop(T *x, int N, int i, int DI) {
+__device__ T sumKernelLoop(const T *x, int N, int i, int DI) {
   T a = T();
   for (; i<N; i+=DI)
     a += x[i];
@@ -179,23 +233,43 @@ __device__ T sumKernelLoop(T *x, int N, int i, int DI) {
 
 
 template <class T>
-__global__ void sumKernel(T *a, T *x, int N) {
+__global__ void sumKernel(T *a, const T *x, int N) {
   DEFINE(t, b, B, G);
-  __shared__ T cache[BLOCK_LIMIT];
-
+  __shared__ T cache[BLOCK_MAX_R];
   cache[t] = sumKernelLoop(x, N, B*b+t, G*B);
   sumKernelReduce(cache, B, t);
   if (t == 0) a[b] = cache[0];
 }
 
 
-
-
-// SUM-AT (CUDA)
-// -------------
+template <class T>
+void sumMemcpyCu(T *a, const T *x, int N) {
+  int B = BLOCK_DIM_RM;
+  int G = min(ceilDiv(N, B), GRID_DIM_RM);
+  sumKernel<<<G, B>>>(a, x, N);
+}
 
 template <class T>
-__device__ T sumAtKernelLoop(T *x, int *is, int IS, int i, int DI) {
+void sumInplaceCu(T *a, const T *x, int N) {
+  int B = BLOCK_DIM_RI;
+  int G = min(ceilDiv(N, B), GRID_DIM_RI);
+  sumKernel<<<G, B>>>(a, x, N);
+  sumKernel<<<1, G>>>(a, a, G);
+}
+
+template <class T>
+void sumCu(T *a, const T *x, int N) {
+  sumInplaceCu(a, x, N);
+}
+
+
+
+
+// SUM-AT
+// ------
+
+template <class T>
+__device__ T sumAtKernelLoop(const T *x, const int *is, int IS, int i, int DI) {
   T a = T();
   for (; i<IS; i+=DI)
     a += x[is[i]];
@@ -204,23 +278,43 @@ __device__ T sumAtKernelLoop(T *x, int *is, int IS, int i, int DI) {
 
 
 template <class T>
-__global__ void sumAtKernel(T *a, T *x, T *is, int IS) {
+__global__ void sumAtKernel(T *a, const T *x, const T *is, int IS) {
   DEFINE(t, b, B, G);
-  __shared__ T cache[BLOCK_LIMIT];
-
+  __shared__ T cache[BLOCK_MAX_R];
   cache[t] = sumAtKernelLoop(x, is, IS, B*b+t, G*B);
   sumKernelReduce(cache, B, t);
   if (t == 0) a[b] = cache[0];
 }
 
 
+template <class T>
+void sumAtMemcpyCu(T *a, const T *x, const T *is, int IS) {
+  int B = BLOCK_DIM_RM;
+  int G = min(ceilDiv(IS, B), GRID_DIM_RM);
+  sumAtKernel<<<G, B>>>(a, x, is, IS);
+}
+
+template <class T>
+void sumAtInplaceCu(T *a, const T *x, const T *is, int IS) {
+  int B = BLOCK_DIM_RI;
+  int G = min(ceilDiv(IS, B), GRID_DIM_RI);
+  sumAtKernel<<<G, B>>>(a, x, is, IS);
+  sumKernel<<<1, G>>>(a, a, G);
+}
+
+template <class T>
+void sumAtCu(T *a, const T *x, const T *is, int IS) {
+  sumAtInplaceCu(a, x, is, IS);
+}
 
 
-// SUM-IF-NOT (CUDA)
-// -----------------
+
+
+// SUM-IF-NOT
+// ----------
 
 template <class T, class C>
-__device__ T sumIfNotKernelLoop(T *x, C *cs, int N, int i, int DI) {
+__device__ T sumIfNotKernelLoop(const T *x, const C *cs, int N, int i, int DI) {
   T a = T();
   for (; i<N; i+=DI)
     if (!cs[i]) a += x[i];
@@ -229,23 +323,43 @@ __device__ T sumIfNotKernelLoop(T *x, C *cs, int N, int i, int DI) {
 
 
 template <class T, class C>
-__global__ void sumIfNotKernel(T *a, T *x, C *cs, int N) {
+__global__ void sumIfNotKernel(T *a, const T *x, const C *cs, int N) {
   DEFINE(t, b, B, G);
-  __shared__ T cache[BLOCK_LIMIT];
-
+  __shared__ T cache[BLOCK_MAX_R];
   cache[t] = sumIfNotKernelLoop(x, cs, N, B*b+t, G*B);
   sumKernelReduce(cache, B, t);
   if (t == 0) a[b] = cache[0];
 }
 
 
-
-
-// ABS-ERROR (CUDA)
-// ----------------
+template <class T>
+void sumIfNotMemcpyCu(T *a, const T *x, const C *cs, int N) {
+  int B = BLOCK_DIM_RM;
+  int G = min(ceilDiv(N, B), GRID_DIM_RM);
+  sumIfNotKernel<<<G, B>>>(a, x, cs, N);
+}
 
 template <class T>
-__device__ T absErrorKernelLoop(T *x, T *y, int N, int i, int DI) {
+void sumIfNotInplaceCu(T *a, const T *x, const C *cs, int N) {
+  int B = BLOCK_DIM_RI;
+  int G = min(ceilDiv(N, B), GRID_DIM_RI);
+  sumIfNotKernel<<<G, B>>>(a, x, cs, N);
+  sumKernel<<<1, G>>>(a, a, G);
+}
+
+template <class T>
+void sumIfNotCu(T *a, const T *x, const C *cs, int N) {
+  sumIfNotInplaceCu(a, x, cs, N);
+}
+
+
+
+
+// L1-NORM
+// -------
+
+template <class T>
+__device__ T l1NormKernelLoop(const T *x, const T *y, int N, int i, int DI) {
   T a = T();
   for (; i<N; i+=DI)
     a += abs(x[i] - y[i]);
@@ -254,31 +368,58 @@ __device__ T absErrorKernelLoop(T *x, T *y, int N, int i, int DI) {
 
 
 template <class T>
-__global__ void absErrorKernel(T *a, T *x, T *y, int N) {
+__global__ void l1NormKernel(T *a, const T *x, const T *y, int N) {
   DEFINE(t, b, B, G);
-  __shared__ T cache[BLOCK_LIMIT];
-
-  cache[t] = absErrorKernelLoop(x, y, N, B*b+t, G*B);
+  __shared__ T cache[BLOCK_MAX_R];
+  cache[t] = l1NormKernelLoop(x, y, N, B*b+t, G*B);
   sumKernelReduce(cache, B, t);
   if (t == 0) a[b] = cache[0];
 }
 
 
-
-
-// MULTIPLY (CUDA)
-// ---------------
+template <class T>
+void l1NormMemcpyCu(T *a, const T *x, const T *y, int N) {
+  int B = BLOCK_DIM_RM;
+  int G = min(ceilDiv(N, B), GRID_DIM_RM);
+  l1NormKernel<<<G, B>>>(a, x, y, N);
+}
 
 template <class T>
-__device__ void multiplyKernelLoop(T *a, T *x, T *y, int N, int i, int DI) {
+void l1NormInplaceCu(T *a, const T *x, const T *y, int N) {
+  int B = BLOCK_DIM_RI;
+  int G = min(ceilDiv(N, B), GRID_DIM_RI);
+  l1NormKernel<<<G, B>>>(a, x, y, N);
+  sumKernel<<<1, G>>>(a, a, G);
+}
+
+template <class T>
+void l1NormCu(T *a, const T *x, const T *y, int N) {
+  l1NormInplaceCu(a, x, y, N);
+}
+
+
+
+
+// MULTIPLY
+// --------
+
+template <class T>
+__device__ void multiplyKernelLoop(T *a, const T *x, const T *y, int N, int i, int DI) {
   for (; i<N; i+=DI)
     a[i] = x[i] * y[i];
 }
 
 
 template <class T>
-__global__ void multiplyKernel(T *a, T *x, T* y, int N) {
+__global__ void multiplyKernel(T *a, const T *x, const T* y, int N) {
   DEFINE(t, b, B, G);
-
   multiplyKernelLoop(a, x, y, N, B*b+t, G*B);
+}
+
+
+template <class T>
+void multiplyCu(T *a, const T *x, const T* y, int N) {
+  int B = BLOCK_DIM_M;
+  int G = min(ceilDiv(N, B), GRID_DIM_M);
+  multiplyKernel<<<G, B>>>(a, x, y, N);
 }
