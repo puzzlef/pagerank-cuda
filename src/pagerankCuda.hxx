@@ -6,6 +6,7 @@
 #include "edges.hxx"
 #include "csr.hxx"
 #include "pagerank.hxx"
+#include "_main.hxx"
 
 using std::vector;
 using std::swap;
@@ -15,7 +16,7 @@ using std::min;
 
 
 template <class T>
-__global__ void pagerankFactorKernel(T *a, int *vdata, T p, int N) {
+__global__ void pagerankFactorKernel(T *a, const int *vdata, int N, T p) {
   DEFINE(t, b, B, G);
   for (int v=B*b+t, DV=G*B; v<N; v+=DV) {
     int d = vdata[v];
@@ -23,11 +24,17 @@ __global__ void pagerankFactorKernel(T *a, int *vdata, T p, int N) {
   }
 }
 
+template <class T>
+void pagerankFactorCu(T *a, const int *vdata, int N, T p) {
+  int B = BLOCK_DIM_M;
+  int G = min(ceilDiv(N, B), GRID_DIM_M);
+  pagerankFactorKernel<<<G, B>>>(a, vdata, N, p);
+}
+
 
 template <class T>
-__global__ void pagerankThreadKernel(T *a, T *r, T *c, int *vfrom, int *efrom, T c0, int N) {
+__global__ void pagerankThreadKernel(T *a, const T *r, const T *c, const int *vfrom, const int *efrom, int N, T c0) {
   DEFINE(t, b, B, G);
-
   for (int v=B*b+t; v<N; v+=G*B) {
     int ebgn = vfrom[v];
     int ideg = vfrom[v+1]-vfrom[v];
@@ -35,28 +42,28 @@ __global__ void pagerankThreadKernel(T *a, T *r, T *c, int *vfrom, int *efrom, T
   }
 }
 
-template<class T>
-void pagerankThreadKernelCall(T *a, T *r, T *c, int *vfrom, int *efrom, T c0, int N) {
-  int B = BLOCK_DIM_T;
-  int G = min(ceilDiv(N, B), GRID_DIM_T);
-  pagerankThreadKernel<<<G, B>>>(a, r, c, vfrom, efrom, c0, N);
+template <class T>
+void pagerankThreadCu(T *a, const T *r, const T *c, const int *vfrom, const int *efrom, int N, T c0) {
+  int B = BLOCK_DIM_PRT;
+  int G = min(ceilDiv(N, B), GRID_DIM_PRT);
+  pagerankThreadKernel<<<G, B>>>(a, r, c, vfrom, efrom, N, c0);
 }
 
 
 template <class T>
-int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, T *fD, int *vfromD, int *efromD, int *vdataD, int N, T p, T E, int L) {
-  int B = BLOCK_DIM;
-  int G = min(ceilDiv(N, B), GRID_DIM);
-  int G1 = G * sizeof(T), l = 1;
+int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T *fD, const int *vfromD, const int *efromD, const int *vdataD, int N, T p, T E, int L) {
+  int R = reduceSizeCu(N);
+  size_t R1 = R * sizeof(T);
+  int l = 1;
   for (; l<L; l++) {
-    sumIfNotKernel<<<G, B>>>(r0D, rD, vdataD, N);
-    multiplyKernel<<<G, B>>>(cD,  rD, fD,     N);
-    TRY( cudaMemcpy(r0, r0D, G1, cudaMemcpyDeviceToHost) );
-    T c0 = (1-p)/N + p*sum(r0, G)/N;
-    pagerankThreadKernelCall(aD, rD, cD, vfromD, efromD, c0, N);
-    l1NormKernel<<<G, B>>>(eD, rD, aD, N);
-    TRY( cudaMemcpy(e, eD, G1, cudaMemcpyDeviceToHost) );
-    T e1 = sum(e, G);
+    sumIfNotCu(r0D, rD, vdataD, N);
+    multiplyCu(cD, rD, fD, N);
+    TRY( cudaMemcpy(r0, r0D, R1, cudaMemcpyDeviceToHost) );
+    T c0 = (1-p)/N + p*sum(r0, R)/N;
+    pagerankThreadCu(aD, rD, cD, vfromD, efromD, N, c0);
+    l1NormCu(eD, rD, aD, N);
+    TRY( cudaMemcpy(e, eD, R1, cudaMemcpyDeviceToHost) );
+    T e1 = sum(e, R);
     if (e1 < E) break;
     swap(aD, rD);
   }
@@ -65,31 +72,37 @@ int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, T *fD, i
 
 
 template <class T>
-int pagerankCudaCore(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, T *fD, int *vfromD, int *efromD, int *vdataD, int N, T p, T E, int L) {
-  int B = BLOCK_DIM;
-  int G = min(ceilDiv(N, B), GRID_DIM);
-  fillKernel<<<G, B>>>(rD, N, T(1)/N);
-  pagerankFactorKernel<<<G, B>>>(fD, vdataD, p, N);
+int pagerankCudaCore(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, T *fD, const int *vfromD, const int *efromD, const int *vdataD, int N, T p, T E, int L) {
+  fillCu(rD, N, T(1)/N);
+  pagerankFactorCu(fD, vdataD, N, p);
   return pagerankCudaLoop(e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, N, p, E, L);
 }
 
 
 template <class H, class T=float>
-PagerankResult<T> pagerankCuda(const H& xt, const vector<T> *q=nullptr, PagerankOptions<T> o=PagerankOptions<T>()) {
-  T    p  = o.damping;
-  T    E  = o.tolerance;
-  int  L  = o.maxIterations, l;
-  bool SV = o.sortVertices;
-  int  N     = xt.order();
-  auto ks    = SV? verticesByDegree(xt) : vertices(xt);
+PagerankResult<T> pagerankCuda(H& xt, const vector<T> *q=nullptr, PagerankOptions<T> o=PagerankOptions<T>()) {
+  typedef PagerankSort Sort;
+  T    p   = o.damping;
+  T    E   = o.tolerance;
+  int  L   = o.maxIterations, l;
+  Sort SV  = o.sortVertices;
+  Sort SE  = o.sortEdges;
+  int  N   = xt.order();
+  int  R   = reduceSizeCu(N);
+  auto fm  = [](int u) { return u; };
+  auto fp  = [&](Sort S, auto ib, auto ie) {
+    if (S==Sort::ASC)  sort(ib, ie, [&](int u, int v) { return xt.degree(u) < xt.degree(v); });
+    if (S==Sort::DESC) sort(ib, ie, [&](int u, int v) { return xt.degree(u) > xt.degree(v); });
+  };
+  auto ks    = vertices(xt, fm, [&](auto ib, auto ie) { fp(SV, ib, ie); });
   auto vfrom = sourceOffsets(xt, ks);
-  auto efrom = destinationIndices(xt, ks);
+  auto efrom = destinationIndices(xt, ks, [&](auto ib, auto ie) { fp(SE, ib, ie); });
   auto vdata = vertexData(xt, ks);
   int VFROM1 = vfrom.size() * sizeof(int);
   int EFROM1 = efrom.size() * sizeof(int);
   int VDATA1 = vdata.size() * sizeof(int);
-  int G1     = GRID_DIM * sizeof(T);
-  int N1     = N        * sizeof(T);
+  int N1 = N * sizeof(T);
+  int R1 = R * sizeof(T);
   vector<T> a(N);
 
   T *e,  *r0;
@@ -97,10 +110,10 @@ PagerankResult<T> pagerankCuda(const H& xt, const vector<T> *q=nullptr, Pagerank
   int *vfromD, *efromD, *vdataD;
   // TRY( cudaProfilerStart() );
   TRY( cudaSetDeviceFlags(cudaDeviceMapHost) );
-  TRY( cudaHostAlloc(&e,  G1, cudaHostAllocDefault) );
-  TRY( cudaHostAlloc(&r0, G1, cudaHostAllocDefault) );
-  TRY( cudaMalloc(&eD,  G1) );
-  TRY( cudaMalloc(&r0D, G1) );
+  TRY( cudaHostAlloc(&e,  R1, cudaHostAllocDefault) );
+  TRY( cudaHostAlloc(&r0, R1, cudaHostAllocDefault) );
+  TRY( cudaMalloc(&eD,  R1) );
+  TRY( cudaMalloc(&r0D, R1) );
   TRY( cudaMalloc(&aD, N1) );
   TRY( cudaMalloc(&rD, N1) );
   TRY( cudaMalloc(&cD, N1) );
