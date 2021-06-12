@@ -26,6 +26,11 @@ auto vertices(const G& x) {
 }
 
 
+
+
+// VERTICES-BY
+// -----------
+
 template <class G, class F>
 auto verticesByDegree(const G& x, F fm) {
   auto a = vertices(x, fm);
@@ -124,4 +129,21 @@ auto compressContainer(const G& x, const vector<T>& vs, J&& ks) {
 template <class G, class T>
 auto compressContainer(const G& x, const vector<T>& vs) {
   return compressContainer(x, vs, x.vertices());
+}
+
+
+
+
+// VERTICES-EQUAL
+// --------------
+
+template <class G>
+bool verticesEqual(const G& x, int u, const G& y, int v) {
+  if (x.degree(u) != y.degree(v)) return false;
+  auto uj = x.edges(u), vj = y.edges(v);
+  auto ui = uj.begin(), ue = uj.end();
+  auto vi = vj.begin(), ve = vj.end();
+  for (; ui!=ue && vi!=ve; ++ui, ++vi)
+    if (*ui != *vi) return false;
+  return true;
 }
