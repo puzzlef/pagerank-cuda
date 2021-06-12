@@ -84,15 +84,21 @@ int pagerankCudaCore(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, T *fD, c
 
 template <class H, class T=float>
 PagerankResult<T> pagerankCuda(H& xt, const vector<T> *q=nullptr, PagerankOptions<T> o=PagerankOptions<T>()) {
-  T   p   = o.damping;
-  T   E   = o.tolerance;
-  int L   = o.maxIterations, l;
-  bool SV = o.sortVertices;
-  int N   = xt.order();
-  int R   = reduceSizeCu(N);
-  auto ks    = SV? verticesByDegree(xt) : vertices(xt);
+  typedef PagerankSort Sort;
+  T    p   = o.damping;
+  T    E   = o.tolerance;
+  int  L   = o.maxIterations, l;
+  Sort S   = o.sort;
+  int  N   = xt.order();
+  int  R   = reduceSizeCu(N);
+  auto fm  = [](int u) { return u; };
+  auto fp  = [&](auto ib, auto ie) {
+    if (S==Sort::ASC)  sort(ib, ie, [&](int u, int v) { return x.degree(u) < x.degree(v); });
+    if (S==Sort::DESC) sort(ib, ie, [&](int u, int v) { return x.degree(u) > x.degree(v); });
+  };
+  auto ks    = vertices(x, fm, fp);
   auto vfrom = sourceOffsets(xt, ks);
-  auto efrom = destinationIndices(xt, ks);
+  auto efrom = destinationIndices(xt, ks, fp);
   auto vdata = vertexData(xt, ks);
   int VFROM1 = vfrom.size() * sizeof(int);
   int EFROM1 = efrom.size() * sizeof(int);
