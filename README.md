@@ -1,16 +1,13 @@
-Experimenting the effect of sorting vertices by in-degree for CUDA
+Experimenting the effect of sorting vertices and/or edges by in-degree for CUDA
 **block-per-vertex** based PageRank ([pull], [CSR], [block-launch]).
 
-This experiment was for comparing the performance between:
-1. Find pagerank using [nvGraph].
-2. Find pagerank using *CUDA block-per-vertex*.
-3. Find pagerank using *CUDA block-per-vertex*, with **vertices sorted by in-degree**.
-
-Each approach is run on multiple graphs, running each 5 times per graph for
-good time measure. For CUDA pagerank `4096x64` launch config is used (see
-[block-launch]). As expected, it appears sorting vertices by in-degree has
-**no consisten**t performance advantage. This is most likely because blocks
-run independently. In order to measure error, [nvGraph] pagerank is taken as
+For this experiment, sorting of vertices and/or edges was either `NO`, `ASC`,
+or `DESC`. This gives a total of `3 * 3 = 9` cases. Each case is run on
+multiple graphs, running each 5 times per graph for good time measure. Results
+show that sorting in *most cases* is **not faster**. In fact, in a number of
+cases, sorting actually slows dows performance. Maybe (just maybe) this is
+because sorted arrangement tend to overflood certain memory chunks with too
+many requests. In order to measure error, [nvGraph] pagerank is taken as
 a reference.
 
 All outputs are saved in [out](out/) and a small part of the output is listed
@@ -45,7 +42,7 @@ $ ...
 # ...
 ```
 
-[![](https://i.imgur.com/zLPn59G.gif)][sheets]
+[![](https://i.imgur.com/Ha2JGkg.gif)][sheets]
 
 <br>
 <br>
@@ -61,13 +58,13 @@ $ ...
 <br>
 <br>
 
-[![](https://i.imgur.com/aEQNi9z.jpg)](https://www.youtube.com/watch?v=Q5hnBsUWmAI)
+[![](https://i.imgur.com/TG0K9e0.jpg)](https://www.youtube.com/watch?v=eQqsP388S3Q)
 
+[SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
 [nvGraph]: https://github.com/rapidsai/nvgraph
+["graphs"]: https://github.com/puzzlef/graphs
 [pull]: https://github.com/puzzlef/pagerank-push-vs-pull
 [csr]: https://github.com/puzzlef/pagerank-class-vs-csr
 [block-launch]: https://github.com/puzzlef/pagerank-cuda-block-adjust-launch
-[charts]: https://photos.app.goo.gl/kCxgy62fFNjWqc8u7
-[sheets]: https://docs.google.com/spreadsheets/d/1vcdBUAa_XQh3G3JVCQMSWhSZmeCffEqXz7EYN30FRZ0/edit?usp=sharing
-["graphs"]: https://github.com/puzzlef/graphs
-[SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
+[charts]: https://photos.app.goo.gl/EfwWVoXnAAhNJWdH7
+[sheets]: https://docs.google.com/spreadsheets/d/16L-b5ofUZbA6xBYbFZESXbv5hs1FTtw_K0FHJLISlNM/edit?usp=sharing
