@@ -1,18 +1,12 @@
-Experimenting the effect of sorting vertices by in-degree for **CUDA**
-**thread-per-vertex** based PageRank ([pull], [CSR], [thread-launch]).
+Experimenting the effect of sorting vertices and/or edges by in-degree for
+**CUDA** **thread-per-vertex** based PageRank ([pull], [CSR], [thread-launch]).
 
-This experiment was for comparing the performance between:
-1. Find pagerank using [nvGraph].
-2. Find pagerank using *CUDA thread-per-vertex*.
-3. Find pagerank using *CUDA thread-per-vertex*, with **vertices sorted by in-degree**.
-
-Each approach is run on multiple graphs, running each 5 times per graph for
-good time measure. For CUDA pagerank `4096x64` launch config is used (see
-[thread-launch]). I expected that sorting vertices by in-degree would allow
-threads to be assigned similar amount of work, and thus reduce warp divergence.
-However, it appears sorting vertices by in-degree has a **detrimental effect**
-instead. Possibly because memory access pattern becomes worse somehow? In order
-to measure error, [nvGraph] pagerank is taken as a reference.
+For this experiment, sorting of vertices and/or edges was either `NO`, `ASC`,
+or `DESC`. This gives a total of `3 * 3 = 9` cases. Each case is run on
+multiple graphs, running each 5 times per graph for good time measure. Results
+show that sorting in *most cases* is **slower**. Maybe this is because sorted
+arrangement tends to overflood certain memory chunks with too many requests.
+In order to measure error, [nvGraph] pagerank is taken as a reference.
 
 All outputs are saved in [out](out/) and a small part of the output is listed
 here. Some [charts] are also included below, generated from [sheets]. The input
@@ -46,7 +40,7 @@ $ ...
 # ...
 ```
 
-[![](https://i.imgur.com/NiKuLu9.gif)][sheets]
+[![](https://i.imgur.com/XF9ByCY.gif)][sheets]
 
 <br>
 <br>
@@ -64,11 +58,11 @@ $ ...
 
 [![](https://i.imgur.com/RTLTH4Q.jpg)](https://www.youtube.com/watch?v=1b8F1qa5-eM)
 
+[SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
 [nvGraph]: https://github.com/rapidsai/nvgraph
+["graphs"]: https://github.com/puzzlef/graphs
 [pull]: https://github.com/puzzlef/pagerank-push-vs-pull
 [csr]: https://github.com/puzzlef/pagerank-class-vs-csr
 [thread-launch]: https://github.com/puzzlef/pagerank-cuda-thread-adjust-launch
-[charts]: https://photos.app.goo.gl/iHRgoDbdS5ETqz8h8
-[sheets]: https://docs.google.com/spreadsheets/d/1ksf6UjOCtheCWxguuGFqMQ2OtkDZ31ZPuWHykEzi01k/edit?usp=sharing
-["graphs"]: https://github.com/puzzlef/graphs
-[SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
+[charts]: https://photos.app.goo.gl/whS1JrbAb165j53g8
+[sheets]: https://docs.google.com/spreadsheets/d/1eaSvvIZw246yX59_SvW7apBTukn5tfTqlEZFJ7mkqKM/edit?usp=sharing
