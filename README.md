@@ -27,6 +27,22 @@ $ ./a.out ~/data/min-2SCC.mtx
 $ ...
 
 # ...
+#
+# Loading graph /home/subhajit/data/web-Stanford.mtx ...
+# order: 281903 size: 2312497 {}
+# order: 281903 size: 2312497 {} (transposeWithDegree)
+# [00011.409 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+# [00032.328 ms; 063 iters.] [7.1476e-07 err.] pagerankCuda [sortv=NO; sorte=NO]
+# [00031.637 ms; 063 iters.] [6.7824e-07 err.] pagerankCuda [sortv=NO; sorte=ASC]
+# [00031.500 ms; 063 iters.] [7.5812e-07 err.] pagerankCuda [sortv=NO; sorte=DESC]
+# [00029.522 ms; 063 iters.] [7.1485e-07 err.] pagerankCuda [sortv=ASC; sorte=NO]
+# [00029.258 ms; 063 iters.] [6.7824e-07 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+# [00029.390 ms; 063 iters.] [7.5812e-07 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+# [00025.924 ms; 063 iters.] [7.1485e-07 err.] pagerankCuda [sortv=DESC; sorte=NO]
+# [00025.723 ms; 063 iters.] [6.7824e-07 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+# [00025.777 ms; 063 iters.] [7.5812e-07 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+#
+# ...
 ```
 
 [![](https://i.imgur.com/zLPn59G.gif)][sheets]
