@@ -30,6 +30,9 @@ using std::move;
 #define BLOCK_DIM_PRT_HIGHDEGREE 32
 #define GRID_DIM_PRT_HIGHDEGREE  8192
 
+// Pagerank switch point
+#define PAGERANK_SWITCH_POINT 32
+
 
 
 
