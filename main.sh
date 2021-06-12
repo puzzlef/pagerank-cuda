@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-src="pagerank-cuda-block-sort-by-indegree"
+src="pagerank-cuda-switched-sort-by-indegree"
 out="/home/resources/Documents/subhajit/$src.log"
 ulimit -s unlimited
 printf "" > "$out"

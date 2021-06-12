@@ -273,6 +273,48 @@ U sumOmp(const vector<T>& x, int i, int N, U a=U()) {
 
 
 
+// SUM-ABS
+// -------
+
+template <class T, class U=T>
+U sumAbs(const T *x, int N, U a=U()) {
+  for (int i=0; i<N; i++)
+    a += abs(x[i]);
+  return a;
+}
+
+template <class T, class U=T>
+U sumAbs(const vector<T>& x, U a=U()) {
+  return sumAbs(x.data(), int(x.size()), a);
+}
+
+template <class T, class U=T>
+U sumAbs(const vector<T>& x, int i, int N, U a=U()) {
+  return sumAbs(x.data()+i, N, a);
+}
+
+
+template <class T, class U=T>
+U sumAbsOmp(const T *x, int N, U a=U()) {
+  #pragma omp parallel for schedule(static,4096) reduction(+:a)
+  for (int i=0; i<N; i++)
+    a += abs(x[i]);
+  return a;
+}
+
+template <class T, class U=T>
+U sumAbsOmp(const vector<T>& x, U a=U()) {
+  return sumAbsOmp(x.data(), int(x.size()), a);
+}
+
+template <class T, class U=T>
+U sumAbsOmp(const vector<T>& x, int i, int N, U a=U()) {
+  return sumAbsOmp(x.data()+i, N, a);
+}
+
+
+
+
 // SUM-AT
 // ------
 

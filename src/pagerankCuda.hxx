@@ -101,11 +101,11 @@ void pagerankSwitchedCu(T *a, const T *r, const T *c, const int *vfrom, const in
 }
 
 template <class G>
-int pagerankSwitchPoint(const G& xt, const vector<int>& ks) {
-  int deg = PAGERANK_SWITCH_POINT;
-  return find_if(ks.begin(), ks.end(), deg, [&](int u, int d) {
-    return xt.degree(u) >= d;
-  }) - ks.begin();
+int pagerankSwitchPoint(const G& xt, const vector<int>& ks, bool rev=false) {
+  auto ie = ks.end(), ib = ks.begin();
+  auto fa = [&](int u) { return xt.degree(u) >= PAGERANK_SWITCH_POINT; };
+  auto fd = [&](int u) { return xt.degree(u) <= PAGERANK_SWITCH_POINT; };
+  return rev? find_if(ib, ie, fd)-ib : find_if(ib, ie, fa)-ib;
 }
 
 void pagerankAddStep(vector<int>& a, int n) {
@@ -117,10 +117,10 @@ template <class G>
 auto pagerankWave(const G& xt, const vector<int>& ks, PagerankSort SV) {
   typedef PagerankSort Sort;
   vector<int> a;
-  int n = ks.size();
-  int s = pagerankSwitchPoint(xt, ks);
-  if (s)   pagerankAddStep(a, SV==Sort::DESC?  s:-s);
-  if (n-s) pagerankAddStep(a, SV==Sort::DESC? -s: s);
+  int n = ks.size(); bool rev = SV==Sort::DESC;
+  int s = pagerankSwitchPoint(xt, ks, rev);
+  if (s)   pagerankAddStep(a, rev? s  : -s);
+  if (n-s) pagerankAddStep(a, rev? s-n:n-s);
   return a;
 }
 
@@ -132,7 +132,7 @@ auto pagerankWave(const G& xt, const vector<int>& ks, PagerankSort SV) {
 
 template <class T, class J>
 int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T *fD, const int *vfromD, const int *efromD, const int *vdataD, int i, J&& ns, int N, T p, T E, int L) {
-  int n = sum(ns);
+  int n = sumAbs(ns);
   int R = reduceSizeCu(n);
   size_t R1 = R * sizeof(T);
   int l = 1;
@@ -155,7 +155,7 @@ int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T 
 template <class T, class J>
 int pagerankCudaCore(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, T *fD, const int *vfromD, const int *efromD, const int *vdataD, J&& ns, int N, T p, T E, int L) {
   fillCu(rD, N, T(1)/N);
-  pagerankFactorCu(fD, vdataD, N, p);
+  pagerankFactorCu(fD, vdataD, 0, N, p);
   return pagerankCudaLoop(e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, 0, ns, N, p, E, L);
 }
 
@@ -171,15 +171,15 @@ PagerankResult<T> pagerankCuda(H& xt, const vector<T> *q=nullptr, PagerankOption
   int  N   = xt.order();
   int  R   = reduceSizeCu(N);
   auto fm  = [](int u) { return u; };
-  auto fpv = [&](auto ib, auto ie) {
-    if (SV==Sort::ASC)  sort(ib, ie, [&](int u, int v) { return xt.degree(u) < xt.degree(v); });
-    if (SV==Sort::DESC) sort(ib, ie, [&](int u, int v) { return xt.degree(u) > xt.degree(v); });
-    partition(ib, ie, [&](int u, int v) { return xt.degree(u) < PAGERANK_SWITCH_POINT; });
-  };
-  auto fpe = [&](auto ib, auto ie) {
-    if (SE==Sort::ASC)  sort(ib, ie, [&](int u, int v) { return xt.degree(u) < xt.degree(v); });
-    if (SE==Sort::DESC) sort(ib, ie, [&](int u, int v) { return xt.degree(u) > xt.degree(v); });
-  };
+  auto fpv = [&](auto ib, auto ie) { switch (SV) {
+    case Sort::ASC:  sort(ib, ie, [&](int u, int v) { return xt.degree(u) < xt.degree(v); }); break;
+    case Sort::DESC: sort(ib, ie, [&](int u, int v) { return xt.degree(u) > xt.degree(v); }); break;
+    default: partition(ib, ie, [&](int u) { return xt.degree(u) < PAGERANK_SWITCH_POINT; });  break;
+  }};
+  auto fpe = [&](auto ib, auto ie) { switch (SE) {
+    case Sort::ASC:  sort(ib, ie, [&](int u, int v) { return xt.degree(u) < xt.degree(v); }); break;
+    case Sort::DESC: sort(ib, ie, [&](int u, int v) { return xt.degree(u) > xt.degree(v); }); break;
+  }};
   auto ks    = vertices(xt, fm, fpv);
   auto ns    = pagerankWave(xt, ks, SV);
   auto vfrom = sourceOffsets(xt, ks);
@@ -212,7 +212,7 @@ PagerankResult<T> pagerankCuda(H& xt, const vector<T> *q=nullptr, PagerankOption
   TRY( cudaMemcpy(efromD, efrom.data(), EFROM1, cudaMemcpyHostToDevice) );
   TRY( cudaMemcpy(vdataD, vdata.data(), VDATA1, cudaMemcpyHostToDevice) );
 
-  float t = measureDuration([&]() { l = pagerankCudaCore(e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, N, p, E, L); }, o.repeat);
+  float t = measureDuration([&]() { l = pagerankCudaCore(e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, ns, N, p, E, L); }, o.repeat);
   TRY( cudaMemcpy(a.data(), aD, N1, cudaMemcpyDeviceToHost) );
 
   TRY( cudaFreeHost(e) );
