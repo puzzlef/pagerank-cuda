@@ -1,0 +1,293 @@
+Loading graph /home/subhajit/data/min-1DeadEnd.mtx ...
+order: 5 size: 6 {}
+order: 5 size: 6 {} (transposeWithDegree)
+[00001.654 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00000.473 ms; 017 iters.] [1.3411e-07 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00000.477 ms; 017 iters.] [1.3411e-07 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00000.461 ms; 017 iters.] [1.3411e-07 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00000.464 ms; 017 iters.] [1.3411e-07 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00000.475 ms; 017 iters.] [1.3411e-07 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00000.457 ms; 017 iters.] [1.3411e-07 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00000.460 ms; 017 iters.] [1.3411e-07 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00000.461 ms; 017 iters.] [1.3411e-07 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00000.461 ms; 017 iters.] [1.3411e-07 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/min-2SCC.mtx ...
+order: 8 size: 12 {}
+order: 8 size: 12 {} (transposeWithDegree)
+[00003.900 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00001.173 ms; 040 iters.] [9.1270e-07 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00001.153 ms; 040 iters.] [9.1270e-07 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00001.119 ms; 040 iters.] [9.1270e-07 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00001.112 ms; 040 iters.] [9.1270e-07 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00001.113 ms; 040 iters.] [9.1270e-07 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00001.153 ms; 040 iters.] [9.1270e-07 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00001.110 ms; 040 iters.] [9.1270e-07 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00001.088 ms; 040 iters.] [9.1270e-07 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00001.155 ms; 040 iters.] [9.1270e-07 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/min-4SCC.mtx ...
+order: 21 size: 35 {}
+order: 21 size: 35 {} (transposeWithDegree)
+[00004.279 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00001.516 ms; 045 iters.] [6.1560e-07 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00001.501 ms; 045 iters.] [6.1560e-07 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00001.526 ms; 045 iters.] [6.1188e-07 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00001.522 ms; 045 iters.] [6.1560e-07 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00001.528 ms; 045 iters.] [6.1560e-07 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00001.534 ms; 045 iters.] [6.1188e-07 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00001.534 ms; 045 iters.] [6.1560e-07 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00001.531 ms; 045 iters.] [6.1560e-07 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00001.511 ms; 045 iters.] [6.1188e-07 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/min-NvgraphEx.mtx ...
+order: 6 size: 10 {}
+order: 6 size: 10 {} (transposeWithDegree)
+[00002.261 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00000.700 ms; 024 iters.] [2.9802e-08 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00000.648 ms; 024 iters.] [2.9802e-08 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00000.650 ms; 024 iters.] [2.9802e-08 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00000.657 ms; 024 iters.] [2.9802e-08 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00000.687 ms; 024 iters.] [2.9802e-08 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00000.645 ms; 024 iters.] [2.9802e-08 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00000.648 ms; 024 iters.] [2.9802e-08 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00000.643 ms; 024 iters.] [2.9802e-08 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00000.689 ms; 024 iters.] [2.9802e-08 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/web-Stanford.mtx ...
+order: 281903 size: 2312497 {}
+order: 281903 size: 2312497 {} (transposeWithDegree)
+[00011.506 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00102.743 ms; 063 iters.] [4.9303e-06 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00101.473 ms; 063 iters.] [2.2609e-06 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00101.517 ms; 063 iters.] [1.0610e-05 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00115.918 ms; 063 iters.] [4.9303e-06 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00113.659 ms; 063 iters.] [2.2609e-06 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00115.622 ms; 063 iters.] [1.0610e-05 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00131.644 ms; 063 iters.] [4.9303e-06 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00126.931 ms; 063 iters.] [2.2609e-06 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00131.776 ms; 063 iters.] [1.0610e-05 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/web-BerkStan.mtx ...
+order: 685230 size: 7600595 {}
+order: 685230 size: 7600595 {} (transposeWithDegree)
+[00016.079 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00222.831 ms; 064 iters.] [2.0918e-05 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00218.300 ms; 064 iters.] [5.2097e-06 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00216.832 ms; 064 iters.] [3.9461e-05 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00291.752 ms; 064 iters.] [2.0924e-05 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00280.961 ms; 064 iters.] [5.2093e-06 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00287.691 ms; 064 iters.] [3.9460e-05 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00322.798 ms; 064 iters.] [2.0927e-05 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00306.349 ms; 064 iters.] [5.2110e-06 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00316.387 ms; 064 iters.] [3.9461e-05 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/web-Google.mtx ...
+order: 916428 size: 5105039 {}
+order: 916428 size: 5105039 {} (transposeWithDegree)
+[00021.581 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00028.348 ms; 062 iters.] [1.4760e-06 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00028.016 ms; 062 iters.] [1.3505e-06 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00028.070 ms; 062 iters.] [2.0650e-06 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00038.019 ms; 062 iters.] [1.6658e-06 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00038.197 ms; 062 iters.] [1.6413e-06 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00037.427 ms; 062 iters.] [2.1842e-06 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00042.518 ms; 062 iters.] [1.4575e-06 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00042.231 ms; 062 iters.] [1.3954e-06 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00041.799 ms; 062 iters.] [2.0312e-06 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/web-NotreDame.mtx ...
+order: 325729 size: 1497134 {}
+order: 325729 size: 1497134 {} (transposeWithDegree)
+[00009.242 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00027.374 ms; 058 iters.] [3.5453e-06 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00026.618 ms; 058 iters.] [3.1164e-06 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00026.151 ms; 058 iters.] [3.1255e-06 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00031.518 ms; 058 iters.] [3.4682e-06 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00029.668 ms; 058 iters.] [3.0372e-06 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00029.953 ms; 058 iters.] [3.0960e-06 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00034.714 ms; 058 iters.] [3.5084e-06 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00034.233 ms; 058 iters.] [3.1347e-06 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00034.847 ms; 058 iters.] [3.0902e-06 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/soc-Slashdot0811.mtx ...
+order: 77360 size: 905468 {}
+order: 77360 size: 905468 {} (transposeWithDegree)
+[00006.844 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00006.533 ms; 055 iters.] [9.7374e-07 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00006.615 ms; 055 iters.] [9.0722e-07 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00006.897 ms; 055 iters.] [9.6415e-07 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00008.059 ms; 055 iters.] [9.7374e-07 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00007.130 ms; 055 iters.] [9.0722e-07 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00008.047 ms; 055 iters.] [9.6415e-07 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00009.070 ms; 055 iters.] [9.7374e-07 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00008.048 ms; 055 iters.] [9.0722e-07 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00009.063 ms; 055 iters.] [9.6415e-07 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/soc-Slashdot0902.mtx ...
+order: 82168 size: 948464 {}
+order: 82168 size: 948464 {} (transposeWithDegree)
+[00007.128 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00007.223 ms; 056 iters.] [8.6255e-07 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00007.204 ms; 056 iters.] [8.2345e-07 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00007.231 ms; 056 iters.] [9.1995e-07 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00009.269 ms; 056 iters.] [8.5981e-07 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00008.260 ms; 056 iters.] [8.2344e-07 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00008.774 ms; 056 iters.] [9.2046e-07 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00009.344 ms; 056 iters.] [8.7735e-07 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00008.285 ms; 056 iters.] [8.4276e-07 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00009.287 ms; 056 iters.] [9.6719e-07 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/soc-Epinions1.mtx ...
+order: 75888 size: 508837 {}
+order: 75888 size: 508837 {} (transposeWithDegree)
+[00007.015 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00008.158 ms; 054 iters.] [1.1718e-06 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00008.170 ms; 054 iters.] [1.3764e-06 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00008.172 ms; 054 iters.] [1.1180e-06 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00008.816 ms; 054 iters.] [1.1800e-06 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00007.999 ms; 054 iters.] [1.3587e-06 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00008.745 ms; 054 iters.] [1.1431e-06 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00009.827 ms; 054 iters.] [1.1040e-06 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00008.171 ms; 054 iters.] [1.2572e-06 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00009.491 ms; 054 iters.] [1.0750e-06 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/coAuthorsDBLP.mtx ...
+order: 299067 size: 1955352 {}
+order: 299067 size: 1955352 {} (transposeWithDegree)
+[00007.398 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00003.495 ms; 045 iters.] [2.9339e-06 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00003.491 ms; 045 iters.] [2.9331e-06 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00003.504 ms; 045 iters.] [2.9346e-06 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00004.367 ms; 045 iters.] [2.9339e-06 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00004.362 ms; 045 iters.] [2.9331e-06 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00004.364 ms; 045 iters.] [2.9346e-06 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00004.314 ms; 045 iters.] [2.9339e-06 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00004.295 ms; 045 iters.] [2.9331e-06 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00004.301 ms; 045 iters.] [2.9346e-06 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/coAuthorsCiteseer.mtx ...
+order: 227320 size: 1628268 {}
+order: 227320 size: 1628268 {} (transposeWithDegree)
+[00007.772 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00005.484 ms; 048 iters.] [2.1900e-06 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00005.354 ms; 048 iters.] [2.1976e-06 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00005.354 ms; 048 iters.] [2.1969e-06 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00006.503 ms; 048 iters.] [2.1900e-06 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00006.526 ms; 048 iters.] [2.1976e-06 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00006.468 ms; 048 iters.] [2.1969e-06 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00006.450 ms; 048 iters.] [2.1900e-06 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00006.399 ms; 048 iters.] [2.1976e-06 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00006.770 ms; 048 iters.] [2.1969e-06 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/soc-LiveJournal1.mtx ...
+order: 4847571 size: 68993773 {}
+order: 4847571 size: 68993773 {} (transposeWithDegree)
+[00167.900 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00215.234 ms; 051 iters.] [3.2450e-06 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00220.779 ms; 051 iters.] [3.2108e-06 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00224.234 ms; 051 iters.] [3.2478e-06 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00252.244 ms; 051 iters.] [3.2461e-06 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00251.207 ms; 051 iters.] [3.2356e-06 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00249.863 ms; 051 iters.] [3.2521e-06 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00314.161 ms; 051 iters.] [3.2510e-06 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00302.675 ms; 051 iters.] [3.2259e-06 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00305.094 ms; 051 iters.] [3.2541e-06 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/coPapersCiteseer.mtx ...
+order: 434102 size: 32073440 {}
+order: 434102 size: 32073440 {} (transposeWithDegree)
+[00026.305 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00029.998 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00031.380 ms; 051 iters.] [1.9980e-06 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00030.765 ms; 051 iters.] [2.1827e-06 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00031.625 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00030.863 ms; 051 iters.] [1.9980e-06 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00031.695 ms; 051 iters.] [2.1827e-06 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00037.973 ms; 051 iters.] [1.9895e-06 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00038.424 ms; 051 iters.] [1.9980e-06 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00036.890 ms; 051 iters.] [2.1827e-06 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/coPapersDBLP.mtx ...
+order: 540486 size: 30491458 {}
+order: 540486 size: 30491458 {} (transposeWithDegree)
+[00024.351 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00029.342 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00030.447 ms; 049 iters.] [1.4819e-06 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00029.983 ms; 049 iters.] [1.5606e-06 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00036.022 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00035.263 ms; 049 iters.] [1.4819e-06 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00035.775 ms; 049 iters.] [1.5606e-06 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00042.108 ms; 049 iters.] [1.4915e-06 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00042.705 ms; 049 iters.] [1.4819e-06 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00040.963 ms; 049 iters.] [1.5606e-06 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/indochina-2004.mtx ...
+order: 7414866 size: 194109311 {}
+order: 7414866 size: 194109311 {} (transposeWithDegree)
+[00193.869 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00736.645 ms; 061 iters.] [9.5296e-06 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00780.997 ms; 061 iters.] [3.9343e-06 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00781.173 ms; 061 iters.] [1.6264e-05 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[01161.679 ms; 061 iters.] [9.5412e-06 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[01192.035 ms; 061 iters.] [3.9407e-06 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[01170.524 ms; 061 iters.] [1.6256e-05 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[01372.740 ms; 061 iters.] [9.6865e-06 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[01396.687 ms; 061 iters.] [3.9851e-06 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[01371.113 ms; 061 iters.] [1.6410e-05 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/italy_osm.mtx ...
+order: 6686493 size: 14027956 {}
+order: 6686493 size: 14027956 {} (transposeWithDegree)
+[00061.810 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00031.160 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00031.229 ms; 063 iters.] [6.4569e-07 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00031.181 ms; 063 iters.] [6.4566e-07 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00034.202 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00034.125 ms; 063 iters.] [6.4569e-07 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00034.143 ms; 063 iters.] [6.4566e-07 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00033.780 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00033.624 ms; 063 iters.] [6.4569e-07 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00033.609 ms; 063 iters.] [6.4566e-07 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/great-britain_osm.mtx ...
+order: 7733822 size: 16313034 {}
+order: 7733822 size: 16313034 {} (transposeWithDegree)
+[00076.044 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00041.759 ms; 067 iters.] [1.6188e-07 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00042.016 ms; 067 iters.] [1.6169e-07 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00042.326 ms; 067 iters.] [1.6195e-07 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00051.630 ms; 067 iters.] [1.6188e-07 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00051.789 ms; 067 iters.] [1.6169e-07 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00051.951 ms; 067 iters.] [1.6195e-07 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00050.052 ms; 067 iters.] [1.6188e-07 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00049.967 ms; 067 iters.] [1.6169e-07 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00049.847 ms; 067 iters.] [1.6195e-07 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/germany_osm.mtx ...
+order: 11548845 size: 24738362 {}
+order: 11548845 size: 24738362 {} (transposeWithDegree)
+[00113.960 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00068.676 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00069.158 ms; 065 iters.] [2.0161e-07 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00068.879 ms; 065 iters.] [2.0178e-07 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00086.700 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00086.301 ms; 065 iters.] [2.0161e-07 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00086.303 ms; 065 iters.] [2.0178e-07 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00085.393 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00084.953 ms; 065 iters.] [2.0161e-07 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00084.962 ms; 065 iters.] [2.0178e-07 err.] pagerankCuda [sortv=DESC; sorte=DESC]
+
+Loading graph /home/subhajit/data/asia_osm.mtx ...
+order: 11950757 size: 25423206 {}
+order: 11950757 size: 25423206 {} (transposeWithDegree)
+[00107.808 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00054.882 ms; 063 iters.] [6.7846e-07 err.] pagerankCuda [sortv=NO; sorte=NO]
+[00054.880 ms; 063 iters.] [6.7848e-07 err.] pagerankCuda [sortv=NO; sorte=ASC]
+[00054.869 ms; 063 iters.] [6.7842e-07 err.] pagerankCuda [sortv=NO; sorte=DESC]
+[00066.960 ms; 063 iters.] [6.7846e-07 err.] pagerankCuda [sortv=ASC; sorte=NO]
+[00066.634 ms; 063 iters.] [6.7848e-07 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+[00066.791 ms; 063 iters.] [6.7842e-07 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+[00064.304 ms; 063 iters.] [6.7846e-07 err.] pagerankCuda [sortv=DESC; sorte=NO]
+[00064.182 ms; 063 iters.] [6.7848e-07 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+[00064.264 ms; 063 iters.] [6.7842e-07 err.] pagerankCuda [sortv=DESC; sorte=DESC]

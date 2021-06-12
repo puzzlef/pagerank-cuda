@@ -32,24 +32,21 @@ $ ...
 # Loading graph /home/subhajit/data/web-Stanford.mtx ...
 # order: 281903 size: 2312497 {}
 # order: 281903 size: 2312497 {} (transposeWithDegree)
-# [00011.606 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
-# [00103.990 ms; 063 iters.] [4.9303e-06 err.] pagerankCuda
-# [00117.245 ms; 063 iters.] [4.9303e-06 err.] pagerankCuda [vert-indeg]
-#
-# ...
-#
-# Loading graph /home/subhajit/data/soc-LiveJournal1.mtx ...
-# order: 4847571 size: 68993773 {}
-# order: 4847571 size: 68993773 {} (transposeWithDegree)
-# [00168.099 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
-# [00220.754 ms; 051 iters.] [3.2720e-06 err.] pagerankCuda
-# [00277.901 ms; 051 iters.] [3.1548e-06 err.] pagerankCuda [vert-indeg]
+# [00011.506 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+# [00102.743 ms; 063 iters.] [4.9303e-06 err.] pagerankCuda [sortv=NO; sorte=NO]
+# [00101.473 ms; 063 iters.] [2.2609e-06 err.] pagerankCuda [sortv=NO; sorte=ASC]
+# [00101.517 ms; 063 iters.] [1.0610e-05 err.] pagerankCuda [sortv=NO; sorte=DESC]
+# [00115.918 ms; 063 iters.] [4.9303e-06 err.] pagerankCuda [sortv=ASC; sorte=NO]
+# [00113.659 ms; 063 iters.] [2.2609e-06 err.] pagerankCuda [sortv=ASC; sorte=ASC]
+# [00115.622 ms; 063 iters.] [1.0610e-05 err.] pagerankCuda [sortv=ASC; sorte=DESC]
+# [00131.644 ms; 063 iters.] [4.9303e-06 err.] pagerankCuda [sortv=DESC; sorte=NO]
+# [00126.931 ms; 063 iters.] [2.2609e-06 err.] pagerankCuda [sortv=DESC; sorte=ASC]
+# [00131.776 ms; 063 iters.] [1.0610e-05 err.] pagerankCuda [sortv=DESC; sorte=DESC]
 #
 # ...
 ```
 
 [![](https://i.imgur.com/NiKuLu9.gif)][sheets]
-[![](https://i.imgur.com/i9g5HX2.gif)][sheets]
 
 <br>
 <br>
