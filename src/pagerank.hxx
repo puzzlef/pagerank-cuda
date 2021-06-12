@@ -1,9 +1,11 @@
 #pragma once
 #include <vector>
+#include <string>
 #include <utility>
 #include "_main.hxx"
 
 using std::vector;
+using std::string;
 using std::move;
 
 
@@ -30,25 +32,51 @@ using std::move;
 
 
 
+
+// PAGERANK-SORT
+// -------------
+
 enum class PagerankSort {
   NO,
   ASC,
   DESC
 };
 
+string stringify(PagerankSort x) {
+  typedef PagerankSort Sort;
+  switch (x) {
+    default:
+    case Sort::NO:   return "NO";
+    case Sort::ASC:  return "ASC";
+    case Sort::DESC: return "DESC";
+  }
+}
+
+
+
+
+// PAGERANK-OPTIONS
+// ----------------
+
 template <class T>
 struct PagerankOptions {
   typedef PagerankSort Sort;
   int  repeat;
-  Sort sort;
+  Sort sortVertices;
+  Sort sortEdges;
   T    damping;
   T    tolerance;
   int  maxIterations;
 
-  PagerankOptions(int repeat=1, Sort sort=Sort::NO, T damping=0.85, T tolerance=1e-6, int maxIterations=500) :
-  repeat(repeat), sort(sort), damping(damping), tolerance(tolerance), maxIterations(maxIterations) {}
+  PagerankOptions(int repeat=1, Sort sortVertices=Sort::NO, Sort sortEdges=Sort::NO, T damping=0.85, T tolerance=1e-6, int maxIterations=500) :
+  repeat(repeat), sortVertices(sortVertices), sortEdges(sortEdges), damping(damping), tolerance(tolerance), maxIterations(maxIterations) {}
 };
 
+
+
+
+// PAGERANK-RESULT
+// ---------------
 
 template <class T>
 struct PagerankResult {

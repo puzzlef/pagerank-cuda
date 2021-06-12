@@ -41,7 +41,7 @@ auto destinationIndices(const G& x, J&& ks, F fp) {
   vector<int> a;
   auto ids = indices(ks);
   for (int u : ks) {
-    insert(a, a.end(), x.edges(u));
+    append(a, x.edges(u));
     auto ie = a.end(), ib = ie-x.degree(u);
     fp(ib, ie); transform(ib, ie, ib, [&](int v) { return ids[v]; });
   }

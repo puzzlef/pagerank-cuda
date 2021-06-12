@@ -88,17 +88,18 @@ PagerankResult<T> pagerankCuda(H& xt, const vector<T> *q=nullptr, PagerankOption
   T    p   = o.damping;
   T    E   = o.tolerance;
   int  L   = o.maxIterations, l;
-  Sort S   = o.sort;
+  Sort SV  = o.sortVertices;
+  Sort SE  = o.sortEdges;
   int  N   = xt.order();
   int  R   = reduceSizeCu(N);
   auto fm  = [](int u) { return u; };
-  auto fp  = [&](auto ib, auto ie) {
-    if (S==Sort::ASC)  sort(ib, ie, [&](int u, int v) { return x.degree(u) < x.degree(v); });
-    if (S==Sort::DESC) sort(ib, ie, [&](int u, int v) { return x.degree(u) > x.degree(v); });
+  auto fp  = [&](Sort S, auto ib, auto ie) {
+    if (S==Sort::ASC)  sort(ib, ie, [&](int u, int v) { return xt.degree(u) < xt.degree(v); });
+    if (S==Sort::DESC) sort(ib, ie, [&](int u, int v) { return xt.degree(u) > xt.degree(v); });
   };
-  auto ks    = vertices(x, fm, fp);
+  auto ks    = vertices(xt, fm, [&](auto ib, auto ie) { fp(SV, ib, ie); });
   auto vfrom = sourceOffsets(xt, ks);
-  auto efrom = destinationIndices(xt, ks, fp);
+  auto efrom = destinationIndices(xt, ks, [&](auto ib, auto ie) { fp(SE, ib, ie); });
   auto vdata = vertexData(xt, ks);
   int VFROM1 = vfrom.size() * sizeof(int);
   int EFROM1 = efrom.size() * sizeof(int);

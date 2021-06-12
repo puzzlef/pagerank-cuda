@@ -14,10 +14,10 @@ using std::back_inserter;
 // EDGES
 // -----
 
-template <class G, class F, class E>
-auto edges(const G& x, int u, F fm, E fp) {
+template <class G, class F, class D>
+auto edges(const G& x, int u, F fm, D fp) {
   vector<int> a;
-  insert(a, a.end(), x.edges(u));
+  append(a, x.edges(u));
   auto ie = a.end(), ib = a.begin();
   fp(ib, ie); transform(ib, ie, ib, fm);
   return a;
@@ -39,13 +39,13 @@ auto edges(const G& x, int u) {
 // EDGE-DATA
 // ---------
 
-template <class G, class J, class F, class E>
-auto edgeData(const G& x, J&& ks, F fm, E fp) {
+template <class G, class J, class F, class D>
+auto edgeData(const G& x, J&& ks, F fm, D fp) {
   using E = decltype(fm(0, 0));
   vector<E> a;
   vector<int> b;
   for (int u : ks) {
-    b.clear(); insert(b, b.end(), x.edges(u));
+    b.clear(); append(b, x.edges(u));
     auto ie = b.end(), ib = b.begin();
     fp(ib, ie); transform(ib, ie, back_inserter(a), [&](int v) { return fm(u, v); });
   }

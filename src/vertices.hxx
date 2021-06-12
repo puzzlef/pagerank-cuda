@@ -14,10 +14,10 @@ using std::back_inserter;
 // VERTICES
 // --------
 
-template <class G, class F, class E>
-auto vertices(const G& x, F fm, E fp) {
+template <class G, class F, class D>
+auto vertices(const G& x, F fm, D fp) {
   vector<int> a;
-  insert(a, a.end(), x.vertices());
+  append(a, x.vertices());
   auto ie = a.end(), ib = a.begin();
   fp(ib, ie); transform(ib, ie, ib, fm);
   return a;
@@ -39,12 +39,12 @@ auto vertices(const G& x) {
 // VERTEX-DATA
 // -----------
 
-template <class G, class J, class F, class E>
-auto vertexData(const G& x, J&& ks, F fm, E fp) {
+template <class G, class J, class F, class D>
+auto vertexData(const G& x, J&& ks, F fm, D fp) {
   using V = decltype(fm(0));
   vector<V> a;
   vector<int> b;
-  insert(b, b.end(), ks);
+  append(b, ks);
   auto ie = b.end(), ib = b.begin();
   fp(ib, ie); transform(ib, ie, back_inserter(a), fm);
   return a;

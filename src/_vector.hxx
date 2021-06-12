@@ -46,17 +46,18 @@ void eraseIndex(vector<T>& a, int i, int I) {
 
 
 
-// INSERT
+// APPEND
 // ------
 
-template <class T, class I, class J>
-void insert(vector<T>& a, I at, J ib, J ie) {
-  a.insert(at, ib, ie);
+template <class T, class I>
+void append(vector<T>& a, I ib, I ie) {
+  for (auto i=ib; i!=ie; ++i)
+    a.push_back(*i);
 }
 
-template <class T, class I, class J>
-void insert(vector<T>& a, I at, J&& x) {
-  a.insert(at, x.begin(), x.end());
+template <class T, class J>
+void append(vector<T>& a, J&& vs) {
+  append(a, vs.begin(), vs.end());
 }
 
 
