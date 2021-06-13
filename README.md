@@ -1,22 +1,20 @@
-Performance of sequential execution based vs OpenMP based PageRank ([pull], [CSR]).
+Performance of [sequential] execution based vs **CUDA** based PageRank ([pull], [CSR]).
 
 This experiment was for comparing the performance between:
-1. Find pagerank using a single thread (**sequential**).
-2. Find pagerank accelerated using **OpenMP**.
+1. Find pagerank using [nvGraph].
+2. Find pagerank using **CUDA**.
+3. Find pagerank using a single thread ([sequential]).
 
-Both techniques were attempted on different types of graphs, running each
-technique 5 times per graph to get a good time measure. **OpenMP** does seem
-to provide a clear benefit for most graphs (except the smallest ones). This
-speedup is definitely not directly proportional to the number of threads, as
-one would normally expect (Amdahl's law). Note that there is still room for
-improvement with **OpenMP** by using sequential versions of certain routines
-instead of OpenMP versions because not all calculations benefit from multiple
-threads (ex. ["multiply-sequential-vs-openmp"]).
+Each technique was attempted on different types of graphs, running each
+technique 5 times per graph to get a good time measure. **CUDA** is the
+[switched-per-vertex] approach running on GPU. **CUDA** based pagerank is
+indeed much faster than **sequential** (CPU). In order to measure error,
+[nvGraph] pagerank is taken as a reference.
 
-Number of threads for this experiment (using `OMP_NUM_THREADS`) was varied
-from `2` to `48`. All outputs are saved in [out/](out/) and outputs for `4`,
-`48` threads are listed here. The input data used for this experiment is
-available at ["graphs"] (for small ones), and the [SuiteSparse Matrix Collection].
+All outputs are saved in [out](out/) and a small part of the output is listed
+here. Some [charts] are also included below, generated from [sheets]. The input
+data used for this experiment is available at ["graphs"] (for small ones), and
+the [SuiteSparse Matrix Collection].
 
 <br>
 
@@ -47,6 +45,8 @@ $ ...
 # ...
 ```
 
+[![](https://i.imgur.com/vDeiY1n.gif)][sheets]
+
 <br>
 <br>
 
@@ -54,15 +54,21 @@ $ ...
 ## References
 
 - [PageRank Algorithm, Mining massive Datasets (CS246), Stanford University](http://snap.stanford.edu/class/cs246-videos-2019/lec9_190205-cs246-720.mp4)
+- [CUDA by Example :: Jason Sanders, Edward Kandrot](http://www.mat.unimi.it/users/sansotte/cuda/CUDA_by_Example.pdf)
+- [Managed memory vs cudaHostAlloc - TK1](https://forums.developer.nvidia.com/t/managed-memory-vs-cudahostalloc-tk1/34281)
 - [SuiteSparse Matrix Collection]
 
 <br>
 <br>
 
-[![](https://i.imgur.com/5vdxPZ3.jpg)](https://www.youtube.com/watch?v=rKv_l1RnSqs)
+[![](https://i.imgur.com/fjeKRUf.jpg)](https://www.youtube.com/watch?v=TtTHBmL7N5U)
 
-[pull]: https://github.com/puzzlef/pagerank-push-vs-pull
-[CSR]: https://github.com/puzzlef/pagerank-class-vs-csr
-["multiply-sequential-vs-openmp"]: https://github.com/puzzlef/multiply-sequential-vs-openmp
-["graphs"]: https://github.com/puzzlef/graphs
 [SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
+[nvGraph]: https://github.com/rapidsai/nvgraph
+["graphs"]: https://github.com/puzzlef/graphs
+[pull]: https://github.com/puzzlef/pagerank-push-vs-pull
+[csr]: https://github.com/puzzlef/pagerank-class-vs-csr
+[sequential]: https://github.com/puzzlef/pagerank-sequential-vs-openmp
+[switched-per-vertex]: https://github.com/puzzlef/pagerank-cuda-switched-adjust-switch-point
+[charts]: https://photos.app.goo.gl/MLcbhUPmLEC7iaEm9
+[sheets]: https://docs.google.com/spreadsheets/d/12u5yq49MLS2QRhWHkZF7SWs1JSS4u1sb7wKl8ExrJgg/edit?usp=sharing
