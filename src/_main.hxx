@@ -7,3 +7,4 @@
 #include "_iterator.hxx"
 #include "_nvgraph.hxx"
 #include "_utility.hxx"
+#include "_vector.hxx"
