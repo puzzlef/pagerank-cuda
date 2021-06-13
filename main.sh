@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-src="pagerank-sequential-vs-openmp"
+src="pagerank-sequential-vs-cuda"
 out="/home/resources/Documents/subhajit/$src.log"
 ulimit -s unlimited
 printf "" > "$out"
@@ -10,9 +10,7 @@ git clone https://github.com/puzzlef/$src
 cd $src
 
 # Run
-run() {
-g++ -O3 -fopenmp main.cxx
-echo "OMP_NUM_THREADS=$OMP_NUM_THREADS"                     | tee -a "$out"
+nvcc -std=c++17 -Xcompiler -lnvgraph -O3 main.cu
 stdbuf --output=L ./a.out ~/data/min-1DeadEnd.mtx      2>&1 | tee -a "$out"
 stdbuf --output=L ./a.out ~/data/min-2SCC.mtx          2>&1 | tee -a "$out"
 stdbuf --output=L ./a.out ~/data/min-4SCC.mtx          2>&1 | tee -a "$out"
@@ -34,13 +32,3 @@ stdbuf --output=L ./a.out ~/data/italy_osm.mtx         2>&1 | tee -a "$out"
 stdbuf --output=L ./a.out ~/data/great-britain_osm.mtx 2>&1 | tee -a "$out"
 stdbuf --output=L ./a.out ~/data/germany_osm.mtx       2>&1 | tee -a "$out"
 stdbuf --output=L ./a.out ~/data/asia_osm.mtx          2>&1 | tee -a "$out"
-echo ""                                                     | tee -a "$out"
-}
-
-export OMP_NUM_THREADS=2  && run
-export OMP_NUM_THREADS=4  && run
-export OMP_NUM_THREADS=8  && run
-export OMP_NUM_THREADS=16 && run
-export OMP_NUM_THREADS=28 && run
-export OMP_NUM_THREADS=32 && run
-export OMP_NUM_THREADS=48 && run

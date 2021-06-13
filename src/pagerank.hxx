@@ -32,6 +32,10 @@ using std::move;
 #define BLOCK_DIM_PRSB 256
 #define GRID_DIM_PRSB  GRID_LIMIT
 
+// For pagerank cuda switched (thread approach)
+#define BLOCK_DIM_PRST 512
+#define GRID_DIM_PRST  GRID_LIMIT
+
 // For pagerank cuda switched switch-point
 #define PAGERANK_SWITCH_DEGREE 64
 #define PAGERANK_SWITCH_LIMIT  32
