@@ -1,14 +1,17 @@
 #pragma once
-#include <cmath>
 #include <vector>
+#include <unordered_map>
+#include <iterator>
 #include <algorithm>
 
 using std::vector;
-using std::find;
+using std::unordered_map;
+using std::iterator_traits;
+using std::back_inserter;
+using std::set_difference;
 using std::count;
 using std::count_if;
-using std::copy;
-using std::abs;
+using std::find;
 
 
 
@@ -52,218 +55,43 @@ int countIf(const J& x, F fn) {
 
 
 
-// ERASE
-// -----
-
-template <class T>
-void eraseIndex(vector<T>& x, int i) {
-  x.erase(x.begin()+i);
-}
-
-template <class T>
-void eraseIndex(vector<T>& x, int i, int I) {
-  x.erase(x.begin()+i, x.begin()+I);
-}
-
-
-
-
-// COPY
-// ----
-
-template <class T>
-void copy(vector<T>& a, const vector<T>& x) {
-  copy(x.begin(), x.end(), a.begin());
-}
-
-
-template <class T>
-void copyOmp(vector<T>& a, const vector<T>& x) {
-  int N = x.size();
-  #pragma omp parallel for schedule(static,4096)
-  for (int i=0; i<N; i++)
-    a[i] = x[i];
-}
-
-
-
-
-// FILL
-// ----
-
-template <class T>
-void fill(T *a, int N, const T& v) {
-  for (int i=0; i<N; i++)
-    a[i] = v;
-}
-
-template <class T>
-void fill(vector<T>& a, const T& v) {
-  fill(a.begin(), a.end(), v);
-}
-
-
-template <class T>
-void fillOmp(T *a, int N, const T& v) {
-  #pragma omp parallel for schedule(static,4096)
-  for (int i=0; i<N; i++)
-    a[i] = v;
-}
-
-template <class T>
-void fillOmp(vector<T>& a, const T& v) {
-  fillOmp(a.data(), (int) a.size(), v);
-}
-
-
-
-
-// FILL-AT
+// INDICES
 // -------
 
-template <class T, class I>
-void fillAt(T *a, const T& v, I&& is) {
-  for (int i : is)
-    a[i] = v;
-}
-
-template <class T, class I>
-void fillAt(vector<T>& a, const T& v, I&& is) {
-  fillAt(a.data(), v, is);
-}
-
-
-
-
-// SUM
-// ---
-
-template <class T>
-auto sum(const T *x, int N) {
-  T a = T();
-  for (int i=0; i<N; i++)
-    a += x[i];
+template <class I>
+auto indices(I ib, I ie) {
+  using K = typename iterator_traits<I>::value_type;
+  unordered_map<K, int> a; int i = 0;
+  for (I it=ib; it!=ie; ++it)
+    a[*it] = i++;
   return a;
 }
 
-template <class T>
-auto sum(const vector<T>& x) {
-  return sum(x.data(), x.size());
+template <class J>
+auto indices(J&& x) {
+  return indices(x.begin(), x.end());
 }
 
 
 
 
-// SUM-AT
-// ------
+// SET-DIFFERENCE
+// --------------
 
-template <class T, class I>
-auto sumAt(const T *x, I&& is) {
-  T a = T();
-  for (int i : is)
-    a += x[i];
+template <class L, class J, class K>
+void setDifference(L&& a, J&& x, K&& y) {
+  set_difference(x.begin(), x.end(), y.begin(), y.end(), a.begin());
+}
+
+template <class T, class J, class K>
+void setDifference(vector<T>& a, J&& x, K&& y) {
+  set_difference(x.begin(), x.end(), y.begin(), y.end(), back_inserter(a));
+}
+
+template <class J, class K>
+auto setDifference(J&& x, K&& y) {
+  using I = decltype(x.begin());
+  using T = typename iterator_traits<I>::value_type;
+  vector<T> a; setDifference(a, x, y);
   return a;
-}
-
-template <class T, class I>
-auto sumAt(const vector<T>& x, I&& is) {
-  return sumAt(x.data(), is);
-}
-
-
-
-
-// ADD-VALUE
-// ---------
-
-template <class T>
-void addValue(T *a, int N, const T& v) {
-  for (int i=0; i<N; i++)
-    a[i] += v;
-}
-
-template <class T>
-void addValue(vector<T>& a, const T& v) {
-  addValue(a.data(), a.size(), v);
-}
-
-
-
-
-// ADD-VALUE-AT
-// ------------
-
-template <class T, class I>
-void addValueAt(T *a, const T& v, I&& is) {
-  for (int i : is)
-    a[i] += v;
-}
-
-template <class T, class I>
-void addValueAt(vector<T>& a, const T& v, I&& is) {
-  addValueAt(a.data(), v, is);
-}
-
-
-
-
-// ABS-ERROR
-// ---------
-
-template <class T>
-auto absError(const T *x, const T *y, int N) {
-  T a = T();
-  for (int i=0; i<N; i++)
-    a += abs(x[i] - y[i]);
-  return a;
-}
-
-template <class T>
-auto absError(const vector<T>& x, const vector<T>& y) {
-  return absError(x.data(), y.data(), x.size());
-}
-
-
-template <class T>
-auto absErrorOmp(const T *x, const T *y, int N) {
-  T a = T();
-  #pragma omp parallel for schedule(static,4096) reduction(+:a)
-  for (int i=0; i<N; i++)
-    a += abs(x[i] - y[i]);
-  return a;
-}
-
-template <class T>
-auto absErrorOmp(const vector<T>& x, const vector<T>& y) {
-  return absErrorOmp(x.data(), y.data(), x.size());
-}
-
-
-
-
-// MULTIPLY
-// --------
-
-template <class T>
-void multiply(T *a, const T *x, const T *y, int N) {
-  for (int i=0; i<N; i++)
-    a[i] = x[i] * y[i];
-}
-
-template <class T>
-void multiply(vector<T>& a, const vector<T>& x, const vector<T>& y) {
-  multiply(a.data(), x.data(), y.data(), x.size());
-}
-
-
-template <class T>
-void multiplyOmp(T *a, const T *x, const T *y, int N) {
-  #pragma omp parallel for schedule(static,4096)
-  for (int i=0; i<N; i++)
-    a[i] = x[i] * y[i];
-}
-
-template <class T>
-void multiplyOmp(vector<T>& a, const vector<T>& x, const vector<T>& y) {
-  multiplyOmp(a.data(), x.data(), y.data(), x.size());
 }
