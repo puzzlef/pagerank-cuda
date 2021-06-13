@@ -1,22 +1,20 @@
-Performance of sequential execution based vs OpenMP based PageRank ([pull], [CSR]).
+Comparing various switch points for CUDA **switched-per-vertex** based
+PageRank ([pull], [CSR], [switched-partition]).
 
-This experiment was for comparing the performance between:
-1. Find pagerank using a single thread (**sequential**).
-2. Find pagerank accelerated using **OpenMP**.
+For this experiment, `switch_degree` was varied from `2` - `1024`, and
+`switch_limit` was varied from `1` - `1024`. `switch_degree` defines the
+*in-degree* at which *pagerank kernel* switches from **thread-per-vertex**
+approach to **block-per-vertex**. `switch_limit` defines the minimum block
+size for **thread-per-vertex** / **block-per-vertex** approach (if a block
+size is too small, it is merged with the other approach block). Each case is
+run on multiple graphs, running each 5 times per graph for good time measure.
+It seems `switch_degree` of **64** and `switch_limit` of **32** would be a
+good choice.
 
-Both techniques were attempted on different types of graphs, running each
-technique 5 times per graph to get a good time measure. **OpenMP** does seem
-to provide a clear benefit for most graphs (except the smallest ones). This
-speedup is definitely not directly proportional to the number of threads, as
-one would normally expect (Amdahl's law). Note that there is still room for
-improvement with **OpenMP** by using sequential versions of certain routines
-instead of OpenMP versions because not all calculations benefit from multiple
-threads (ex. ["multiply-sequential-vs-openmp"]).
-
-Number of threads for this experiment (using `OMP_NUM_THREADS`) was varied
-from `2` to `48`. All outputs are saved in [out/](out/) and outputs for `4`,
-`48` threads are listed here. The input data used for this experiment is
-available at ["graphs"] (for small ones), and the [SuiteSparse Matrix Collection].
+All outputs are saved in [out](out/) and a small part of the output is listed
+here. Some [charts] are also included below, generated from [sheets]. The input
+data used for this experiment is available at ["graphs"] (for small ones), and
+the [SuiteSparse Matrix Collection].
 
 <br>
 
@@ -146,6 +144,24 @@ $ ...
 # ...
 ```
 
+[![](https://i.imgur.com/CzE33L3.gif)][sheets]
+[![](https://i.imgur.com/LfwTsKA.gif)][sheets]
+[![](https://i.imgur.com/hnzcjjP.gif)][sheets]
+[![](https://i.imgur.com/aJIeelH.gif)][sheets]
+[![](https://i.imgur.com/TiKRMFU.gif)][sheets]
+[![](https://i.imgur.com/sJ7nRLX.gif)][sheets]
+[![](https://i.imgur.com/Z58cLk1.gif)][sheets]
+[![](https://i.imgur.com/WbB8X99.gif)][sheets]
+[![](https://i.imgur.com/Qz4MaQu.gif)][sheets]
+[![](https://i.imgur.com/WGhdeCy.gif)][sheets]
+[![](https://i.imgur.com/Z8fwD1m.gif)][sheets]
+[![](https://i.imgur.com/51OGaWq.gif)][sheets]
+[![](https://i.imgur.com/Xd9byhu.gif)][sheets]
+[![](https://i.imgur.com/MOOBk46.gif)][sheets]
+[![](https://i.imgur.com/edjSyiU.gif)][sheets]
+[![](https://i.imgur.com/WWS1N4M.gif)][sheets]
+[![](https://i.imgur.com/zdXhaKj.gif)][sheets]
+
 <br>
 <br>
 
@@ -153,15 +169,22 @@ $ ...
 ## References
 
 - [PageRank Algorithm, Mining massive Datasets (CS246), Stanford University](http://snap.stanford.edu/class/cs246-videos-2019/lec9_190205-cs246-720.mp4)
+- [CUDA by Example :: Jason Sanders, Edward Kandrot](http://www.mat.unimi.it/users/sansotte/cuda/CUDA_by_Example.pdf)
+- [Managed memory vs cudaHostAlloc - TK1](https://forums.developer.nvidia.com/t/managed-memory-vs-cudahostalloc-tk1/34281)
 - [SuiteSparse Matrix Collection]
 
 <br>
 <br>
 
-[![](https://i.imgur.com/5vdxPZ3.jpg)](https://www.youtube.com/watch?v=rKv_l1RnSqs)
+[![](https://i.imgur.com/uOYmbJZ.jpg)](https://www.youtube.com/watch?v=EQy5YjewJeU)
 
-[pull]: https://github.com/puzzlef/pagerank-push-vs-pull
-[CSR]: https://github.com/puzzlef/pagerank-class-vs-csr
-["multiply-sequential-vs-openmp"]: https://github.com/puzzlef/multiply-sequential-vs-openmp
-["graphs"]: https://github.com/puzzlef/graphs
 [SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
+[nvGraph]: https://github.com/rapidsai/nvgraph
+["graphs"]: https://github.com/puzzlef/graphs
+[pull]: https://github.com/puzzlef/pagerank-push-vs-pull
+[csr]: https://github.com/puzzlef/pagerank-class-vs-csr
+[block-launch]: https://github.com/puzzlef/pagerank-cuda-block-adjust-launch
+[thread-launch]: https://github.com/puzzlef/pagerank-cuda-thread-adjust-launch
+[switched-partition]: https://github.com/puzzlef/pagerank-cuda-switched-sort-by-indegree
+[charts]: https://photos.app.goo.gl/67DDHrtivnEGvXzQ7
+[sheets]: https://docs.google.com/spreadsheets/d/186GuFf02uKEp2C1gQtpjenWyTTAh6IXOpLJOPxdOlPA/edit?usp=sharing
