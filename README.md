@@ -1,12 +1,12 @@
 Comparing various launch configs for CUDA **switched-per-vertex** based
-PageRank, focusing on **block approach** ([pull], [CSR], [switch-point]).
+PageRank, focusing on **thread approach** ([pull], [CSR], [switch-point]).
 
 This experiment was for finding a suitable **launch config** for
-**CUDA switched-per-vertex** for block approach. For the launch config,
+**CUDA switched-per-vertex** for thread approach. For the launch config,
 the **block-size** (threads) was adjusted from `32`-`1024`, and the
 **grid-limit** (max grid-size) was adjusted from `1024`-`32768`. Each config
-was run 5 times per graph to get a good time measure. `MAXx256` appears to be
-a good config for most graphs. Here `MAX` is the *grid-limit*, and `256` is
+was run 5 times per graph to get a good time measure. `MAXx512` appears to be
+a good config for most graphs. Here `MAX` is the *grid-limit*, and `512` is
 the *block-size*. Note that this applies to **Tesla V100 PCIe 16GB**, and
 would be different for other GPUs. In order to measure error, [nvGraph]
 pagerank is taken as a reference.
@@ -70,7 +70,23 @@ $ ...
 # ...
 ```
 
-[![](https://i.imgur.com/XVcsXgB.gif)][sheets]
+[![](https://i.imgur.com/Mi4kLGM.gif)][sheets]
+[![](https://i.imgur.com/myc6Edt.gif)][sheets]
+[![](https://i.imgur.com/el6UjtR.gif)][sheets]
+[![](https://i.imgur.com/NJGRR9W.gif)][sheets]
+[![](https://i.imgur.com/b78vRe4.gif)][sheets]
+[![](https://i.imgur.com/wq2QoiQ.gif)][sheets]
+[![](https://i.imgur.com/KdlGaFy.gif)][sheets]
+[![](https://i.imgur.com/OSIrORA.gif)][sheets]
+[![](https://i.imgur.com/XbMtxZe.gif)][sheets]
+[![](https://i.imgur.com/SijlWf7.gif)][sheets]
+[![](https://i.imgur.com/LQlZWH7.gif)][sheets]
+[![](https://i.imgur.com/2ykwciu.gif)][sheets]
+[![](https://i.imgur.com/u7OXm2u.gif)][sheets]
+[![](https://i.imgur.com/lnUBtmQ.gif)][sheets]
+[![](https://i.imgur.com/QdSBzla.gif)][sheets]
+[![](https://i.imgur.com/8wO424j.gif)][sheets]
+[![](https://i.imgur.com/5jyaxPP.gif)][sheets]
 
 <br>
 <br>
@@ -86,7 +102,7 @@ $ ...
 <br>
 <br>
 
-[![](https://i.imgur.com/uOYmbJZ.jpg)](https://www.youtube.com/watch?v=EQy5YjewJeU)
+[![](https://i.imgur.com/NEc07SM.jpg)](https://www.youtube.com/watch?v=igKn7Qbz38g)
 
 [SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
 [nvGraph]: https://github.com/rapidsai/nvgraph
@@ -94,5 +110,5 @@ $ ...
 [pull]: https://github.com/puzzlef/pagerank-push-vs-pull
 [csr]: https://github.com/puzzlef/pagerank-class-vs-csr
 [switch-point]: https://github.com/puzzlef/pagerank-cuda-switched-adjust-switch-point
-[charts]: https://photos.app.goo.gl/fQzccCkR8bCjX6ne8
-[sheets]: https://docs.google.com/spreadsheets/d/1JCb295fcFPTqImCj9uKvzY5m4_exW7ssO66C9tYEdfU/edit?usp=sharing
+[charts]: https://photos.app.goo.gl/7tB7ivu7XH5YVHbN9
+[sheets]: https://docs.google.com/spreadsheets/d/1Fh7u0gpwBOzCDaqt_sWCYUwFiDtO6T1I8M6NqOoPYRo/edit?usp=sharing
