@@ -101,8 +101,8 @@ void pagerankSwitchedCu(T *a, const T *r, const T *c, const int *vfrom, const in
 
 template <class G, class T=float>
 int pagerankSwitchPoint(const G& xt, const PagerankOptions<T>& o) {
-  int a = countIf(x.vertices(), [&](int u) { return xt.degree(u) < o.switchDegree; });
-  int L = o.switchLimit, N = ks.size();
+  int a = countIf(xt.vertices(), [&](int u) { return xt.degree(u) < o.switchDegree; });
+  int L = o.switchLimit, N = xt.order();
   return a<L? 0 : (N-a<L? N : a);
 }
 
@@ -114,7 +114,7 @@ void pagerankAddStep(vector<int>& a, int n) {
 template <class G, class T=float>
 auto pagerankWave(const G& xt, const PagerankOptions<T>& o) {
   vector<int> a;
-  int N = ks.size();
+  int N = xt.order();
   int s = pagerankSwitchPoint(xt, o);
   if (s)   pagerankAddStep(a,  -s);
   if (N-s) pagerankAddStep(a, N-s);
@@ -159,7 +159,6 @@ int pagerankCudaCore(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, T *fD, c
 
 template <class H, class T=float>
 PagerankResult<T> pagerankCuda(H& xt, const vector<T> *q=nullptr, PagerankOptions<T> o=PagerankOptions<T>()) {
-  typedef PagerankSort Sort;
   T    p   = o.damping;
   T    E   = o.tolerance;
   int  L   = o.maxIterations, l;

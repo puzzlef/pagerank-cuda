@@ -8,7 +8,7 @@ using namespace std;
 
 
 
-#define REPEAT 1
+#define REPEAT 5
 
 template <class G, class H>
 void runPagerank(const G& x, const H& xt, bool show) {
@@ -20,8 +20,8 @@ void runPagerank(const G& x, const H& xt, bool show) {
   printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankNvgraph\n", a1.time, a1.iterations, e1);
 
   // Find pagerank using CUDA thread-per-vertex.
-  for (int degree=2; degree<=1024; degree*=2) {
-    for (int limit=32; limit<=32; limit*=2) {
+  for (int degree=2; degree<=BLOCK_LIMIT; degree*=2) {
+    for (int limit=1; limit<=BLOCK_LIMIT; limit*=2) {
       auto a2 = pagerankCuda(xt, init, {REPEAT, degree, limit});
       auto e2 = l1Norm(a2.ranks, a1.ranks);
       printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda [degree=%d; limit=%d]\n", a2.time, a2.iterations, e2, degree, limit);
