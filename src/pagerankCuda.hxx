@@ -91,24 +91,24 @@ void pagerankThreadCu(T *a, const T *r, const T *c, const int *vfrom, const int 
 
 
 template <class T>
-void pagerankSwitchedBlockCu(T *a, const T *r, const T *c, const int *vfrom, const int *efrom, int i, int n, T c0, const PagerankOptions<T>& o) {
-  int B = o.blockSize;
-  int G = min(n, o.gridLimit);
+void pagerankSwitchedBlockCu(T *a, const T *r, const T *c, const int *vfrom, const int *efrom, int i, int n, T c0) {
+  int B = BLOCK_DIM_PRSB;
+  int G = min(n, GRID_DIM_PRSB);
   pagerankBlockKernel<<<G, B>>>(a, r, c, vfrom, efrom, i, n, c0);
 }
 
 template <class T>
-void pagerankSwitchedThreadCu(T *a, const T *r, const T *c, const int *vfrom, const int *efrom, int i, int n, T c0) {
-  int B = BLOCK_DIM_PRT;
-  int G = min(ceilDiv(n, B), GRID_DIM_PRT);
+void pagerankSwitchedThreadCu(T *a, const T *r, const T *c, const int *vfrom, const int *efrom, int i, int n, T c0, const PagerankOptions<T>& o) {
+  int B = o.blockSize;
+  int G = min(ceilDiv(n, B), o.gridLimit);
   pagerankThreadKernel<<<G, B>>>(a, r, c, vfrom, efrom, i, n, c0);
 }
 
 template <class T, class J>
 void pagerankSwitchedCu(T *a, const T *r, const T *c, const int *vfrom, const int *efrom, int i, J&& ns, T c0, const PagerankOptions<T>& o) {
   for (int n : ns) {
-    if (n>0) pagerankSwitchedBlockCu (a, r, c, vfrom, efrom, i,  n, c0, o);
-    else     pagerankSwitchedThreadCu(a, r, c, vfrom, efrom, i, -n, c0);
+    if (n>0) pagerankSwitchedBlockCu (a, r, c, vfrom, efrom, i,  n, c0);
+    else     pagerankSwitchedThreadCu(a, r, c, vfrom, efrom, i, -n, c0, o);
     i += abs(n);
   }
 }
