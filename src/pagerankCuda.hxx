@@ -6,7 +6,6 @@
 #include "edges.hxx"
 #include "csr.hxx"
 #include "pagerank.hxx"
-#include "_main.hxx"
 
 using std::vector;
 using std::partition;
@@ -90,11 +89,26 @@ void pagerankThreadCu(T *a, const T *r, const T *c, const int *vfrom, const int 
 // PAGERANK-SWITCHED
 // -----------------
 
+
+template <class T>
+void pagerankSwitchedBlockCu(T *a, const T *r, const T *c, const int *vfrom, const int *efrom, int i, int n, T c0, const PagerankOptions<T>& o) {
+  int B = o.blockSize;
+  int G = min(n, o.gridLimit);
+  pagerankBlockKernel<<<G, B>>>(a, r, c, vfrom, efrom, i, n, c0);
+}
+
+template <class T>
+void pagerankSwitchedThreadCu(T *a, const T *r, const T *c, const int *vfrom, const int *efrom, int i, int n, T c0) {
+  int B = BLOCK_DIM_PRT;
+  int G = min(ceilDiv(n, B), GRID_DIM_PRT);
+  pagerankThreadKernel<<<G, B>>>(a, r, c, vfrom, efrom, i, n, c0);
+}
+
 template <class T, class J>
-void pagerankSwitchedCu(T *a, const T *r, const T *c, const int *vfrom, const int *efrom, int i, J&& ns, T c0) {
+void pagerankSwitchedCu(T *a, const T *r, const T *c, const int *vfrom, const int *efrom, int i, J&& ns, T c0, const PagerankOptions<T>& o) {
   for (int n : ns) {
-    if (n>0) pagerankBlockCu (a, r, c, vfrom, efrom, i,  n, c0);
-    else     pagerankThreadCu(a, r, c, vfrom, efrom, i, -n, c0);
+    if (n>0) pagerankSwitchedBlockCu (a, r, c, vfrom, efrom, i,  n, c0, o);
+    else     pagerankSwitchedThreadCu(a, r, c, vfrom, efrom, i, -n, c0);
     i += abs(n);
   }
 }
@@ -128,7 +142,7 @@ auto pagerankWave(const G& xt, const PagerankOptions<T>& o) {
 // ---------------
 
 template <class T, class J>
-int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T *fD, const int *vfromD, const int *efromD, const int *vdataD, int i, J&& ns, int N, T p, T E, int L) {
+int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T *fD, const int *vfromD, const int *efromD, const int *vdataD, int i, J&& ns, int N, T p, T E, int L, const PagerankOptions<T>& o) {
   int n = sumAbs(ns);
   int R = reduceSizeCu(n);
   size_t R1 = R * sizeof(T);
@@ -138,7 +152,7 @@ int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T 
     multiplyCu(cD, rD, fD, n);
     TRY( cudaMemcpy(r0, r0D, R1, cudaMemcpyDeviceToHost) );
     T c0 = (1-p)/N + p*sum(r0, R)/N;
-    pagerankSwitchedCu(aD, rD, cD, vfromD, efromD, i, ns, c0);
+    pagerankSwitchedCu(aD, rD, cD, vfromD, efromD, i, ns, c0, o);
     l1NormCu(eD, rD, aD, n);
     TRY( cudaMemcpy(e, eD, R1, cudaMemcpyDeviceToHost) );
     T e1 = sum(e, R);
@@ -150,10 +164,10 @@ int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T 
 
 
 template <class T, class J>
-int pagerankCudaCore(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, T *fD, const int *vfromD, const int *efromD, const int *vdataD, J&& ns, int N, T p, T E, int L) {
+int pagerankCudaCore(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, T *fD, const int *vfromD, const int *efromD, const int *vdataD, J&& ns, int N, T p, T E, int L, const PagerankOptions<T>& o) {
   fillCu(rD, N, T(1)/N);
   pagerankFactorCu(fD, vdataD, 0, N, p);
-  return pagerankCudaLoop(e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, 0, ns, N, p, E, L);
+  return pagerankCudaLoop(e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, 0, ns, N, p, E, L, o);
 }
 
 
@@ -200,7 +214,7 @@ PagerankResult<T> pagerankCuda(H& xt, const vector<T> *q=nullptr, PagerankOption
   TRY( cudaMemcpy(efromD, efrom.data(), EFROM1, cudaMemcpyHostToDevice) );
   TRY( cudaMemcpy(vdataD, vdata.data(), VDATA1, cudaMemcpyHostToDevice) );
 
-  float t = measureDuration([&]() { l = pagerankCudaCore(e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, ns, N, p, E, L); }, o.repeat);
+  float t = measureDuration([&]() { l = pagerankCudaCore(e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, ns, N, p, E, L, o); }, o.repeat);
   TRY( cudaMemcpy(a.data(), aD, N1, cudaMemcpyDeviceToHost) );
 
   TRY( cudaFreeHost(e) );
