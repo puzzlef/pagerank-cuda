@@ -1,0 +1,146 @@
+Loading graph /home/subhajit/data/min-1DeadEnd.mtx ...
+order: 5 size: 6 {}
+order: 5 size: 6 {} (transposeWithDegree)
+[00001.588 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00000.595 ms; 017 iters.] [1.3411e-07 err.] pagerankCuda
+[00000.000 ms; 017 iters.] [1.3411e-07 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/min-2SCC.mtx ...
+order: 8 size: 12 {}
+order: 8 size: 12 {} (transposeWithDegree)
+[00003.953 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00001.282 ms; 040 iters.] [9.1270e-07 err.] pagerankCuda
+[00000.004 ms; 040 iters.] [9.1270e-07 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/min-4SCC.mtx ...
+order: 21 size: 35 {}
+order: 21 size: 35 {} (transposeWithDegree)
+[00004.329 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00001.445 ms; 045 iters.] [6.1188e-07 err.] pagerankCuda
+[00000.007 ms; 045 iters.] [6.1560e-07 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/min-NvgraphEx.mtx ...
+order: 6 size: 10 {}
+order: 6 size: 10 {} (transposeWithDegree)
+[00002.365 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00000.724 ms; 024 iters.] [2.9802e-08 err.] pagerankCuda
+[00000.000 ms; 024 iters.] [2.9802e-08 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/web-Stanford.mtx ...
+order: 281903 size: 2312497 {}
+order: 281903 size: 2312497 {} (transposeWithDegree)
+[00011.345 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00011.150 ms; 063 iters.] [7.0094e-07 err.] pagerankCuda
+[00439.086 ms; 063 iters.] [5.0388e-06 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/web-BerkStan.mtx ...
+order: 685230 size: 7600595 {}
+order: 685230 size: 7600595 {} (transposeWithDegree)
+[00016.313 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00022.947 ms; 064 iters.] [9.6459e-07 err.] pagerankCuda
+[00937.824 ms; 064 iters.] [2.3679e-05 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/web-Google.mtx ...
+order: 916428 size: 5105039 {}
+order: 916428 size: 5105039 {} (transposeWithDegree)
+[00019.616 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00012.736 ms; 062 iters.] [1.2688e-06 err.] pagerankCuda
+[01528.386 ms; 061 iters.] [5.1350e-04 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/web-NotreDame.mtx ...
+order: 325729 size: 1497134 {}
+order: 325729 size: 1497134 {} (transposeWithDegree)
+[00008.405 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00005.884 ms; 058 iters.] [2.5289e-06 err.] pagerankCuda
+[00225.837 ms; 058 iters.] [7.7281e-04 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/soc-Slashdot0811.mtx ...
+order: 77360 size: 905468 {}
+order: 77360 size: 905468 {} (transposeWithDegree)
+[00006.604 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00003.470 ms; 055 iters.] [9.0883e-07 err.] pagerankCuda
+[00092.833 ms; 055 iters.] [9.8525e-07 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/soc-Slashdot0902.mtx ...
+order: 82168 size: 948464 {}
+order: 82168 size: 948464 {} (transposeWithDegree)
+[00007.155 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00003.732 ms; 056 iters.] [8.2736e-07 err.] pagerankCuda
+[00103.043 ms; 056 iters.] [4.4357e-06 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/soc-Epinions1.mtx ...
+order: 75888 size: 508837 {}
+order: 75888 size: 508837 {} (transposeWithDegree)
+[00006.961 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00003.523 ms; 054 iters.] [1.4007e-06 err.] pagerankCuda
+[00079.987 ms; 054 iters.] [2.6672e-05 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/coAuthorsDBLP.mtx ...
+order: 299067 size: 1955352 {}
+order: 299067 size: 1955352 {} (transposeWithDegree)
+[00007.389 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00003.662 ms; 045 iters.] [2.9323e-06 err.] pagerankCuda
+[00256.152 ms; 045 iters.] [2.9339e-06 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/coAuthorsCiteseer.mtx ...
+order: 227320 size: 1628268 {}
+order: 227320 size: 1628268 {} (transposeWithDegree)
+[00007.071 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00003.734 ms; 048 iters.] [2.1887e-06 err.] pagerankCuda
+[00203.253 ms; 048 iters.] [2.1900e-06 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/soc-LiveJournal1.mtx ...
+order: 4847571 size: 68993773 {}
+order: 4847571 size: 68993773 {} (transposeWithDegree)
+[00168.225 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00158.135 ms; 051 iters.] [3.2208e-06 err.] pagerankCuda
+[13072.056 ms; 051 iters.] [2.0581e-03 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/coPapersCiteseer.mtx ...
+order: 434102 size: 32073440 {}
+order: 434102 size: 32073440 {} (transposeWithDegree)
+[00026.225 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00036.083 ms; 051 iters.] [1.8962e-06 err.] pagerankCuda
+[02339.454 ms; 051 iters.] [1.9895e-06 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/coPapersDBLP.mtx ...
+order: 540486 size: 30491458 {}
+order: 540486 size: 30491458 {} (transposeWithDegree)
+[00024.845 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00037.367 ms; 049 iters.] [1.4561e-06 err.] pagerankCuda
+[02244.309 ms; 049 iters.] [1.4915e-06 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/indochina-2004.mtx ...
+order: 7414866 size: 194109311 {}
+order: 7414866 size: 194109311 {} (transposeWithDegree)
+[00194.159 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00122.417 ms; 060 iters.] [1.7977e-06 err.] pagerankCuda
+[19897.328 ms; 061 iters.] [7.8820e-04 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/italy_osm.mtx ...
+order: 6686493 size: 14027956 {}
+order: 6686493 size: 14027956 {} (transposeWithDegree)
+[00062.299 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00030.037 ms; 063 iters.] [6.4568e-07 err.] pagerankCuda
+[04883.926 ms; 063 iters.] [6.4568e-07 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/great-britain_osm.mtx ...
+order: 7733822 size: 16313034 {}
+order: 7733822 size: 16313034 {} (transposeWithDegree)
+[00076.220 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00039.423 ms; 067 iters.] [1.6188e-07 err.] pagerankCuda
+[07300.815 ms; 067 iters.] [1.6188e-07 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/germany_osm.mtx ...
+order: 11548845 size: 24738362 {}
+order: 11548845 size: 24738362 {} (transposeWithDegree)
+[00113.766 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00061.787 ms; 065 iters.] [2.0173e-07 err.] pagerankCuda
+[11420.545 ms; 065 iters.] [2.0173e-07 err.] pagerankSeq
+
+Loading graph /home/subhajit/data/asia_osm.mtx ...
+order: 11950757 size: 25423206 {}
+order: 11950757 size: 25423206 {} (transposeWithDegree)
+[00107.844 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00051.432 ms; 063 iters.] [6.7846e-07 err.] pagerankCuda
+[08622.731 ms; 063 iters.] [6.7846e-07 err.] pagerankSeq
