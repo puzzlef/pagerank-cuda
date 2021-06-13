@@ -115,8 +115,8 @@ void pagerankSwitchedCu(T *a, const T *r, const T *c, const int *vfrom, const in
 
 template <class G, class T=float>
 int pagerankSwitchPoint(const G& xt, const PagerankOptions<T>& o) {
-  int a = countIf(xt.vertices(), [&](int u) { return xt.degree(u) < o.switchDegree; });
-  int L = o.switchLimit, N = xt.order();
+  int a = countIf(xt.vertices(), [&](int u) { return xt.degree(u) < PAGERANK_SWITCH_DEGREE; });
+  int L = PAGERANK_SWITCH_LIMIT, N = xt.order();
   return a<L? 0 : (N-a<L? N : a);
 }
 
@@ -180,7 +180,7 @@ PagerankResult<T> pagerankCuda(H& xt, const vector<T> *q=nullptr, PagerankOption
   int  R   = reduceSizeCu(N);
   auto fm  = [](int u) { return u; };
   auto fp  = [&](auto ib, auto ie) {
-    partition(ib, ie, [&](int u) { return xt.degree(u) < o.switchDegree; });
+    partition(ib, ie, [&](int u) { return xt.degree(u) < PAGERANK_SWITCH_DEGREE; });
   };
   auto ks    = vertices(xt, fm, fp);
   auto ns    = pagerankWave(xt, o);
