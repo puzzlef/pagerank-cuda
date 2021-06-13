@@ -1,15 +1,15 @@
-Comparing various switch points for CUDA **switched-per-vertex** based
-PageRank ([pull], [CSR], [switched-partition]).
+Comparing various launch configs for CUDA **switched-per-vertex** based
+PageRank, focusing on **block approach** ([pull], [CSR], [switch-point]).
 
-For this experiment, `switch_degree` was varied from `2` - `1024`, and
-`switch_limit` was varied from `1` - `1024`. `switch_degree` defines the
-*in-degree* at which *pagerank kernel* switches from **thread-per-vertex**
-approach to **block-per-vertex**. `switch_limit` defines the minimum block
-size for **thread-per-vertex** / **block-per-vertex** approach (if a block
-size is too small, it is merged with the other approach block). Each case is
-run on multiple graphs, running each 5 times per graph for good time measure.
-It seems `switch_degree` of **64** and `switch_limit` of **32** would be a
-good choice.
+This experiment was for finding a suitable **launch config** for
+**CUDA switched-per-vertex** for block approach. For the launch config,
+the **block-size** (threads) was adjusted from `32`-`1024`, and the
+**grid-limit** (max grid-size) was adjusted from `1024`-`32768`. Each config
+was run 5 times per graph to get a good time measure. `MAXx256` appears to be
+a good config for most graphs. Here `MAX` is the *grid-limit*, and `256` is
+the *block-size*. Note that this applies to **Tesla V100 PCIe 16GB**, and
+would be different for other GPUs. In order to measure error, [nvGraph]
+pagerank is taken as a reference.
 
 All outputs are saved in [out](out/) and a small part of the output is listed
 here. Some [charts] are also included below, generated from [sheets]. The input
@@ -70,7 +70,23 @@ $ ...
 # ...
 ```
 
-[![](https://i.imgur.com/CzE33L3.gif)][sheets]
+[![](https://i.imgur.com/XVcsXgB.gif)][sheets]
+[![](https://i.imgur.com/pJQuCyQ.gif)][sheets]
+[![](https://i.imgur.com/rMcxGaK.gif)][sheets]
+[![](https://i.imgur.com/GHv0HTz.gif)][sheets]
+[![](https://i.imgur.com/c52xyC3.gif)][sheets]
+[![](https://i.imgur.com/eFwCZx2.gif)][sheets]
+[![](https://i.imgur.com/D3el541.gif)][sheets]
+[![](https://i.imgur.com/23r0SbK.gif)][sheets]
+[![](https://i.imgur.com/NAs3Acp.gif)][sheets]
+[![](https://i.imgur.com/x6UPORj.gif)][sheets]
+[![](https://i.imgur.com/vnYxsOf.gif)][sheets]
+[![](https://i.imgur.com/NfvfHu3.gif)][sheets]
+[![](https://i.imgur.com/k7TNWWY.gif)][sheets]
+[![](https://i.imgur.com/Q5pcmAn.gif)][sheets]
+[![](https://i.imgur.com/Z2cYysC.gif)][sheets]
+[![](https://i.imgur.com/Ge4pleG.gif)][sheets]
+[![](https://i.imgur.com/xPAexTi.gif)][sheets]
 
 <br>
 <br>
@@ -93,8 +109,6 @@ $ ...
 ["graphs"]: https://github.com/puzzlef/graphs
 [pull]: https://github.com/puzzlef/pagerank-push-vs-pull
 [csr]: https://github.com/puzzlef/pagerank-class-vs-csr
-[block-launch]: https://github.com/puzzlef/pagerank-cuda-block-adjust-launch
-[thread-launch]: https://github.com/puzzlef/pagerank-cuda-thread-adjust-launch
-[switched-partition]: https://github.com/puzzlef/pagerank-cuda-switched-sort-by-indegree
-[charts]: https://photos.app.goo.gl/67DDHrtivnEGvXzQ7
-[sheets]: https://docs.google.com/spreadsheets/d/186GuFf02uKEp2C1gQtpjenWyTTAh6IXOpLJOPxdOlPA/edit?usp=sharing
+[switch-point]: https://github.com/puzzlef/pagerank-cuda-switched-adjust-switch-point
+[charts]: https://photos.app.goo.gl/fQzccCkR8bCjX6ne8
+[sheets]: https://docs.google.com/spreadsheets/d/1JCb295fcFPTqImCj9uKvzY5m4_exW7ssO66C9tYEdfU/edit?usp=sharing
