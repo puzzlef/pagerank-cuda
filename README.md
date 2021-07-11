@@ -1,18 +1,22 @@
-Comparing various launch configs for CUDA block-per-vertex based PageRank ([pull], [CSR]).
+Comparing various launch configs for **CUDA block-per-vertex** based PageRank
+([pull], [CSR]).
 
 This experiment was for finding a suitable **launch config** for
 **CUDA block-per-vertex**. For the launch config, the **block-size** (threads)
 was adjusted from `32`-`1024`, and the **grid-limit** (max grid-size) was
 adjusted from `1024`-`32768`. Each config was run 5 times per graph to get a
 good time measure. `MAXx64` appears to be a good config for most graphs. Here
-`MAX` is the *grid-limit*, and `64` is the *block-size*. Note that this
-applies to **Tesla V100 PCIe 16GB**, and would be different for other GPUs. In
-order to measure error, [nvGraph] pagerank is taken as a reference.
+`MAX` is the **grid-limit**, and `64` is the **block-size**. This launch
+config is for the entire graph, and could be slightly different for subset of
+graphs. Also note that this applies to *Tesla V100 PCIe 16GB*, and could be
+different for other GPUs. In order to measure error, [nvGraph] pagerank is
+taken as a reference.
 
 All outputs are saved in [out](out/) and a small part of the output is listed
 here. Some [charts] are also included below, generated from [sheets]. The input
 data used for this experiment is available at ["graphs"] (for small ones), and
-the [SuiteSparse Matrix Collection].
+the [SuiteSparse Matrix Collection]. This experiment was done with guidance
+from [Prof. Dip Sankar Banerjee] and [Prof. Kishore Kothapalli].
 
 <br>
 
@@ -92,9 +96,13 @@ $ ...
 
 ## References
 
-- [PageRank Algorithm, Mining massive Datasets (CS246), Stanford University](http://snap.stanford.edu/class/cs246-videos-2019/lec9_190205-cs246-720.mp4)
-- [CUDA by Example :: Jason Sanders, Edward Kandrot](http://www.mat.unimi.it/users/sansotte/cuda/CUDA_by_Example.pdf)
+- [PageRank Algorithm, Mining massive Datasets (CS246), Stanford University](https://www.youtube.com/watch?v=ke9g8hB0MEo)
+- [CUDA by Example :: Jason Sanders, Edward Kandrot](https://www.slideshare.net/SubhajitSahu/cuda-by-example-notes)
 - [Managed memory vs cudaHostAlloc - TK1](https://forums.developer.nvidia.com/t/managed-memory-vs-cudahostalloc-tk1/34281)
+- [nvGraph pagerank example, EN605.617, JHU-EP-Intro2GPU](https://github.com/JHU-EP-Intro2GPU/EN605.617/blob/master/module9/nvgraph_examples/nvgraph_Pagerank.cpp)
+- [nvGraph pagerank example, CUDA Toolkit Documentation](https://docs.nvidia.com/cuda/archive/10.0/nvgraph/index.html#nvgraph-pagerank-example)
+- [nvGraph Library User's Guide](https://docs.nvidia.com/cuda/archive/10.1/pdf/nvGRAPH_Library.pdf)
+- [RAPIDS nvGraph NVIDIA graph library][nvGraph]
 - [SuiteSparse Matrix Collection]
 
 <br>
@@ -102,10 +110,12 @@ $ ...
 
 [![](https://i.imgur.com/QIUy2ds.jpg)](https://www.youtube.com/watch?v=4EG2up-jcKM&t=12897s)
 
+[Prof. Dip Sankar Banerjee]: https://sites.google.com/site/dipsankarban/
+[Prof. Kishore Kothapalli]: https://cstar.iiit.ac.in/~kkishore/
+[SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
+["graphs"]: https://github.com/puzzlef/graphs
 [nvGraph]: https://github.com/rapidsai/nvgraph
 [pull]: https://github.com/puzzlef/pagerank-push-vs-pull
 [csr]: https://github.com/puzzlef/pagerank-class-vs-csr
 [charts]: https://photos.app.goo.gl/8uvRf81gpiBFNjFS6
 [sheets]: https://docs.google.com/spreadsheets/d/1Vqa9Kt1jU7Te9cB29HDZF8O_VfiwJOkNb1eu6mcUDrY/edit?usp=sharing
-["graphs"]: https://github.com/puzzlef/graphs
-[SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
