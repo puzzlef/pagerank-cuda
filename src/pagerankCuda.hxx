@@ -84,10 +84,12 @@ int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T 
     TRY( cudaMemcpy(r0, r0D, R1, cudaMemcpyDeviceToHost) );
     T c0 = (1-p)/N + p*sum(r0, R)/N;
     pagerankBlockCu(aD, cD, vfromD, efromD, i, n, c0, G, B);
-    l1NormCu(eD, rD+i, aD+i, n);
-    TRY( cudaMemcpy(e, eD, R1, cudaMemcpyDeviceToHost) );
-    T el = sum(e, R);
-    if (el < E) break;
+    if ((l & 1)==0) {
+      l1NormCu(eD, rD+i, aD+i, n);
+      TRY( cudaMemcpy(e, eD, R1, cudaMemcpyDeviceToHost) );
+      T el = sum(e, R);
+      if (el < E) break;
+    }
     swap(aD, rD);
   }
   return l;

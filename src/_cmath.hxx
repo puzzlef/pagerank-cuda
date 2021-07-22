@@ -1,8 +1,6 @@
 #pragma once
 #include <cmath>
-#include <type_traits>
 
-using std::is_floating_point;
 using std::ceil;
 
 
