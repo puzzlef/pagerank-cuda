@@ -12,10 +12,11 @@ using std::ceil;
 // --------
 
 template <class T>
-T ceilDiv(T x, T y) {
-  if (is_floating_point<T>()) return ceil(x/y);
-  else return (x + y-1) / y;
-}
+__host__ __device__ T ceilDiv(T x, T y) { return (x + y-1) / y; }
+template <>
+__host__ __device__ float ceilDiv<float>(float x, float y) { return ceil(x/y); }
+template <>
+__host__ __device__ double ceilDiv<double>(double x, double y) { return ceil(x/y); }
 
 
 
@@ -24,18 +25,18 @@ T ceilDiv(T x, T y) {
 // -----
 
 template <class T>
-constexpr bool isPow2(T x) noexcept {
+__host__ __device__ constexpr bool isPow2(T x) noexcept {
   return !(x & (x-1));
 }
 
 
 template <class T>
-constexpr T prevPow2(T x) noexcept {
+__host__ __device__ constexpr T prevPow2(T x) noexcept {
   return 1 << T(log2(x));
 }
 
 
 template <class T>
-constexpr T nextPow2(T x) noexcept {
+__host__ __device__ constexpr T nextPow2(T x) noexcept {
   return 1 << T(ceil(log2(x)));
 }

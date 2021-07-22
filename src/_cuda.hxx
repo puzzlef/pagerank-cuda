@@ -100,7 +100,7 @@ template <class T>
 __device__ void unusedCuda(T&&) {}
 
 #ifndef UNUSED_CUDA
-#define UNUSED_CUDA(...) ARG_CALL(unusedCuda, ##__VA_ARGS__)
+#define UNUSED_CUDA(x) unusedCuda(x)
 #endif
 
 #ifndef UNUSED
@@ -146,6 +146,17 @@ int reduceSizeCu(int N) {
 
 
 
+// SWAP
+// ----
+
+template <class T>
+__device__ void swapCu(T& x, T& y) {
+  T t = x; x = y; y = t;
+}
+
+
+
+
 // FILL
 // ----
 
@@ -164,7 +175,7 @@ __global__ void fillKernel(T *a, int N, T v) {
 
 
 template <class T>
-void fillCu(T *a, int N, T v) {
+__host__ __device__ void fillCu(T *a, int N, T v) {
   const int B = BLOCK_DIM_M<T>();
   const int G = min(ceilDiv(N, B), GRID_DIM_M<T>());
   fillKernel<<<G, B>>>(a, N, v);
@@ -191,10 +202,37 @@ __global__ void fillAtKernel(T *a, T v, const int *is, int IS) {
 
 
 template <class T>
-void fillAtCu(T *a, T v, const int *is, int IS) {
+__host__ __device__ void fillAtCu(T *a, T v, const int *is, int IS) {
   const int B = BLOCK_DIM_M<T>();
   const int G = min(ceilDiv(IS, B), GRID_DIM_M<T>());
   fillAtKernel<<<G, B>>>(a, v, is, IS);
+}
+
+
+
+
+// MULTIPLY
+// --------
+
+template <class T>
+__device__ void multiplyKernelLoop(T *a, const T *x, const T *y, int N, int i, int DI) {
+  for (; i<N; i+=DI)
+    a[i] = x[i] * y[i];
+}
+
+
+template <class T>
+__global__ void multiplyKernel(T *a, const T *x, const T* y, int N) {
+  DEFINE(t, b, B, G);
+  multiplyKernelLoop(a, x, y, N, B*b+t, G*B);
+}
+
+
+template <class T>
+void multiplyCu(T *a, const T *x, const T* y, int N) {
+  const int B = BLOCK_DIM_M<T>();
+  const int G = min(ceilDiv(N, B), GRID_DIM_M<T>());
+  multiplyKernel<<<G, B>>>(a, x, y, N);
 }
 
 
@@ -400,6 +438,96 @@ void sumIfNotCu(T *a, const T *x, const C *cs, int N) {
 
 
 
+// SUM-MULTIPLY
+// ------------
+
+template <class T>
+__device__ T sumMultiplyKernelLoop(const T *x, const T *y, int N, int i, int DI) {
+  T a = T();
+  for (; i<N; i+=DI)
+    a += x[i] * y[i];
+  return a;
+}
+
+
+template <class T, int S=BLOCK_LIMIT>
+__global__ void sumMultiplyKernel(T *a, const T *x, const T *y, int N) {
+  DEFINE(t, b, B, G);
+  __shared__ T cache[S];
+  cache[t] = sumMultiplyKernelLoop(x, y, N, B*b+t, G*B);
+  sumKernelReduce(cache, B, t);
+  if (t==0) a[b] = cache[0];
+}
+
+
+template <class T>
+void sumMultiplyMemcpyCu(T *a, const T *x, const T *y, int N) {
+  const int B = BLOCK_DIM_R<T>();
+  const int G = min(ceilDiv(N, B), GRID_DIM_R<T>());
+  sumMultiplyKernel<<<G, B>>>(a, x, y, N);
+}
+
+template <class T>
+void sumMultiplyInplaceCu(T *a, const T *x, const T *y, int N) {
+  const int B = BLOCK_DIM_R<T>();
+  const int G = min(ceilDiv(N, B), GRID_DIM_R<T>());
+  sumMultiplyKernel<<<G, B>>>(a, x, y, N);
+  sumKernel<<<1, G>>>(a, a, G);
+}
+
+template <class T>
+void sumMultiplyCu(T *a, const T *x, const T *y, int N) {
+  sumMultiplyMemcpyCu(a, x, y, N);
+}
+
+
+
+
+// SUM-MULTIPLY-AT
+// ---------------
+
+template <class T>
+__device__ T sumMultiplyAtKernelLoop(const T *x, const T *y, const int *is, int IS, int i, int DI) {
+  T a = T();
+  for (; i<IS; i+=DI)
+    a += x[is[i]] * y[is[i]];
+  return a;
+}
+
+
+template <class T, int S=BLOCK_LIMIT>
+__global__ void sumMultiplyAtKernel(T *a, const T *x, const T *y, const T *is, int IS) {
+  DEFINE(t, b, B, G);
+  __shared__ T cache[S];
+  cache[t] = sumMultiplyAtKernelLoop(x, y, is, IS, B*b+t, G*B);
+  sumKernelReduce(cache, B, t);
+  if (t==0) a[b] = cache[0];
+}
+
+
+template <class T>
+void sumMultiplyAtMemcpyCu(T *a, const T *x, const T *y, const T *is, int IS) {
+  const int B = BLOCK_DIM_R<T>();
+  const int G = min(ceilDiv(IS, B), GRID_DIM_R<T>());
+  sumMultiplyAtKernel<<<G, B>>>(a, x, y, is, IS);
+}
+
+template <class T>
+void sumMultiplyAtInplaceCu(T *a, const T *x, const T *y, const T *is, int IS) {
+  const int B = BLOCK_DIM_R<T>();
+  const int G = min(ceilDiv(IS, B), GRID_DIM_R<T>());
+  sumMultiplyAtKernel<<<G, B>>>(a, x, y, is, IS);
+  sumKernel<<<1, G>>>(a, a, G);
+}
+
+template <class T>
+void sumMultiplyAtCu(T *a, const T *x, const T *y, const T *is, int IS) {
+  sumMultiplyAtMemcpyCu(a, x, y, is, IS);
+}
+
+
+
+
 // L1-NORM
 // -------
 
@@ -531,31 +659,4 @@ void liNormInplaceCu(T *a, const T *x, const T *y, int N) {
 template <class T>
 void liNormCu(T *a, const T *x, const T *y, int N) {
   liNormMemcpyCu(a, x, y, N);
-}
-
-
-
-
-// MULTIPLY
-// --------
-
-template <class T>
-__device__ void multiplyKernelLoop(T *a, const T *x, const T *y, int N, int i, int DI) {
-  for (; i<N; i+=DI)
-    a[i] = x[i] * y[i];
-}
-
-
-template <class T>
-__global__ void multiplyKernel(T *a, const T *x, const T* y, int N) {
-  DEFINE(t, b, B, G);
-  multiplyKernelLoop(a, x, y, N, B*b+t, G*B);
-}
-
-
-template <class T>
-void multiplyCu(T *a, const T *x, const T* y, int N) {
-  const int B = BLOCK_DIM_M<T>();
-  const int G = min(ceilDiv(N, B), GRID_DIM_M<T>());
-  multiplyKernel<<<G, B>>>(a, x, y, N);
 }
