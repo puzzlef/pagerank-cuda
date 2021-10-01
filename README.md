@@ -14,7 +14,8 @@ pagerank is taken as a reference.
 All outputs are saved in [out](out/) and a small part of the output is listed
 here. Some [charts] are also included below, generated from [sheets]. The input
 data used for this experiment is available at ["graphs"] (for small ones), and
-the [SuiteSparse Matrix Collection].
+the [SuiteSparse Matrix Collection]. This experiment was done with guidance
+from [Prof. Dip Sankar Banerjee] and [Prof. Kishore Kothapalli].
 
 <br>
 
@@ -70,23 +71,26 @@ $ ...
 # ...
 ```
 
-[![](https://i.imgur.com/XVcsXgB.gif)][sheets]
-[![](https://i.imgur.com/pJQuCyQ.gif)][sheets]
-[![](https://i.imgur.com/rMcxGaK.gif)][sheets]
-[![](https://i.imgur.com/GHv0HTz.gif)][sheets]
-[![](https://i.imgur.com/c52xyC3.gif)][sheets]
-[![](https://i.imgur.com/eFwCZx2.gif)][sheets]
-[![](https://i.imgur.com/D3el541.gif)][sheets]
-[![](https://i.imgur.com/23r0SbK.gif)][sheets]
-[![](https://i.imgur.com/NAs3Acp.gif)][sheets]
-[![](https://i.imgur.com/x6UPORj.gif)][sheets]
-[![](https://i.imgur.com/vnYxsOf.gif)][sheets]
-[![](https://i.imgur.com/NfvfHu3.gif)][sheets]
-[![](https://i.imgur.com/k7TNWWY.gif)][sheets]
-[![](https://i.imgur.com/Q5pcmAn.gif)][sheets]
-[![](https://i.imgur.com/Z2cYysC.gif)][sheets]
-[![](https://i.imgur.com/Ge4pleG.gif)][sheets]
-[![](https://i.imgur.com/xPAexTi.gif)][sheets]
+[![](https://i.imgur.com/XVcsXgB.gif)][sheetp]
+[![](https://i.imgur.com/pJQuCyQ.gif)][sheetp]
+[![](https://i.imgur.com/rMcxGaK.gif)][sheetp]
+[![](https://i.imgur.com/GHv0HTz.gif)][sheetp]
+[![](https://i.imgur.com/c52xyC3.gif)][sheetp]
+[![](https://i.imgur.com/eFwCZx2.gif)][sheetp]
+[![](https://i.imgur.com/D3el541.gif)][sheetp]
+[![](https://i.imgur.com/23r0SbK.gif)][sheetp]
+[![](https://i.imgur.com/NAs3Acp.gif)][sheetp]
+[![](https://i.imgur.com/x6UPORj.gif)][sheetp]
+[![](https://i.imgur.com/vnYxsOf.gif)][sheetp]
+[![](https://i.imgur.com/NfvfHu3.gif)][sheetp]
+[![](https://i.imgur.com/k7TNWWY.gif)][sheetp]
+[![](https://i.imgur.com/Q5pcmAn.gif)][sheetp]
+[![](https://i.imgur.com/Z2cYysC.gif)][sheetp]
+[![](https://i.imgur.com/Ge4pleG.gif)][sheetp]
+[![](https://i.imgur.com/xPAexTi.gif)][sheetp]
+
+[![](https://i.imgur.com/M23rXUY.png)][sheetp]
+[![](https://i.imgur.com/jsQxAIP.png)][sheetp]
 
 <br>
 <br>
@@ -104,6 +108,8 @@ $ ...
 
 [![](https://i.imgur.com/uOYmbJZ.jpg)](https://www.youtube.com/watch?v=EQy5YjewJeU)
 
+[Prof. Dip Sankar Banerjee]: https://sites.google.com/site/dipsankarban/
+[Prof. Kishore Kothapalli]: https://cstar.iiit.ac.in/~kkishore/
 [SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
 [nvGraph]: https://github.com/rapidsai/nvgraph
 ["graphs"]: https://github.com/puzzlef/graphs
@@ -112,3 +118,4 @@ $ ...
 [switch-point]: https://github.com/puzzlef/pagerank-cuda-switched-adjust-switch-point
 [charts]: https://photos.app.goo.gl/fQzccCkR8bCjX6ne8
 [sheets]: https://docs.google.com/spreadsheets/d/1JCb295fcFPTqImCj9uKvzY5m4_exW7ssO66C9tYEdfU/edit?usp=sharing
+[sheetp]: https://docs.google.com/spreadsheets/d/e/2PACX-1vSwcuxUCvBbCNO48_-FzzhXzbM7elfy6OSR-MA2Q9fYTDpqF-HEHEnLvUToomcikujHeaGgavNedpaX/pubhtml
