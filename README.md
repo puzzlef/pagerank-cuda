@@ -11,7 +11,8 @@ In order to measure error, [nvGraph] pagerank is taken as a reference.
 All outputs are saved in [out](out/) and a small part of the output is listed
 here. Some [charts] are also included below, generated from [sheets]. The input
 data used for this experiment is available at ["graphs"] (for small ones), and
-the [SuiteSparse Matrix Collection].
+the [SuiteSparse Matrix Collection]. This experiment was done with guidance
+from [Prof. Dip Sankar Banerjee] and [Prof. Kishore Kothapalli].
 
 <br>
 
@@ -40,7 +41,14 @@ $ ...
 # ...
 ```
 
-[![](https://i.imgur.com/XF9ByCY.gif)][sheets]
+[![](https://i.imgur.com/XF9ByCY.gif)][sheetp]
+
+[![](https://i.imgur.com/vURBt4y.png)][sheetp]
+[![](https://i.imgur.com/YDq9PNQ.png)][sheetp]
+[![](https://i.imgur.com/qx5lZxL.png)][sheetp]
+[![](https://i.imgur.com/FBdY4h7.png)][sheetp]
+[![](https://i.imgur.com/pyhVV6H.png)][sheetp]
+[![](https://i.imgur.com/qS4xTa7.png)][sheetp]
 
 <br>
 <br>
@@ -58,6 +66,8 @@ $ ...
 
 [![](https://i.imgur.com/RTLTH4Q.jpg)](https://www.youtube.com/watch?v=1b8F1qa5-eM)
 
+[Prof. Dip Sankar Banerjee]: https://sites.google.com/site/dipsankarban/
+[Prof. Kishore Kothapalli]: https://cstar.iiit.ac.in/~kkishore/
 [SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
 [nvGraph]: https://github.com/rapidsai/nvgraph
 ["graphs"]: https://github.com/puzzlef/graphs
@@ -66,3 +76,4 @@ $ ...
 [thread-launch]: https://github.com/puzzlef/pagerank-cuda-thread-adjust-launch
 [charts]: https://photos.app.goo.gl/whS1JrbAb165j53g8
 [sheets]: https://docs.google.com/spreadsheets/d/1eaSvvIZw246yX59_SvW7apBTukn5tfTqlEZFJ7mkqKM/edit?usp=sharing
+[sheetp]: https://docs.google.com/spreadsheets/d/e/2PACX-1vROIk883tXa4-Nwrpat6x7NRnPlnrM6kjplfNcrXmF4S0lFW_i656iBgnkp5RtPhAMIFlPpe79WohUD/pubhtml
