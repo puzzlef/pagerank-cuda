@@ -13,7 +13,8 @@ a reference.
 All outputs are saved in [out](out/) and a small part of the output is listed
 here. Some [charts] are also included below, generated from [sheets]. The input
 data used for this experiment is available at ["graphs"] (for small ones), and
-the [SuiteSparse Matrix Collection].
+the [SuiteSparse Matrix Collection]. This experiment was done with guidance
+from [Prof. Dip Sankar Banerjee] and [Prof. Kishore Kothapalli].
 
 <br>
 
@@ -42,7 +43,14 @@ $ ...
 # ...
 ```
 
-[![](https://i.imgur.com/Ha2JGkg.gif)][sheets]
+[![](https://i.imgur.com/Ha2JGkg.gif)][sheetp]
+
+[![](https://i.imgur.com/j4cXLhE.png)][sheetp]
+[![](https://i.imgur.com/bIHKFvU.png)][sheetp]
+[![](https://i.imgur.com/2ZtTKEb.png)][sheetp]
+[![](https://i.imgur.com/b1hp5TZ.png)][sheetp]
+[![](https://i.imgur.com/Ah6nepn.png)][sheetp]
+[![](https://i.imgur.com/WdEorr0.png)][sheetp]
 
 <br>
 <br>
@@ -60,6 +68,8 @@ $ ...
 
 [![](https://i.imgur.com/TG0K9e0.jpg)](https://www.youtube.com/watch?v=eQqsP388S3Q)
 
+[Prof. Dip Sankar Banerjee]: https://sites.google.com/site/dipsankarban/
+[Prof. Kishore Kothapalli]: https://cstar.iiit.ac.in/~kkishore/
 [SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
 [nvGraph]: https://github.com/rapidsai/nvgraph
 ["graphs"]: https://github.com/puzzlef/graphs
@@ -68,3 +78,4 @@ $ ...
 [block-launch]: https://github.com/puzzlef/pagerank-cuda-block-adjust-launch
 [charts]: https://photos.app.goo.gl/EfwWVoXnAAhNJWdH7
 [sheets]: https://docs.google.com/spreadsheets/d/16L-b5ofUZbA6xBYbFZESXbv5hs1FTtw_K0FHJLISlNM/edit?usp=sharing
+[sheetp]: https://docs.google.com/spreadsheets/d/e/2PACX-1vS1mLP7ciOUPjtVzwEvrrn3i8pSiJHHQuVmQEmL4H9Gsu_NhEJoJXL0oSfAfUr25PMm-RwsVYP1iW5l/pubhtml
