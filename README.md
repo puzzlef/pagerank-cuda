@@ -11,7 +11,8 @@ simply **partition** *vertices* by *degree*. In order to measure error,
 All outputs are saved in [out](out/) and a small part of the output is listed
 here. Some [charts] are also included below, generated from [sheets]. The input
 data used for this experiment is available at ["graphs"] (for small ones), and
-the [SuiteSparse Matrix Collection].
+the [SuiteSparse Matrix Collection]. This experiment was done with guidance
+from [Prof. Dip Sankar Banerjee] and [Prof. Kishore Kothapalli].
 
 <br>
 
@@ -40,7 +41,14 @@ $ ...
 # ...
 ```
 
-[![](https://i.imgur.com/cJwEj0S.gif)][sheets]
+[![](https://i.imgur.com/cJwEj0S.gif)][sheetp]
+
+[![](https://i.imgur.com/bfBcTqH.png)][sheetp]
+[![](https://i.imgur.com/Usj08Nw.png)][sheetp]
+[![](https://i.imgur.com/I6BW30j.png)][sheetp]
+[![](https://i.imgur.com/sLKFqVu.png)][sheetp]
+[![](https://i.imgur.com/wOUaKH0.png)][sheetp]
+[![](https://i.imgur.com/ImjIDzu.png)][sheetp]
 
 <br>
 <br>
@@ -58,6 +66,8 @@ $ ...
 
 [![](https://i.imgur.com/PQdIWEL.jpg)](https://www.youtube.com/watch?v=GAfOf26DuGk)
 
+[Prof. Dip Sankar Banerjee]: https://sites.google.com/site/dipsankarban/
+[Prof. Kishore Kothapalli]: https://cstar.iiit.ac.in/~kkishore/
 [SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
 [nvGraph]: https://github.com/rapidsai/nvgraph
 ["graphs"]: https://github.com/puzzlef/graphs
@@ -67,3 +77,4 @@ $ ...
 [thread-launch]: https://github.com/puzzlef/pagerank-cuda-thread-adjust-launch
 [charts]: https://photos.app.goo.gl/aoimeCU2px6SAP5z6
 [sheets]: https://docs.google.com/spreadsheets/d/1EoP9whQLThF2UBKNGUeD_d_fCI6tVhtVeqiOt8fmmK8/edit?usp=sharing
+[sheetp]: https://docs.google.com/spreadsheets/d/e/2PACX-1vToajY38qMw0rB7ipBXBjqPYXjiY6fb3h9Odx5BnHgRCP_xfJ81bRshVUNrN7RGsM0IktMM_j_jWUuZ/pubhtml
