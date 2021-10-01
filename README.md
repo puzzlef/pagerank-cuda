@@ -72,23 +72,26 @@ $ ...
 # ...
 ```
 
-[![](https://i.imgur.com/bwedZN8.gif)][sheets]
-[![](https://i.imgur.com/SYY0VTV.gif)][sheets]
-[![](https://i.imgur.com/0ThK2pd.gif)][sheets]
-[![](https://i.imgur.com/a7AKdLx.gif)][sheets]
-[![](https://i.imgur.com/sxbRgJF.gif)][sheets]
-[![](https://i.imgur.com/crTZjmn.gif)][sheets]
-[![](https://i.imgur.com/cxLbgqj.gif)][sheets]
-[![](https://i.imgur.com/m9KGsyj.gif)][sheets]
-[![](https://i.imgur.com/V5Xp74C.gif)][sheets]
-[![](https://i.imgur.com/LW2qAcp.gif)][sheets]
-[![](https://i.imgur.com/Kt1Uzyk.gif)][sheets]
-[![](https://i.imgur.com/UGah41u.gif)][sheets]
-[![](https://i.imgur.com/o9maK87.gif)][sheets]
-[![](https://i.imgur.com/GQJRono.gif)][sheets]
-[![](https://i.imgur.com/rou4VBX.gif)][sheets]
-[![](https://i.imgur.com/D73ZUaf.gif)][sheets]
-[![](https://i.imgur.com/sX2dCEb.gif)][sheets]
+[![](https://i.imgur.com/bwedZN8.gif)][sheetp]
+[![](https://i.imgur.com/SYY0VTV.gif)][sheetp]
+[![](https://i.imgur.com/0ThK2pd.gif)][sheetp]
+[![](https://i.imgur.com/a7AKdLx.gif)][sheetp]
+[![](https://i.imgur.com/sxbRgJF.gif)][sheetp]
+[![](https://i.imgur.com/crTZjmn.gif)][sheetp]
+[![](https://i.imgur.com/cxLbgqj.gif)][sheetp]
+[![](https://i.imgur.com/m9KGsyj.gif)][sheetp]
+[![](https://i.imgur.com/V5Xp74C.gif)][sheetp]
+[![](https://i.imgur.com/LW2qAcp.gif)][sheetp]
+[![](https://i.imgur.com/Kt1Uzyk.gif)][sheetp]
+[![](https://i.imgur.com/UGah41u.gif)][sheetp]
+[![](https://i.imgur.com/o9maK87.gif)][sheetp]
+[![](https://i.imgur.com/GQJRono.gif)][sheetp]
+[![](https://i.imgur.com/rou4VBX.gif)][sheetp]
+[![](https://i.imgur.com/D73ZUaf.gif)][sheetp]
+[![](https://i.imgur.com/sX2dCEb.gif)][sheetp]
+
+[![](https://i.imgur.com/IQTjjIb.png)][sheetp]
+[![](https://i.imgur.com/S4eCob2.png)][sheetp]
 
 <br>
 <br>
@@ -119,3 +122,4 @@ $ ...
 [csr]: https://github.com/puzzlef/pagerank-class-vs-csr
 [charts]: https://photos.app.goo.gl/8uvRf81gpiBFNjFS6
 [sheets]: https://docs.google.com/spreadsheets/d/1Vqa9Kt1jU7Te9cB29HDZF8O_VfiwJOkNb1eu6mcUDrY/edit?usp=sharing
+[sheetp]: https://docs.google.com/spreadsheets/d/e/2PACX-1vQiG1SaS9NOXCGbJq-BM2rE5orbAeGU1F1SSqEhIrjs-TicLxm71x0MnUg7E2VU2oxLW4wIWNmGndNN/pubhtml
