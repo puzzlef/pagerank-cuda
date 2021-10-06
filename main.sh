@@ -7,7 +7,7 @@ printf "" > "$out"
 # Download program
 rm -rf $src
 git clone https://github.com/puzzlef/$src
-cd $src
+cd $src && echo ""
 
 # Run
 nvcc -std=c++17 -Xcompiler -lnvgraph -O3 main.cu
