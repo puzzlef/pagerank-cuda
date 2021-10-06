@@ -10,9 +10,12 @@ using namespace std;
 
 
 
+#define TYPE float
+
+
 template <class G, class H>
 void runPagerank(const G& x, const H& xt, int repeat) {
-  vector<float> *init = nullptr;
+  vector<TYPE> *init = nullptr;
 
   // Find pagerank using a single thread.
   auto a1 = pagerankNvgraph(xt, init, {repeat});

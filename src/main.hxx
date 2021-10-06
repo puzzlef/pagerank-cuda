@@ -8,5 +8,10 @@
 #include "copy.hxx"
 #include "transpose.hxx"
 #include "pagerank.hxx"
-#include "pagerankNvgraph.hxx"
 #include "pagerankCuda.hxx"
+
+#ifndef NVGRAPH_DISABLE
+#include "pagerankNvgraph.hxx"
+#else
+#define pagerankNvgraph pagerankCuda
+#endif

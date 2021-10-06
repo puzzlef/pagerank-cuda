@@ -84,12 +84,10 @@ int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T 
     TRY( cudaMemcpy(r0, r0D, R1, cudaMemcpyDeviceToHost) );
     T c0 = (1-p)/N + p*sum(r0, R)/N;
     pagerankBlockCu(aD, cD, vfromD, efromD, i, n, c0, G, B);
-    if ((l & 1)==0) {
-      l1NormCu(eD, rD+i, aD+i, n);
-      TRY( cudaMemcpy(e, eD, R1, cudaMemcpyDeviceToHost) );
-      T el = sum(e, R);
-      if (el < E) break;
-    }
+    l1NormCu(eD, rD+i, aD+i, n);
+    TRY( cudaMemcpy(e, eD, R1, cudaMemcpyDeviceToHost) );
+    T el = sum(e, R);
+    if (el < E) break;
     swap(aD, rD);
   }
   return l;
@@ -140,7 +138,7 @@ PagerankResult<T> pagerankCuda(H& xt, const vector<T> *q=nullptr, PagerankOption
   float t = measureDurationMarked([&](auto mark) {
     if (q) r = compressContainer(xt, *q, ks);
     else fill(r, T(1)/N);
-    TRY( cudaMemcpy(aD, a.data(), N1, cudaMemcpyHostToDevice) );
+    TRY( cudaMemcpy(aD, r.data(), N1, cudaMemcpyHostToDevice) );
     TRY( cudaMemcpy(rD, r.data(), N1, cudaMemcpyHostToDevice) );
     mark([&] { pagerankFactorCu(fD, vdataD, 0, N, p); });
     mark([&] { l = pagerankCudaLoop(e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, 0, ns, N, p, E, L, G, B); });

@@ -6,15 +6,40 @@ using std::ceil;
 
 
 
-// CEIL-DIV
+// COALESCE
 // --------
+// Similar to JavaScript coalescing || operator.
 
 template <class T>
-__host__ __device__ T ceilDiv(T x, T y) { return (x + y-1) / y; }
+T coalesce(T x, T d=T()) {
+  return x!=T()? x : d;
+}
+
+
+
+
+// CEIL-DIV
+// --------
+// For kernel launch calculation.
+
+template <class T>
+T ceilDiv(T x, T y) { return (x + y-1) / y; }
 template <>
-__host__ __device__ float ceilDiv<float>(float x, float y) { return ceil(x/y); }
+float ceilDiv<float>(float x, float y) { return ceil(x/y); }
 template <>
-__host__ __device__ double ceilDiv<double>(double x, double y) { return ceil(x/y); }
+double ceilDiv<double>(double x, double y) { return ceil(x/y); }
+
+
+
+
+// SGN
+// ---
+// https://stackoverflow.com/a/4609795/1413259
+
+template <typename T>
+int sgn(T x) {
+  return (T() < x) - (x < T());
+}
 
 
 
@@ -23,18 +48,18 @@ __host__ __device__ double ceilDiv<double>(double x, double y) { return ceil(x/y
 // -----
 
 template <class T>
-__host__ __device__ constexpr bool isPow2(T x) noexcept {
+constexpr bool isPow2(T x) noexcept {
   return !(x & (x-1));
 }
 
 
 template <class T>
-__host__ __device__ constexpr T prevPow2(T x) noexcept {
+constexpr T prevPow2(T x) noexcept {
   return 1 << T(log2(x));
 }
 
 
 template <class T>
-__host__ __device__ constexpr T nextPow2(T x) noexcept {
+constexpr T nextPow2(T x) noexcept {
   return 1 << T(ceil(log2(x)));
 }

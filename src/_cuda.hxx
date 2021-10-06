@@ -25,13 +25,21 @@ using std::exit;
 template <class T>
 constexpr int BLOCK_DIM_M() noexcept { return 256; }
 template <class T>
-constexpr int GRID_DIM_M() noexcept { return GRID_LIMIT; }
+constexpr int GRID_DIM_M() noexcept  { return GRID_LIMIT; }
 
 // For reduce-like operations
 template <class T=float>
-constexpr int BLOCK_DIM_R() noexcept { return sizeof(T)<=4? 128:256; }
+constexpr int BLOCK_DIM_RM() noexcept { return 256; }
 template <class T=float>
-constexpr int GRID_DIM_R() noexcept { return 1024; }
+constexpr int GRID_DIM_RM() noexcept  { return 1024; }
+template <class T=float>
+constexpr int BLOCK_DIM_RI() noexcept { return sizeof(T)<=4? 128:256; }
+template <class T=float>
+constexpr int GRID_DIM_RI() noexcept  { return 1024; }
+template <class T=float>
+constexpr int BLOCK_DIM_R() noexcept { return BLOCK_DIM_RM<T>(); }
+template <class T=float>
+constexpr int GRID_DIM_R() noexcept  { return GRID_DIM_RM<T>(); }
 
 
 
@@ -137,11 +145,21 @@ void __syncthreads();
 // ------
 
 template <class T=float>
-int reduceSizeCu(int N) {
-  const int B = BLOCK_DIM_R<T>();
-  const int G = min(ceilDiv(N, B), GRID_DIM_R<T>());
+int reduceMemcpySizeCu(int N) {
+  const int B = BLOCK_DIM_RM<T>();
+  const int G = min(ceilDiv(N, B), GRID_DIM_RM<T>());
   return G;
 }
+
+template <class T=float>
+int reduceInplaceSizeCu(int N) {
+  const int B = BLOCK_DIM_RI<T>();
+  const int G = min(ceilDiv(N, B), GRID_DIM_RI<T>());
+  return G;
+}
+
+template <class T=float>
+int reduceSizeCu(int N) { return reduceMemcpySizeCu<T>(N); }
 
 
 
@@ -619,7 +637,7 @@ void l2NormCu(T *a, const T *x, const T *y, int N) {
 
 
 
-// L3-NORM
+// LI-NORM
 // -------
 
 template <class T>

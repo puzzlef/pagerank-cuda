@@ -9,13 +9,49 @@ using std::vector;
 using std::unordered_map;
 using std::iterator_traits;
 using std::hash;
+using std::for_each;
+using std::any_of;
+using std::all_of;
 using std::find;
 using std::find_if;
 using std::lower_bound;
 using std::count;
 using std::count_if;
+using std::transform;
 using std::set_difference;
 using std::back_inserter;
+
+
+
+
+// ANY-OF
+// ------
+
+template <class I, class F>
+auto anyOf(I ib, I ie, F fn) {
+  return any_of(ib, ie, fn);
+}
+
+template <class J, class F>
+auto anyOf(const J& x, F fn) {
+  return any_of(x.begin(), x.end(), fn);
+}
+
+
+
+
+// ALL-OF
+// ------
+
+template <class I, class F>
+auto allOf(I ib, I ie, F fn) {
+  return all_of(ib, ie, fn);
+}
+
+template <class J, class F>
+auto allOf(const J& x, F fn) {
+  return all_of(x.begin(), x.end(), fn);
+}
 
 
 
@@ -73,8 +109,8 @@ auto lowerBound(const J& x, const T& v) {
 }
 
 template <class J, class T, class F>
-auto lowerBound(const J& x, const T& v, F fe) {
-  return lower_bound(x.begin(), x.end(), v, fe);
+auto lowerBound(const J& x, const T& v, F fl) {
+  return lower_bound(x.begin(), x.end(), v, fl);
 }
 
 template <class J, class T>
@@ -130,6 +166,25 @@ int countIf(const J& x, F fn) {
 
 
 
+// COUNT-ALL
+// ---------
+
+template <class I>
+auto countAll(I ib, I ie) {
+  using T = typename I::value_type;
+  unordered_map<T, int> a;
+  for_each(ib, ie, [&](const auto& v) { a[v]++; });
+  return a;
+}
+
+template <class J>
+auto countAll(const J& x) {
+  return countAll(x.begin(), x.end());
+}
+
+
+
+
 // INDICES
 // -------
 
@@ -145,6 +200,37 @@ auto indices(I ib, I ie) {
 template <class J>
 auto indices(J&& x) {
   return indices(x.begin(), x.end());
+}
+
+
+
+
+// IDENTIFIERS
+// -----------
+
+template <class I>
+auto identifiers(I ib, I ie) {
+  using K = typename iterator_traits<I>::value_type;
+  unordered_map<K, int> a; int i = 0;
+  for (I it=ib; it!=ie; ++it)
+    if (a.count(*it)==0) a[*it] = i++;
+  return a;
+}
+
+template <class J>
+auto identifiers(const J& x) {
+  return identifiers(x.begin(), x.end());
+}
+
+
+
+
+// TRANSFORM
+// ---------
+
+template <class J, class F>
+void transform(J& x, F fn) {
+  transform(x.begin(), x.end(), x.begin(), fn);
 }
 
 
