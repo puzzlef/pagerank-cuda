@@ -27,7 +27,7 @@ void runPagerank(const G& x, const H& xt, int repeat) {
     for (int edge=0; edge<3; edge++) {
       Sort sortVertex = static_cast<Sort>(vertex);
       Sort sortEdge   = static_cast<Sort>(edge);
-      // Find pagerank using CUDA block-per-vertex.
+      // Find pagerank using CUDA switched-per-vertex.
       auto a2 = pagerankCuda(xt, init, {repeat, sortVertex, sortEdge});
       auto e2 = l1Norm(a2.ranks, a1.ranks);
       printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda [sortv=%s; sorte=%s]\n", a2.time, a2.iterations, e2, stringify(sortVertex).c_str(), stringify(sortEdge).c_str());
