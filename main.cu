@@ -17,12 +17,12 @@ template <class G, class H>
 void runPagerank(const G& x, const H& xt, int repeat) {
   vector<TYPE> *init = nullptr;
 
-  // Find pagerank using a single thread.
+  // Find pagerank using nvGraph.
   auto a1 = pagerankNvgraph(xt, init, {repeat});
   auto e1 = l1Norm(a1.ranks, a1.ranks);
   printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankNvgraph\n", a1.time, a1.iterations, e1);
 
-  // Find pagerank using CUDA thread-per-vertex.
+  // Find pagerank using CUDA block-per-vertex.
   for (int g=1024; g<=GRID_LIMIT; g*=2) {
     for (int b=32; b<=BLOCK_LIMIT; b*=2) {
       auto a2 = pagerankCuda(xt, init, {repeat, g, b});

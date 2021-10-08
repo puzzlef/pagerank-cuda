@@ -6,7 +6,6 @@
 #include "edges.hxx"
 #include "csr.hxx"
 #include "pagerank.hxx"
-#include "_main.hxx"
 
 using std::vector;
 using std::swap;
@@ -76,7 +75,6 @@ int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T 
   int n = sumAbs(ns);
   int R = reduceSizeCu<T>(n);
   size_t R1 = R * sizeof(T);
-  T c0 = (1-p)/N;
   int l = 1;
   for (; l<L; l++) {
     sumIfNotCu(r0D, rD, vdataD, N);
@@ -95,7 +93,7 @@ int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T 
 
 
 template <class H, class T=float>
-PagerankResult<T> pagerankCuda(H& xt, const vector<T> *q=nullptr, PagerankOptions<T> o=PagerankOptions<T>()) {
+PagerankResult<T> pagerankCuda(const H& xt, const vector<T> *q=nullptr, PagerankOptions<T> o=PagerankOptions<T>()) {
   T   p = o.damping;
   T   E = o.tolerance;
   int L = o.maxIterations, l;
@@ -157,5 +155,5 @@ PagerankResult<T> pagerankCuda(H& xt, const vector<T> *q=nullptr, PagerankOption
   TRY( cudaFree(efromD) );
   TRY( cudaFree(vdataD) );
   // TRY( cudaProfilerStop() );
-  return {decompressContainer(xt, a), l, t};
+  return {decompressContainer(xt, a, ks), l, t};
 }
