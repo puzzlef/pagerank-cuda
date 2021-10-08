@@ -15,20 +15,24 @@ using std::move;
 // -------------
 
 // For pagerank cuda block-per-vertex
-#define BLOCK_DIM_PRB 64
-#define GRID_DIM_PRB  GRID_LIMIT
+template <class T=float>
+constexpr int BLOCK_DIM_PRB() noexcept { return 64; }
+template <class T=float>
+constexpr int GRID_DIM_PRB() noexcept  { return GRID_LIMIT; }
 
 // For pagerank cuda thread-per-vertex (default)
-#define BLOCK_DIM_PRT 128
-#define GRID_DIM_PRT  8192
-
-// For pagerank cuda thread-per-vertex (low avg. density)
-#define BLOCK_DIM_PRT_LOWDENSITY 512
-#define GRID_DIM_PRT_LOWDENSITY  8192
-
-// For pagerank cuda thread-per-vertex (high avg. degree)
-#define BLOCK_DIM_PRT_HIGHDEGREE 32
-#define GRID_DIM_PRT_HIGHDEGREE  8192
+template <class T=float>
+constexpr int BLOCK_DIM_PRT() noexcept { return 128; }
+template <class T=float>
+constexpr int GRID_DIM_PRT() noexcept  { return 8192; }
+template <class T=float>
+constexpr int BLOCK_DIM_PRT_LOWDENSITY() noexcept { return 512; }
+template <class T=float>
+constexpr int GRID_DIM_PRT_LOWDENSITY() noexcept  { return 8192; }
+template <class T=float>
+constexpr int BLOCK_DIM_PRT_HIGHDEGREE() noexcept { return 32; }
+template <class T=float>
+constexpr int GRID_DIM_PRT_HIGHDEGREE() noexcept  { return 8192; }
 
 
 
