@@ -42,7 +42,7 @@ int pagerankSeqLoop(vector<T>& a, vector<T>& r, vector<T>& c, const vector<T>& f
     T c0 = pagerankTeleport(r, vfrom, efrom, vdata, v, V, N, p);
     multiply(c, r, f, v, V-v);
     pagerankCalculate(a, c, vfrom, efrom, vdata, v, V, N, c0);
-    T el = l1Norm(a, r, v, V-v);
+    T el = l2Norm(a, r, v, V-v);
     if (el < E) break;
     swap(a, r);
   }
