@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-src="pagerank-sequential-vs-cuda"
+src="pagerank-nvgraph-vs-cuda"
 out="/home/resources/Documents/subhajit/$src.log"
 ulimit -s unlimited
 printf "" > "$out"
