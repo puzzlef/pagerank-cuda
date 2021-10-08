@@ -13,20 +13,24 @@ using std::move;
 // -------------
 
 // For pagerank cuda block-per-vertex
-#define BLOCK_DIM_PRB 64
-#define GRID_DIM_PRB  GRID_LIMIT
+template <class T=float>
+constexpr int BLOCK_DIM_PRB() noexcept { return 64; }
+template <class T=float>
+constexpr int GRID_DIM_PRB() noexcept  { return GRID_LIMIT; }
 
-// For pagerank cuda thread-per-vertex (default)
-#define BLOCK_DIM_PRT 128
-#define GRID_DIM_PRT  8192
-
-// For pagerank cuda thread-per-vertex (low avg. density)
-#define BLOCK_DIM_PRT_LOWDENSITY 512
-#define GRID_DIM_PRT_LOWDENSITY  8192
-
-// For pagerank cuda thread-per-vertex (high avg. degree)
-#define BLOCK_DIM_PRT_HIGHDEGREE 32
-#define GRID_DIM_PRT_HIGHDEGREE  8192
+// For pagerank cuda thread-per-vertex
+template <class T=float>
+constexpr int BLOCK_DIM_PRT() noexcept { return 128; }
+template <class T=float>
+constexpr int GRID_DIM_PRT() noexcept  { return 8192; }
+template <class T=float>
+constexpr int BLOCK_DIM_PRT_LOWDENSITY() noexcept { return 512; }
+template <class T=float>
+constexpr int GRID_DIM_PRT_LOWDENSITY() noexcept  { return 8192; }
+template <class T=float>
+constexpr int BLOCK_DIM_PRT_HIGHDEGREE() noexcept { return 32; }
+template <class T=float>
+constexpr int GRID_DIM_PRT_HIGHDEGREE() noexcept  { return 8192; }
 
 
 
@@ -43,7 +47,7 @@ struct PagerankOptions {
   T   tolerance;
   int maxIterations;
 
-  PagerankOptions(int repeat=1, int switchDegree=BLOCK_DIM_PRB, int switchLimit=BLOCK_DIM_PRT, T damping=0.85, T tolerance=1e-6, int maxIterations=500) :
+  PagerankOptions(int repeat=1, int switchDegree=32, int switchLimit=1, T damping=0.85, T tolerance=1e-6, int maxIterations=500) :
   repeat(repeat), switchDegree(switchDegree), switchLimit(switchLimit), damping(damping), tolerance(tolerance), maxIterations(maxIterations) {}
 };
 
