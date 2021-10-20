@@ -55,13 +55,13 @@ constexpr int GRID_DIM_PRST()  noexcept { return GRID_LIMIT; }
 template <class T>
 struct PagerankOptions {
   int repeat;
-  T   damping;
   T   tolerance;
   int toleranceNorm;
+  T   damping;
   int maxIterations;
 
-  PagerankOptions(int repeat=1, T damping=0.85, T tolerance=1e-6, int toleranceNorm=1, int maxIterations=500) :
-  repeat(repeat), damping(damping), tolerance(tolerance), toleranceNorm(toleranceNorm), maxIterations(maxIterations) {}
+  PagerankOptions(int repeat=1, T tolerance=1e-6, int toleranceNorm=1, T damping=0.85, int maxIterations=500) :
+  repeat(repeat), tolerance(tolerance), toleranceNorm(toleranceNorm), damping(damping), maxIterations(maxIterations) {}
 };
 
 
