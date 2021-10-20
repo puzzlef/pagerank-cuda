@@ -36,13 +36,23 @@ void pagerankCalculate(vector<T>& a, const vector<T>& c, const vector<int>& vfro
 }
 
 template <class T>
-int pagerankSeqLoop(vector<T>& a, vector<T>& r, vector<T>& c, const vector<T>& f, const vector<int>& vfrom, const vector<int>& efrom, const vector<int>& vdata, int v, int V, int N, T p, T E, int L) {
+T pagerankError(const vector<T>& x, const vector<T>& y, int i, int N, int EF) {
+  switch (EF) {
+    case 1:  return l1Norm(x, y, i, N);
+    case 2:  return l2Norm(x, y, i, N);
+    default: return liNorm(x, y, i, N);
+  }
+}
+
+
+template <class T>
+int pagerankSeqLoop(vector<T>& a, vector<T>& r, vector<T>& c, const vector<T>& f, const vector<int>& vfrom, const vector<int>& efrom, const vector<int>& vdata, int v, int V, int N, T p, T E, int L, int EF) {
   int l = 1;
   for (; l<L; l++) {
     T c0 = pagerankTeleport(r, vfrom, efrom, vdata, v, V, N, p);
     multiply(c, r, f, v, V-v);
     pagerankCalculate(a, c, vfrom, efrom, vdata, v, V, N, c0);
-    T el = l2Norm(a, r, v, V-v);
+    T el = pagerankError(a, r, v, V-v, EF);
     if (el < E) break;
     swap(a, r);
   }
@@ -57,9 +67,10 @@ int pagerankSeqLoop(vector<T>& a, vector<T>& r, vector<T>& c, const vector<T>& f
 // @returns {ranks, iterations, time}
 template <class G, class T=float>
 PagerankResult<T> pagerankSeq(const G& xt, const vector<T> *q=nullptr, PagerankOptions<T> o={}) {
-  T    p = o.damping;
-  T    E = o.tolerance;
-  int  L = o.maxIterations, l;
+  T    p  = o.damping;
+  T    E  = o.tolerance;
+  int  L  = o.maxIterations, l;
+  int  EF = o.toleranceNorm;
   auto vfrom = sourceOffsets(xt);
   auto efrom = destinationIndices(xt);
   auto vdata = vertexData(xt);
@@ -71,7 +82,7 @@ PagerankResult<T> pagerankSeq(const G& xt, const vector<T> *q=nullptr, PagerankO
     if (q) copy(r, qc);
     else fill(r, T(1)/N);
     mark([&] { pagerankFactor(f, vfrom, efrom, vdata, 0, N, N, p); });
-    mark([&] { l = pagerankSeqLoop(a, r, c, f, vfrom, efrom, vdata, 0, N, N, p, E, L); });
+    mark([&] { l = pagerankSeqLoop(a, r, c, f, vfrom, efrom, vdata, 0, N, N, p, E, L, EF); });
   }, o.repeat);
   return {decompressContainer(xt, a), l, t};
 }

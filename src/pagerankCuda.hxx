@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 #include <vector>
 #include <algorithm>
 #include "_main.hxx"
@@ -8,9 +9,11 @@
 #include "pagerank.hxx"
 
 using std::vector;
+using std::sqrt;
 using std::partition;
 using std::swap;
 using std::min;
+using std::max;
 
 
 
@@ -123,11 +126,35 @@ auto pagerankWave(const G& xt) {
 
 
 
+// PAGERANK-ERROR
+// --------------
+
+template <class T>
+void pagerankErrorCu(T *a, const T *x, const T *y, int N, int EF) {
+  switch (EF) {
+    case 1:  l1NormCu(a, x, y, N); break;
+    case 2:  l2NormCu(a, x, y, N); break;
+    default: liNormCu(a, x, y, N); break;
+  }
+}
+
+template <class T>
+T pagerankErrorReduce(const T *x, int N, int EF) {
+  switch (EF) {
+    case 1:  return sum(x, N);
+    case 2:  return sqrt(sum(x, N));
+    default: return max(x, N);
+  }
+}
+
+
+
+
 // PAGERANK (CUDA)
 // ---------------
 
 template <class T, class J>
-int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T *fD, const int *vfromD, const int *efromD, const int *vdataD, int i, J&& ns, int N, T p, T E, int L) {
+int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T *fD, const int *vfromD, const int *efromD, const int *vdataD, int i, J&& ns, int N, T p, T E, int L, int EF) {
   int n = sumAbs(ns);
   int R = reduceSizeCu<T>(n);
   size_t R1 = R * sizeof(T);
@@ -138,9 +165,9 @@ int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T 
     TRY( cudaMemcpy(r0, r0D, R1, cudaMemcpyDeviceToHost) );
     T c0 = (1-p)/N + p*sum(r0, R)/N;
     pagerankSwitchedCu(aD, cD, vfromD, efromD, i, ns, c0);
-    l2NormCu(eD, rD, aD, n);  // L2-norm in use, for comparing with nvGraph
+    pagerankErrorCu(eD, rD, aD, n, EF);
     TRY( cudaMemcpy(e, eD, R1, cudaMemcpyDeviceToHost) );
-    T el = sqrt(sum(e, R));   // sqrt for L2-norm
+    T el = pagerankErrorReduce(e, R, EF);
     if (el < E) break;
     swap(aD, rD);
   }
@@ -153,6 +180,7 @@ PagerankResult<T> pagerankCuda(const H& xt, const vector<T> *q=nullptr, Pagerank
   T    p   = o.damping;
   T    E   = o.tolerance;
   int  L   = o.maxIterations, l;
+  int  EF  = o.toleranceNorm;
   int  N   = xt.order();
   int  R   = reduceSizeCu<T>(N);
   auto fm  = [](int u) { return u; };
@@ -197,7 +225,7 @@ PagerankResult<T> pagerankCuda(const H& xt, const vector<T> *q=nullptr, Pagerank
     TRY( cudaMemcpy(aD, r.data(), N1, cudaMemcpyHostToDevice) );
     TRY( cudaMemcpy(rD, r.data(), N1, cudaMemcpyHostToDevice) );
     mark([&] { pagerankFactorCu(fD, vdataD, 0, N, p); });
-    mark([&] { l = pagerankCudaLoop(e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, 0, ns, N, p, E, L); });
+    mark([&] { l = pagerankCudaLoop(e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, 0, ns, N, p, E, L, EF); });
   }, o.repeat);
   TRY( cudaMemcpy(a.data(), aD, N1, cudaMemcpyDeviceToHost) );
 
