@@ -1,5 +1,7 @@
 Comparing the effect of using different **functions** for
-**convergence check**, with PageRank ([pull], [CSR]).
+**convergence check**, with CUDA-based PageRank ([pull], [CSR]).
+
+`TODO!`
 
 This experiment was for comparing the performance between:
 1. Find pagerank using **L1 norm** for convergence check.
