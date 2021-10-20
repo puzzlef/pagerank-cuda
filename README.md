@@ -1,6 +1,8 @@
 Comparing the effect of using different values of **damping factor**,
 with PageRank ([pull], [CSR]).
 
+`TODO!`
+
 Adjustment of the *damping factor α* is a delicate balancing act. For
 smaller values of *α*, the convergence is fast, but the *link structure*
 *of the graph* used to determine ranks is less true. Slightly different

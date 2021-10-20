@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-src="pagerank-adjust-damping-factor"
+src="pagerank-cuda-adjust-damping-factor"
 out="/home/resources/Documents/subhajit/$src.log"
 ulimit -s unlimited
 printf "" > "$out"
@@ -10,7 +10,7 @@ git clone https://github.com/puzzlef/$src
 cd $src
 
 # Run
-g++ -O3 main.cxx
+nvcc -std=c++17 -Xcompiler -lnvgraph -O3 main.cu
 stdbuf --output=L ./a.out ~/data/min-1DeadEnd.mtx      2>&1 | tee -a "$out"
 stdbuf --output=L ./a.out ~/data/min-2SCC.mtx          2>&1 | tee -a "$out"
 stdbuf --output=L ./a.out ~/data/min-4SCC.mtx          2>&1 | tee -a "$out"
