@@ -10,11 +10,14 @@ using namespace std;
 
 
 
+#define TYPE float
+
+
 template <class G, class H>
 void runPagerank(const G& x, const H& xt, int repeat) {
   float damping = 0.85f;
-  int L1 = 1, L2 = 2, Li = 3;
-  vector<float> *init = nullptr;
+  enum ToleranceNorm { L1=1, L2=2, Li=3 };
+  vector<TYPE> *init = nullptr;
 
   // Find pagerank using default tolerance 10^-6, L1-norm.
   auto a1 = pagerankMonolithic(xt, init, {repeat, damping});
