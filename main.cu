@@ -14,7 +14,7 @@ using namespace std;
 
 template <class G, class H>
 void runPagerank(const G& x, const H& xt, int repeat) {
-  int L1 = 1, L2 = 2, Li = 3;
+  enum ToleranceNorm { L1=1, L2=2, Li=3 };
   vector<TYPE> *init = nullptr;
 
   // Find pagerank using nvGraph.
