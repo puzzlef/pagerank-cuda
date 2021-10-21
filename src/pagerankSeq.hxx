@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 #include <vector>
 #include <algorithm>
 #include "_main.hxx"
@@ -9,6 +10,7 @@
 
 using std::vector;
 using std::swap;
+using std::sqrt;
 
 
 
@@ -42,19 +44,24 @@ void pagerankCalculate(vector<T>& a, const vector<T>& c, const vector<int>& vfro
 // --------------
 
 template <class T>
-double pagerankScaleReduce(const vector<T>& r, int SF) {
+double pagerankScaleSum(const vector<T>& r, int SF) {
   switch (SF) {
-    default: return T();
+    default: return 1.0;
     case 1:  return sumAbs(r, double());
-    case 2:  return sumSqr(r, double());
+    case 2:  return sqrt(sumSqr(r, double()));
   }
 }
 
 template <class T>
-void pagerankScale(vector<T>& a, int SF) {
+void pagerankScaleMultiplyValue(vector<T>& a, const vector<T>& x, double v, int SF) {
   if (SF==0) return;
-  double sf = pagerankScaleReduce(a, SF);
-  multiplyValue(a, a, 1.0/sf);
+  multiplyValue(a, x, v);
+}
+
+template <class T>
+void pagerankScale(vector<T>& a, int SF) {
+  double sf = pagerankScaleSum(a, SF);
+  pagerankScaleMultiplyValue(a, a, 1.0/sf, SF);
 }
 
 

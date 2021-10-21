@@ -7,3 +7,8 @@
 #include "_string.hxx"
 #include "_utility.hxx"
 #include "_vector.hxx"
+#include "_cuda.hxx"
+
+#ifndef NVGRAPH_DISABLE
+#include "_nvgraph.hxx"
+#endif

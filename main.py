@@ -1,12 +1,13 @@
-# https://www.kaggle.com/wolfram77/puzzlef-pagerank-adjust-iteration-scaling
+# https://www.kaggle.com/wolfram77/puzzlef-pagerank-cuda-adjust-iteration-scaling
 import os
 from IPython.display import FileLink
-src="pagerank-adjust-iteration-scaling"
+src="pagerank-cuda-adjust-iteration-scaling"
 inp="/kaggle/input/graphs"
 out="{}.txt".format(src)
 !printf "" > "$out"
 display(FileLink(out))
 !ulimit -s unlimited && echo ""
+!nvidia-smi && echo ""
 
 # Download program
 !rm -rf $src
@@ -14,7 +15,7 @@ display(FileLink(out))
 !echo ""
 
 # Run
-!g++ -O3 $src/main.cxx
+!nvcc -std=c++17 -Xcompiler -DNVGRAPH_DISABLE -O3 $src/main.cu
 !stdbuf --output=L ./a.out $inp/min-1DeadEnd.mtx      2>&1 | tee -a "$out"
 !stdbuf --output=L ./a.out $inp/min-2SCC.mtx          2>&1 | tee -a "$out"
 !stdbuf --output=L ./a.out $inp/min-4SCC.mtx          2>&1 | tee -a "$out"
