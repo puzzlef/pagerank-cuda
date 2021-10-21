@@ -148,9 +148,9 @@ T pagerankScaleSumReduce(const T *x, int N, int SF) {
 }
 
 template <class T>
-void pagerankScaleMultiplyValueCu(T *a, const T *x, T v, int SF) {
+void pagerankScaleMultiplyValueCu(T *a, const T *x, T v, int N, int SF) {
   if (SF==0) return;
-  multiplyValueCu(a, x, v);
+  multiplyValueCu(a, x, v, N);
 }
 
 
@@ -198,7 +198,7 @@ int pagerankCudaLoop(T *e, T *r0, T *eD, T *r0D, T *&aD, T *&rD, T *cD, const T 
     pagerankScaleSumCu(eD, aD, n, SF);
     if (SF!=0) TRY( cudaMemcpy(e, eD, R1, cudaMemcpyDeviceToHost) );
     T ss = pagerankScaleSumReduce(e, R, SF);
-    pagerankScaleMultiplyValueCu(a, a, T(1)/ss, SF);
+    pagerankScaleMultiplyValueCu(aD, aD, T(1)/ss, n, SF);
     pagerankErrorCu(eD, rD, aD, n, EF);
     TRY( cudaMemcpy(e, eD, R1, cudaMemcpyDeviceToHost) );
     T el = pagerankErrorReduce(e, R, EF);
