@@ -1,0 +1,230 @@
+Loading graph /kaggle/input/graphs/min-1DeadEnd.mtx ...
+order: 5 size: 6 {}
+order: 5 size: 6 {} (transposeWithDegree)
+[00000.722 ms; 017 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00000.783 ms; 017 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[00000.000 ms; 017 iters.] [0.0000e+00 err.] pagerankSeqL1Norm
+[00000.708 ms; 017 iters.] [0.0000e+00 err.] pagerankCudaL2Norm
+[00000.000 ms; 017 iters.] [0.0000e+00 err.] pagerankSeqL2Norm
+[00000.717 ms; 017 iters.] [0.0000e+00 err.] pagerankCudaLiNorm
+[00000.713 ms; 017 iters.] [0.0000e+00 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/min-2SCC.mtx ...
+order: 8 size: 12 {}
+order: 8 size: 12 {} (transposeWithDegree)
+[00001.666 ms; 040 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00001.660 ms; 040 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[00000.002 ms; 040 iters.] [0.0000e+00 err.] pagerankSeqL1Norm
+[00001.600 ms; 038 iters.] [1.4603e-06 err.] pagerankCudaL2Norm
+[00000.002 ms; 038 iters.] [1.4454e-06 err.] pagerankSeqL2Norm
+[00001.539 ms; 037 iters.] [1.1474e-06 err.] pagerankCudaLiNorm
+[00001.558 ms; 037 iters.] [1.1474e-06 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/min-4SCC.mtx ...
+order: 21 size: 35 {}
+order: 21 size: 35 {} (transposeWithDegree)
+[00001.876 ms; 045 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00001.858 ms; 045 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[00000.009 ms; 045 iters.] [3.3528e-08 err.] pagerankSeqL1Norm
+[00001.691 ms; 041 iters.] [1.1288e-06 err.] pagerankCudaL2Norm
+[00000.008 ms; 041 iters.] [1.1176e-06 err.] pagerankSeqL2Norm
+[00001.724 ms; 040 iters.] [1.6540e-06 err.] pagerankCudaLiNorm
+[00001.680 ms; 040 iters.] [1.6540e-06 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/min-NvgraphEx.mtx ...
+order: 6 size: 10 {}
+order: 6 size: 10 {} (transposeWithDegree)
+[00001.019 ms; 024 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00000.995 ms; 024 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[00000.001 ms; 024 iters.] [0.0000e+00 err.] pagerankSeqL1Norm
+[00000.960 ms; 023 iters.] [9.4995e-07 err.] pagerankCudaL2Norm
+[00000.001 ms; 023 iters.] [9.4995e-07 err.] pagerankSeqL2Norm
+[00000.990 ms; 022 iters.] [2.4810e-06 err.] pagerankCudaLiNorm
+[00000.917 ms; 022 iters.] [2.4810e-06 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/web-Stanford.mtx ...
+order: 281903 size: 2312497 {}
+order: 281903 size: 2312497 {} (transposeWithDegree)
+[00017.519 ms; 063 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00016.971 ms; 063 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[00379.698 ms; 063 iters.] [4.8278e-06 err.] pagerankSeqL1Norm
+[00011.497 ms; 044 iters.] [3.5795e-05 err.] pagerankCudaL2Norm
+[00299.247 ms; 044 iters.] [3.8869e-05 err.] pagerankSeqL2Norm
+[00011.065 ms; 041 iters.] [6.1089e-05 err.] pagerankCudaLiNorm
+[00011.058 ms; 041 iters.] [6.1089e-05 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/web-BerkStan.mtx ...
+order: 685230 size: 7600595 {}
+order: 685230 size: 7600595 {} (transposeWithDegree)
+[00035.564 ms; 064 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00035.579 ms; 064 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[00867.945 ms; 064 iters.] [2.3101e-05 err.] pagerankSeqL1Norm
+[00024.933 ms; 043 iters.] [4.6798e-05 err.] pagerankCudaL2Norm
+[00582.115 ms; 043 iters.] [5.7885e-05 err.] pagerankSeqL2Norm
+[00021.084 ms; 037 iters.] [1.3914e-04 err.] pagerankCudaLiNorm
+[00020.882 ms; 037 iters.] [1.3914e-04 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/web-Google.mtx ...
+order: 916428 size: 5105039 {}
+order: 916428 size: 5105039 {} (transposeWithDegree)
+[00035.687 ms; 062 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00034.647 ms; 062 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[01413.888 ms; 061 iters.] [5.1357e-04 err.] pagerankSeqL1Norm
+[00022.913 ms; 040 iters.] [7.5327e-05 err.] pagerankCudaL2Norm
+[00924.895 ms; 040 iters.] [5.1582e-04 err.] pagerankSeqL2Norm
+[00020.442 ms; 036 iters.] [1.5439e-04 err.] pagerankCudaLiNorm
+[00020.422 ms; 036 iters.] [1.5439e-04 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/web-NotreDame.mtx ...
+order: 325729 size: 1497134 {}
+order: 325729 size: 1497134 {} (transposeWithDegree)
+[00011.232 ms; 058 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00010.584 ms; 058 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[00226.353 ms; 058 iters.] [7.7329e-04 err.] pagerankSeqL1Norm
+[00007.059 ms; 040 iters.] [9.6362e-05 err.] pagerankCudaL2Norm
+[00145.591 ms; 040 iters.] [7.8014e-04 err.] pagerankSeqL2Norm
+[00006.987 ms; 038 iters.] [1.4051e-04 err.] pagerankCudaLiNorm
+[00006.995 ms; 038 iters.] [1.4051e-04 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/soc-Slashdot0811.mtx ...
+order: 77360 size: 905468 {}
+order: 77360 size: 905468 {} (transposeWithDegree)
+[00005.767 ms; 055 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00005.699 ms; 055 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[00086.727 ms; 055 iters.] [1.2296e-07 err.] pagerankSeqL1Norm
+[00003.025 ms; 029 iters.] [4.2707e-04 err.] pagerankCudaL2Norm
+[00045.914 ms; 029 iters.] [4.2708e-04 err.] pagerankSeqL2Norm
+[00002.174 ms; 020 iters.] [1.9667e-03 err.] pagerankCudaLiNorm
+[00002.144 ms; 020 iters.] [1.9667e-03 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/soc-Slashdot0902.mtx ...
+order: 82168 size: 948464 {}
+order: 82168 size: 948464 {} (transposeWithDegree)
+[00005.933 ms; 056 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00005.887 ms; 056 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[00095.908 ms; 056 iters.] [4.5094e-06 err.] pagerankSeqL1Norm
+[00003.077 ms; 029 iters.] [5.0400e-04 err.] pagerankCudaL2Norm
+[00050.122 ms; 029 iters.] [5.0075e-04 err.] pagerankSeqL2Norm
+[00002.319 ms; 021 iters.] [1.9706e-03 err.] pagerankCudaLiNorm
+[00002.356 ms; 021 iters.] [1.9706e-03 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/soc-Epinions1.mtx ...
+order: 75888 size: 508837 {}
+order: 75888 size: 508837 {} (transposeWithDegree)
+[00004.774 ms; 054 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00004.750 ms; 054 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[00083.192 ms; 054 iters.] [2.6096e-05 err.] pagerankSeqL1Norm
+[00003.056 ms; 038 iters.] [1.9525e-05 err.] pagerankCudaL2Norm
+[00053.865 ms; 038 iters.] [4.3565e-05 err.] pagerankSeqL2Norm
+[00002.793 ms; 032 iters.] [5.4520e-05 err.] pagerankCudaLiNorm
+[00002.764 ms; 032 iters.] [5.4520e-05 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/coAuthorsDBLP.mtx ...
+order: 299067 size: 1955352 {}
+order: 299067 size: 1955352 {} (transposeWithDegree)
+[00007.090 ms; 045 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00007.085 ms; 045 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[00224.582 ms; 045 iters.] [1.5326e-08 err.] pagerankSeqL1Norm
+[00003.501 ms; 022 iters.] [4.7959e-04 err.] pagerankCudaL2Norm
+[00110.144 ms; 022 iters.] [4.7959e-04 err.] pagerankSeqL2Norm
+[00003.013 ms; 018 iters.] [1.1653e-03 err.] pagerankCudaLiNorm
+[00003.049 ms; 018 iters.] [1.1653e-03 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/coAuthorsCiteseer.mtx ...
+order: 227320 size: 1628268 {}
+order: 227320 size: 1628268 {} (transposeWithDegree)
+[00006.855 ms; 048 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00007.644 ms; 048 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[00182.990 ms; 048 iters.] [2.6549e-08 err.] pagerankSeqL1Norm
+[00003.278 ms; 023 iters.] [5.0506e-04 err.] pagerankCudaL2Norm
+[00116.306 ms; 023 iters.] [5.0506e-04 err.] pagerankSeqL2Norm
+[00002.564 ms; 016 iters.] [2.1820e-03 err.] pagerankCudaLiNorm
+[00002.424 ms; 016 iters.] [2.1820e-03 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/soc-LiveJournal1.mtx ...
+order: 4847571 size: 68993773 {}
+order: 4847571 size: 68993773 {} (transposeWithDegree)
+[00368.903 ms; 051 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00369.105 ms; 051 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[11479.602 ms; 051 iters.] [2.0579e-03 err.] pagerankSeqL1Norm
+[00173.960 ms; 024 iters.] [4.0180e-04 err.] pagerankCudaL2Norm
+[05392.164 ms; 024 iters.] [1.9889e-03 err.] pagerankSeqL2Norm
+[00123.658 ms; 017 iters.] [1.6956e-03 err.] pagerankCudaLiNorm
+[00122.914 ms; 017 iters.] [1.6956e-03 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/coPapersCiteseer.mtx ...
+order: 434102 size: 32073440 {}
+order: 434102 size: 32073440 {} (transposeWithDegree)
+[00112.292 ms; 051 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00110.160 ms; 051 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[02189.873 ms; 051 iters.] [2.8585e-07 err.] pagerankSeqL1Norm
+[00042.848 ms; 020 iters.] [1.5958e-03 err.] pagerankCudaL2Norm
+[00833.257 ms; 020 iters.] [1.5957e-03 err.] pagerankSeqL2Norm
+[00010.802 ms; 005 iters.] [4.6208e-02 err.] pagerankCudaLiNorm
+[00010.796 ms; 005 iters.] [4.6208e-02 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/coPapersDBLP.mtx ...
+order: 540486 size: 30491458 {}
+order: 540486 size: 30491458 {} (transposeWithDegree)
+[00115.143 ms; 049 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00112.427 ms; 049 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[02061.250 ms; 049 iters.] [1.7198e-07 err.] pagerankSeqL1Norm
+[00043.672 ms; 019 iters.] [1.8788e-03 err.] pagerankCudaL2Norm
+[00814.925 ms; 019 iters.] [1.8788e-03 err.] pagerankSeqL2Norm
+[00016.235 ms; 007 iters.] [2.9598e-02 err.] pagerankCudaLiNorm
+[00016.199 ms; 007 iters.] [2.9598e-02 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/indochina-2004.mtx ...
+order: 7414866 size: 194109311 {}
+order: 7414866 size: 194109311 {} (transposeWithDegree)
+[00285.507 ms; 060 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00284.527 ms; 060 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[18872.855 ms; 061 iters.] [7.8789e-04 err.] pagerankSeqL1Norm
+[00173.546 ms; 036 iters.] [1.7163e-04 err.] pagerankCudaL2Norm
+[11052.988 ms; 036 iters.] [7.5297e-04 err.] pagerankSeqL2Norm
+[00144.718 ms; 030 iters.] [5.3004e-04 err.] pagerankCudaLiNorm
+[00144.672 ms; 030 iters.] [5.3004e-04 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/italy_osm.mtx ...
+order: 6686493 size: 14027956 {}
+order: 6686493 size: 14027956 {} (transposeWithDegree)
+[00048.320 ms; 063 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00048.893 ms; 063 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[04515.265 ms; 063 iters.] [0.0000e+00 err.] pagerankSeqL1Norm
+[00015.691 ms; 020 iters.] [6.6253e-04 err.] pagerankCudaL2Norm
+[01461.040 ms; 020 iters.] [6.6253e-04 err.] pagerankSeqL2Norm
+[00000.950 ms; 001 iters.] [3.7756e-02 err.] pagerankCudaLiNorm
+[00000.949 ms; 001 iters.] [3.7756e-02 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/great-britain_osm.mtx ...
+order: 7733822 size: 16313034 {}
+order: 7733822 size: 16313034 {} (transposeWithDegree)
+[00063.196 ms; 067 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00063.516 ms; 067 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[07036.378 ms; 067 iters.] [0.0000e+00 err.] pagerankSeqL1Norm
+[00021.893 ms; 023 iters.] [8.0939e-04 err.] pagerankCudaL2Norm
+[02404.244 ms; 023 iters.] [8.0939e-04 err.] pagerankSeqL2Norm
+[00001.118 ms; 001 iters.] [7.8761e-02 err.] pagerankCudaLiNorm
+[00001.118 ms; 001 iters.] [7.8761e-02 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/germany_osm.mtx ...
+order: 11548845 size: 24738362 {}
+order: 11548845 size: 24738362 {} (transposeWithDegree)
+[00098.306 ms; 065 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00096.971 ms; 065 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[11774.156 ms; 065 iters.] [0.0000e+00 err.] pagerankSeqL1Norm
+[00031.700 ms; 021 iters.] [9.3146e-04 err.] pagerankCudaL2Norm
+[03809.484 ms; 021 iters.] [9.3146e-04 err.] pagerankSeqL2Norm
+[00001.801 ms; 001 iters.] [6.8314e-02 err.] pagerankCudaLiNorm
+[00001.793 ms; 001 iters.] [6.8314e-02 err.] pagerankSeqLiNorm
+
+Loading graph /kaggle/input/graphs/asia_osm.mtx ...
+order: 11950757 size: 25423206 {}
+order: 11950757 size: 25423206 {} (transposeWithDegree)
+[00084.118 ms; 063 iters.] [0.0000e+00 err.] pagerankNvgraph
+[00086.978 ms; 063 iters.] [0.0000e+00 err.] pagerankCudaL1Norm
+[08527.693 ms; 063 iters.] [0.0000e+00 err.] pagerankSeqL1Norm
+[00025.703 ms; 019 iters.] [8.3822e-04 err.] pagerankCudaL2Norm
+[02652.823 ms; 019 iters.] [8.3822e-04 err.] pagerankSeqL2Norm
+[00001.620 ms; 001 iters.] [4.3444e-02 err.] pagerankCudaLiNorm
+[00001.615 ms; 001 iters.] [4.3444e-02 err.] pagerankSeqLiNorm
