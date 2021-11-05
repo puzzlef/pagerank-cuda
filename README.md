@@ -42,51 +42,51 @@ $ ...
 
 # ...
 #
-# Loading graph /kaggle/input/graphs/soc-Slashdot0811.mtx ...
+# Loading graph /home/subhajit/data/soc-Slashdot0811.mtx ...
 # order: 77360 size: 905468 {}
 # order: 77360 size: 905468 {} (transposeWithDegree)
-# [00007.217 ms; 054 iters.] [0.0000e+00 err.] pagerankNvgraph
-# [00006.105 ms; 055 iters.] [9.1448e-07 err.] pagerankCudaL1Norm [iteration-scaling=L0]
-# [00089.349 ms; 055 iters.] [8.8146e-07 err.] pagerankSeqL1Norm [iteration-scaling=L0]
-# [00007.184 ms; 054 iters.] [0.0000e+00 err.] pagerankCudaL1Norm [iteration-scaling=L1]
-# [00097.146 ms; 055 iters.] [9.1883e-07 err.] pagerankSeqL1Norm [iteration-scaling=L1]
-# [00064.125 ms; 500 iters.] [7.4785e+01 err.] pagerankCudaL1Norm [iteration-scaling=L2]
-# [00928.749 ms; 500 iters.] [7.4784e+01 err.] pagerankSeqL1Norm [iteration-scaling=L2]
-# [00004.207 ms; 029 iters.] [4.2616e-04 err.] pagerankCudaL2Norm [iteration-scaling=L0]
-# [00052.387 ms; 029 iters.] [4.2617e-04 err.] pagerankSeqL2Norm [iteration-scaling=L0]
-# [00003.714 ms; 029 iters.] [4.2623e-04 err.] pagerankCudaL2Norm [iteration-scaling=L1]
-# [00050.589 ms; 029 iters.] [4.2616e-04 err.] pagerankSeqL2Norm [iteration-scaling=L1]
-# [00062.272 ms; 500 iters.] [7.4785e+01 err.] pagerankCudaL2Norm [iteration-scaling=L2]
-# [00897.315 ms; 500 iters.] [7.4784e+01 err.] pagerankSeqL2Norm [iteration-scaling=L2]
-# [00002.147 ms; 020 iters.] [1.9658e-03 err.] pagerankCudaLiNorm [iteration-scaling=L0]
-# [00044.195 ms; 020 iters.] [1.9659e-03 err.] pagerankSeqLiNorm [iteration-scaling=L0]
-# [00002.558 ms; 020 iters.] [1.9657e-03 err.] pagerankCudaLiNorm [iteration-scaling=L1]
-# [00047.898 ms; 020 iters.] [1.9658e-03 err.] pagerankSeqLiNorm [iteration-scaling=L1]
-# [00063.723 ms; 500 iters.] [7.4785e+01 err.] pagerankCudaLiNorm [iteration-scaling=L2]
-# [01218.959 ms; 500 iters.] [7.4784e+01 err.] pagerankSeqLiNorm [iteration-scaling=L2]
+# [00006.911 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+# [00003.584 ms; 055 iters.] [9.0883e-07 err.] pagerankCudaL1Norm [iteration-scaling=L0]
+# [00101.015 ms; 055 iters.] [9.8525e-07 err.] pagerankSeqL1Norm [iteration-scaling=L0]
+# [00004.657 ms; 054 iters.] [1.8232e-06 err.] pagerankCudaL1Norm [iteration-scaling=L1]
+# [00109.816 ms; 055 iters.] [9.4585e-07 err.] pagerankSeqL1Norm [iteration-scaling=L1]
+# [00042.708 ms; 500 iters.] [7.4785e+01 err.] pagerankCudaL1Norm [iteration-scaling=L2]
+# [00989.602 ms; 500 iters.] [7.4784e+01 err.] pagerankSeqL1Norm [iteration-scaling=L2]
+# [00001.844 ms; 029 iters.] [4.2798e-04 err.] pagerankCudaL2Norm [iteration-scaling=L0]
+# [00053.427 ms; 029 iters.] [4.2798e-04 err.] pagerankSeqL2Norm [iteration-scaling=L0]
+# [00002.456 ms; 029 iters.] [4.2805e-04 err.] pagerankCudaL2Norm [iteration-scaling=L1]
+# [00057.631 ms; 029 iters.] [4.2797e-04 err.] pagerankSeqL2Norm [iteration-scaling=L1]
+# [00041.511 ms; 500 iters.] [7.4785e+01 err.] pagerankCudaL2Norm [iteration-scaling=L2]
+# [00993.422 ms; 500 iters.] [7.4784e+01 err.] pagerankSeqL2Norm [iteration-scaling=L2]
+# [00001.289 ms; 020 iters.] [1.9676e-03 err.] pagerankCudaLiNorm [iteration-scaling=L0]
+# [00039.009 ms; 020 iters.] [1.9677e-03 err.] pagerankSeqLiNorm [iteration-scaling=L0]
+# [00001.707 ms; 020 iters.] [1.9675e-03 err.] pagerankCudaLiNorm [iteration-scaling=L1]
+# [00042.109 ms; 020 iters.] [1.9676e-03 err.] pagerankSeqLiNorm [iteration-scaling=L1]
+# [00041.756 ms; 500 iters.] [7.4785e+01 err.] pagerankCudaLiNorm [iteration-scaling=L2]
+# [01046.375 ms; 500 iters.] [7.4784e+01 err.] pagerankSeqLiNorm [iteration-scaling=L2]
 #
-# Loading graph /kaggle/input/graphs/soc-Slashdot0902.mtx ...
+# Loading graph /home/subhajit/data/soc-Slashdot0902.mtx ...
 # order: 82168 size: 948464 {}
 # order: 82168 size: 948464 {} (transposeWithDegree)
-# [00007.058 ms; 055 iters.] [0.0000e+00 err.] pagerankNvgraph
-# [00005.985 ms; 056 iters.] [1.1293e-06 err.] pagerankCudaL1Norm [iteration-scaling=L0]
-# [00098.479 ms; 056 iters.] [4.8344e-06 err.] pagerankSeqL1Norm [iteration-scaling=L0]
-# [00006.933 ms; 055 iters.] [0.0000e+00 err.] pagerankCudaL1Norm [iteration-scaling=L1]
-# [00108.133 ms; 056 iters.] [1.4502e-06 err.] pagerankSeqL1Norm [iteration-scaling=L1]
-# [00062.889 ms; 500 iters.] [7.8248e+01 err.] pagerankCudaL1Norm [iteration-scaling=L2]
-# [01006.808 ms; 500 iters.] [7.8247e+01 err.] pagerankSeqL1Norm [iteration-scaling=L2]
-# [00003.133 ms; 029 iters.] [5.0287e-04 err.] pagerankCudaL2Norm [iteration-scaling=L0]
-# [00058.954 ms; 029 iters.] [4.9963e-04 err.] pagerankSeqL2Norm [iteration-scaling=L0]
-# [00004.060 ms; 029 iters.] [5.0315e-04 err.] pagerankCudaL2Norm [iteration-scaling=L1]
-# [00074.190 ms; 029 iters.] [5.0262e-04 err.] pagerankSeqL2Norm [iteration-scaling=L1]
-# [00070.101 ms; 500 iters.] [7.8248e+01 err.] pagerankCudaL2Norm [iteration-scaling=L2]
-# [00949.488 ms; 500 iters.] [7.8247e+01 err.] pagerankSeqL2Norm [iteration-scaling=L2]
-# [00002.301 ms; 021 iters.] [1.9694e-03 err.] pagerankCudaLiNorm [iteration-scaling=L0]
-# [00050.244 ms; 021 iters.] [1.9676e-03 err.] pagerankSeqLiNorm [iteration-scaling=L0]
-# [00002.745 ms; 021 iters.] [1.9696e-03 err.] pagerankCudaLiNorm [iteration-scaling=L1]
-# [00055.429 ms; 021 iters.] [1.9693e-03 err.] pagerankSeqLiNorm [iteration-scaling=L1]
-# [00064.156 ms; 500 iters.] [7.8248e+01 err.] pagerankCudaLiNorm [iteration-scaling=L2]
-# [01312.879 ms; 500 iters.] [7.8247e+01 err.] pagerankSeqLiNorm [iteration-scaling=L2]
+# [00006.898 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+# [00003.498 ms; 056 iters.] [8.5459e-07 err.] pagerankCudaL1Norm [iteration-scaling=L0]
+# [00111.433 ms; 056 iters.] [4.4357e-06 err.] pagerankSeqL1Norm [iteration-scaling=L0]
+# [00004.581 ms; 055 iters.] [1.9838e-06 err.] pagerankCudaL1Norm [iteration-scaling=L1]
+# [00122.162 ms; 056 iters.] [1.2052e-06 err.] pagerankSeqL1Norm [iteration-scaling=L1]
+# [00041.337 ms; 500 iters.] [7.8248e+01 err.] pagerankCudaL1Norm [iteration-scaling=L2]
+# [01083.655 ms; 500 iters.] [7.8247e+01 err.] pagerankSeqL1Norm [iteration-scaling=L2]
+# [00001.832 ms; 029 iters.] [5.0485e-04 err.] pagerankCudaL2Norm [iteration-scaling=L0]
+# [00057.329 ms; 029 iters.] [5.0161e-04 err.] pagerankSeqL2Norm [iteration-scaling=L0]
+# [00002.439 ms; 029 iters.] [5.0514e-04 err.] pagerankCudaL2Norm [iteration-scaling=L1]
+# [00063.226 ms; 029 iters.] [5.0461e-04 err.] pagerankSeqL2Norm [iteration-scaling=L1]
+# [00041.209 ms; 500 iters.] [7.8248e+01 err.] pagerankCudaL2Norm [iteration-scaling=L2]
+# [01084.506 ms; 500 iters.] [7.8247e+01 err.] pagerankSeqL2Norm [iteration-scaling=L2]
+# [00001.352 ms; 021 iters.] [1.9714e-03 err.] pagerankCudaLiNorm [iteration-scaling=L0]
+# [00045.283 ms; 021 iters.] [1.9696e-03 err.] pagerankSeqLiNorm [iteration-scaling=L0]
+# [00001.779 ms; 021 iters.] [1.9716e-03 err.] pagerankCudaLiNorm [iteration-scaling=L1]
+# [00048.552 ms; 021 iters.] [1.9713e-03 err.] pagerankSeqLiNorm [iteration-scaling=L1]
+# [00041.432 ms; 500 iters.] [7.8248e+01 err.] pagerankCudaLiNorm [iteration-scaling=L2]
+# [01149.528 ms; 500 iters.] [7.8247e+01 err.] pagerankSeqLiNorm [iteration-scaling=L2]
 #
 # ...
 ```
