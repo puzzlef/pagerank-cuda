@@ -81,12 +81,12 @@ PagerankResult<T> pagerankSeq(const H& xt, const J& ks, int i, const M& ns, FL f
   int  N  = xt.order();
   T    p  = o.damping;
   T    E  = o.tolerance;
-  int  L  = o.maxIterations;
+  int  L  = o.maxIterations, l = 0;
   int  EF = o.toleranceNorm;
   auto vfrom = sourceOffsets(xt, ks);
   auto efrom = destinationIndices(xt, ks);
   auto vdata = vertexData(xt, ks);
-  vector<T> a(N), r(N), c(N), f(N), qc; float l = 0;
+  vector<T> a(N), r(N), c(N), f(N), qc;
   if (q) qc = compressContainer(xt, *q, ks);
   float t = measureDurationMarked([&](auto mark) {
     if (q) copy(r, qc);    // copy old ranks (qc), if given
@@ -95,5 +95,5 @@ PagerankResult<T> pagerankSeq(const H& xt, const J& ks, int i, const M& ns, FL f
     mark([&] { pagerankFactor(f, vdata, 0, N, p); multiply(c, a, f, 0, N); });      // calculate factors (f) and contributions (c)
     mark([&] { l = fl(a, r, c, f, vfrom, efrom, vdata, i, ns, N, p, E, L, EF); });  // calculate ranks of vertices
   }, o.repeat);
-  return {decompressContainer(xt, a, ks), l, t, (1-sum(ns)/float(N))};
+  return {decompressContainer(xt, a, ks), l, t};
 }

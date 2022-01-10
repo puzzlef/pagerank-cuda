@@ -16,10 +16,6 @@ display(FileLink(out))
 
 # Run
 !nvcc -std=c++17 -Xcompiler -DNVGRAPH_DISABLE -O3 $src/main.cu
-!stdbuf --output=L ./a.out $inp/min-1DeadEnd.mtx      2>&1 | tee -a "$out"
-!stdbuf --output=L ./a.out $inp/min-2SCC.mtx          2>&1 | tee -a "$out"
-!stdbuf --output=L ./a.out $inp/min-4SCC.mtx          2>&1 | tee -a "$out"
-!stdbuf --output=L ./a.out $inp/min-NvgraphEx.mtx     2>&1 | tee -a "$out"
 !stdbuf --output=L ./a.out $inp/web-Stanford.mtx      2>&1 | tee -a "$out"
 !stdbuf --output=L ./a.out $inp/web-BerkStan.mtx      2>&1 | tee -a "$out"
 !stdbuf --output=L ./a.out $inp/web-Google.mtx        2>&1 | tee -a "$out"

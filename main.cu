@@ -9,29 +9,31 @@ using namespace std;
 
 
 
-#define TYPE float
-
-
 template <class G, class H>
 void runPagerank(const G& x, const H& xt, int repeat) {
-  vector<TYPE> *init = nullptr;
+  using T = float;
+  enum NormFunction { L0=0, L1=1, L2=2, Li=3 };
+  vector<T> *init = nullptr;
 
   // Find pagerank using default damping factor 0.85.
-  auto a0 = pagerankNvgraph(xt, init, {repeat});
+  auto a0 = pagerankNvgraph(xt, init, {repeat, L2});
   auto e0 = l1Norm(a0.ranks, a0.ranks);
   printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankNvgraph\n", a0.time, a0.iterations, e0);
 
   // Find pagerank using custom damping factors.
   for (float damping=1.0f; damping>0.45f; damping-=0.05f) {
-    auto a1 = pagerankNvgraph(xt, init, {repeat, damping});
+    auto a1 = pagerankNvgraph(xt, init, {repeat, L2, damping});
     auto e1 = l1Norm(a1.ranks, a0.ranks);
     printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankNvgraph [damping=%.2f]\n", a1.time, a1.iterations, e1, damping);
-    auto a2 = pagerankCuda(xt, init, {repeat, damping});
+    auto a2 = pagerankCuda(xt, init, {repeat, L1, damping});
     auto e2 = l1Norm(a2.ranks, a0.ranks);
-    printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda [damping=%.2f]\n", a2.time, a2.iterations, e2, damping);
-    auto a3 = pagerankSeq(xt, init, {repeat, damping});
+    printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda_L1Norm [damping=%.2f]\n", a2.time, a2.iterations, e2, damping);
+    auto a3 = pagerankCuda(xt, init, {repeat, L2, damping});
     auto e3 = l1Norm(a3.ranks, a0.ranks);
-    printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankSeq [damping=%.2f]\n", a3.time, a3.iterations, e3, damping);
+    printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda_L2Norm [damping=%.2f]\n", a3.time, a3.iterations, e3, damping);
+    auto a4 = pagerankCuda(xt, init, {repeat, Li, damping});
+    auto e4 = l1Norm(a4.ranks, a0.ranks);
+    printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda_LiNorm [damping=%.2f]\n", a4.time, a4.iterations, e4, damping);
   }
 }
 
