@@ -11,7 +11,7 @@ display(FileLink(out))
 
 # Download program
 !rm -rf $src
-!git clone https://github.com/cudaf/$src
+!git clone https://github.com/puzzlef/$src
 !echo ""
 
 # Run

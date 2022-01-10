@@ -1,9 +1,11 @@
-PageRank (PR) example using NVIDIA's Graph Library [nvGraph].
+Switched thread/block-per-vertex CUDA-based PageRank (PR) algorithm ([pull], [CSR]).
 
 All outputs are saved in [out](out/) and a small part of the output is listed
 here. Some [charts] are also included below, generated from [sheets]. The input
 data used for this experiment is available at the [SuiteSparse Matrix
 Collection].
+
+<br>
 
 ```bash
 $ nvcc -std=c++17 -Xcompiler -O3 main.cu
@@ -26,8 +28,9 @@ $ ...
 # ...
 ```
 
-[![](https://i.imgur.com/jUgH24r.png)][sheetp]
-[![](https://i.imgur.com/bg2zNx0.png)][sheetp]
+[![](https://i.imgur.com/42hbeHL.png)][sheetp]
+[![](https://i.imgur.com/5gHlECC.png)][sheetp]
+[![](https://i.imgur.com/cBcC75q.png)][sheetp]
 
 <br>
 <br>
@@ -35,13 +38,14 @@ $ ...
 
 ## References
 
-- [nvGraph pagerank example, EN605.617, JHU-EP-Intro2GPU](https://github.com/JHU-EP-Intro2GPU/EN605.617/blob/master/module9/nvgraph_examples/nvgraph_Pagerank.cpp)
-- [nvGraph pagerank example, CUDA Toolkit Documentation](https://docs.nvidia.com/cuda/archive/10.0/nvgraph/index.html#nvgraph-pagerank-example)
-- [nvGraph, CUDA Toolkit Documentation](https://docs.nvidia.com/cuda/archive/10.0/nvgraph/index.html#introduction)
-- [RAPIDS nvGraph NVIDIA graph library][nvGraph]
+- [PageRank Algorithm, Mining massive Datasets (CS246), Stanford University](https://www.youtube.com/watch?v=ke9g8hB0MEo)
+- [CUDA by Example :: Jason Sanders, Edward Kandrot](https://gist.github.com/wolfram77/72c51e494eaaea1c21a9c4021ad0f320)
+- [Managed memory vs cudaHostAlloc - TK1](https://forums.developer.nvidia.com/t/managed-memory-vs-cudahostalloc-tk1/34281)
+- [SuiteSparse Matrix Collection]
 
 [SuiteSparse Matrix Collection]: https://sparse.tamu.edu
-[nvGraph]: https://github.com/rapidsai/nvgraph
-[charts]: https://photos.app.goo.gl/owJ8YMMpoQQUqLGx5
-[sheets]: https://docs.google.com/spreadsheets/d/1gWzOw_715qpzYxjTvV5ti-lyMcsiqt43Vy9IFyibUGc/edit?usp=sharing
-[sheetp]: https://docs.google.com/spreadsheets/d/e/2PACX-1vQjvsrRquyQ0wE1e33Raz3mOYnTRU-hhTbk1nSRPraM1GkgBBxitL5KQjYwGTgpK7lDhD_ZMqs0jYze/pubhtml
+[pull]: https://github.com/puzzlef/pagerank-push-vs-pull
+[CSR]: https://github.com/puzzlef/pagerank-class-vs-csr
+[charts]: https://photos.app.goo.gl/6gvHFBbuN9jwEPSw7
+[sheets]: https://docs.google.com/spreadsheets/d/1hxCQrWodd_GGAR8KCe4HjKmdj9NobzKoH8qJjqKQqcY/edit?usp=sharing
+[sheetp]: https://docs.google.com/spreadsheets/d/e/2PACX-1vSuhEybARymE9SDn2V_AcUHWYQbKvnWsCttbS-H9pFIvp7_sEoKgg95fDs4zALvcKkU36alE55uug4J/pubhtml
