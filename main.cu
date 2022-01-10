@@ -16,24 +16,21 @@ void runPagerank(const G& x, const H& xt, int repeat) {
   vector<T> *init = nullptr;
 
   // Find pagerank using default damping factor 0.85.
-  auto a0 = pagerankNvgraph(xt, init, {repeat, L2});
+  auto a0 = pagerankNvgraph(x, xt, init, {repeat});
   auto e0 = l1Norm(a0.ranks, a0.ranks);
   printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankNvgraph\n", a0.time, a0.iterations, e0);
 
   // Find pagerank using custom damping factors.
   for (float damping=1.0f; damping>0.45f; damping-=0.05f) {
-    auto a1 = pagerankNvgraph(xt, init, {repeat, L2, damping});
+    auto a1 = pagerankMonolithicCuda(x, xt, init, {repeat, L1, damping});
     auto e1 = l1Norm(a1.ranks, a0.ranks);
-    printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankNvgraph [damping=%.2f]\n", a1.time, a1.iterations, e1, damping);
-    auto a2 = pagerankCuda(xt, init, {repeat, L1, damping});
+    printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankMonolithicCuda_L1Norm [damping=%.2f]\n", a1.time, a1.iterations, e1, damping);
+    auto a2 = pagerankMonolithicCuda(x, xt, init, {repeat, L2, damping});
     auto e2 = l1Norm(a2.ranks, a0.ranks);
-    printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda_L1Norm [damping=%.2f]\n", a2.time, a2.iterations, e2, damping);
-    auto a3 = pagerankCuda(xt, init, {repeat, L2, damping});
+    printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankMonolithicCuda_L2Norm [damping=%.2f]\n", a2.time, a2.iterations, e2, damping);
+    auto a3 = pagerankMonolithicCuda(x, xt, init, {repeat, Li, damping});
     auto e3 = l1Norm(a3.ranks, a0.ranks);
-    printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda_L2Norm [damping=%.2f]\n", a3.time, a3.iterations, e3, damping);
-    auto a4 = pagerankCuda(xt, init, {repeat, Li, damping});
-    auto e4 = l1Norm(a4.ranks, a0.ranks);
-    printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankCuda_LiNorm [damping=%.2f]\n", a4.time, a4.iterations, e4, damping);
+    printf("[%09.3f ms; %03d iters.] [%.4e err.] pagerankMonolithicCuda_LiNorm [damping=%.2f]\n", a3.time, a3.iterations, e3, damping);
   }
 }
 
