@@ -1,7 +1,7 @@
-# https://www.kaggle.com/wolfram77/puzzlef-pagerank-nvgraph
+# https://www.kaggle.com/wolfram77/puzzlef-pagerank-cuda
 import os
 from IPython.display import FileLink
-src="pagerank-nvgraph"
+src="pagerank-cuda"
 inp="/kaggle/input/graphs"
 out="{}.txt".format(src)
 !printf "" > "$out"
