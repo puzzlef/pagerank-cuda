@@ -10,7 +10,7 @@ git clone https://github.com/cudaf/$src
 cd $src
 
 # Run
-nvcc -std=c++17 -Xcompiler -lnvgraph -O3 main.cu
+nvcc -std=c++17 -Xcompiler -O3 main.cu
 stdbuf --output=L ./a.out ~/data/web-Stanford.mtx      2>&1 | tee -a "$out"
 stdbuf --output=L ./a.out ~/data/web-BerkStan.mtx      2>&1 | tee -a "$out"
 stdbuf --output=L ./a.out ~/data/web-Google.mtx        2>&1 | tee -a "$out"

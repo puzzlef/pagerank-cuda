@@ -6,7 +6,7 @@ data used for this experiment is available at the [SuiteSparse Matrix
 Collection].
 
 ```bash
-$ nvcc -std=c++17 -Xcompiler -lnvgraph -O3 main.cu
+$ nvcc -std=c++17 -Xcompiler -O3 main.cu
 $ ./a.out ~/data/web-Stanford.mtx
 $ ./a.out ~/data/web-BerkStan.mtx
 $ ...
@@ -14,14 +14,14 @@ $ ...
 # Loading graph /home/subhajit/data/web-Stanford.mtx ...
 # order: 281903 size: 2312497 {}
 # order: 281903 size: 2312497 {} (transposeWithDegree)
-# [00011.348 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+# [00011.300 ms; 063 iters.] [0.0000e+00 err.] pagerankCuda
 #
 # ...
 #
 # Loading graph /home/subhajit/data/soc-LiveJournal1.mtx ...
 # order: 4847571 size: 68993773 {}
 # order: 4847571 size: 68993773 {} (transposeWithDegree)
-# [00168.232 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
+# [00157.767 ms; 051 iters.] [0.0000e+00 err.] pagerankCuda
 #
 # ...
 ```
