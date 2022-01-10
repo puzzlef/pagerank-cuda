@@ -146,9 +146,11 @@ using std::max;
 
 template <class I>
 class Iterable {
+  using T = typename iterator_traits<I>::value_type;
   const I ib, ie;
 
   public:
+  using value_type = T;
   Iterable(I ib, I ie) : ib(ib), ie(ie) {}
   auto begin()  const { return ib; }
   auto end()    const { return ie; }

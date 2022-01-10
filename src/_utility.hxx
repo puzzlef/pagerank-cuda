@@ -8,8 +8,15 @@ using std::chrono::duration_cast;
 
 
 
-// MEASURE
-// -------
+// MEASURE-DURATION
+// ----------------
+
+template <class T>
+float durationMilliseconds(const T& start, const T& stop) {
+  auto a = duration_cast<microseconds>(stop - start);
+  return a.count()/1000.0f;
+}
+
 
 template <class F>
 float measureDuration(F fn, int N=1) {
@@ -17,8 +24,7 @@ float measureDuration(F fn, int N=1) {
   for (int i=0; i<N; i++)
     fn();
   auto stop = high_resolution_clock::now();
-  auto duration = duration_cast<microseconds>(stop - start);
-  return duration.count()/(N*1000.0f);
+  return durationMilliseconds(start, stop)/N;
 }
 
 
@@ -42,3 +48,19 @@ bool retry(F fn, int N=2) {
     if (fn()) return true;
   return false;
 }
+
+
+
+
+// MOVE
+// ----
+// Conditional move, otherwise value.
+
+#define CMOVE(c, t, f) \
+  ((c)? move(t) : (f))
+
+#define CMOVE_VECTOR(t, f) \
+  CMOVE(!(t).empty(), t, f)
+
+#define CMOVE_GRAPH(t, f) \
+  CMOVE((t).order()>0, t, f)

@@ -24,8 +24,31 @@ using std::back_inserter;
 
 
 
+// FOR-EACH
+// --------
+// Perform a sale.
+
+template <class I, class F>
+auto forEach(I ib, I ie, F fn) {
+  return for_each(ib, ie, fn);
+}
+
+template <class J, class F>
+auto forEach(const J& x, F fn) {
+  return for_each(x.begin(), x.end(), fn);
+}
+
+template <class J, class F>
+auto forEach(J& x, F fn) {
+  return for_each(x.begin(), x.end(), fn);
+}
+
+
+
+
 // ANY-OF
 // ------
+// Is anything useful there?
 
 template <class I, class F>
 auto anyOf(I ib, I ie, F fn) {
@@ -42,6 +65,7 @@ auto anyOf(const J& x, F fn) {
 
 // ALL-OF
 // ------
+// Is everything there?
 
 template <class I, class F>
 auto allOf(I ib, I ie, F fn) {
@@ -58,6 +82,7 @@ auto allOf(const J& x, F fn) {
 
 // FIND
 // ----
+// Find a business or its address.
 
 template <class J, class T>
 auto find(const J& x, const T& v) {
@@ -102,6 +127,7 @@ int findIfEqIndex(const J& x, F fn) {
 
 // LOWER-BOUND
 // -----------
+// Find closest business, or its address.
 
 template <class J, class T>
 auto lowerBound(const J& x, const T& v) {
@@ -146,6 +172,7 @@ int lowerBoundEqIndex(const J& x, const T& v, F fl, G fe) {
 
 // COUNT
 // -----
+// Count businesses in a sector.
 
 template <class J, class T>
 int count(const J& x, const T& v) {
@@ -168,11 +195,12 @@ int countIf(const J& x, F fn) {
 
 // COUNT-ALL
 // ---------
+// Count businesses in each sector.
 
 template <class I>
 auto countAll(I ib, I ie) {
-  using T = typename I::value_type;
-  unordered_map<T, int> a;
+  using K = typename iterator_traits<I>::value_type;
+  unordered_map<K, int> a;
   for_each(ib, ie, [&](const auto& v) { a[v]++; });
   return a;
 }
@@ -187,39 +215,20 @@ auto countAll(const J& x) {
 
 // INDICES
 // -------
+// Keep the address of each business (yellow pages).
 
 template <class I>
 auto indices(I ib, I ie) {
   using K = typename iterator_traits<I>::value_type;
-  unordered_map<K, int> a; int i = 0;
+  unordered_map<K, int> a; int i = -1;
   for (I it=ib; it!=ie; ++it)
-    a[*it] = i++;
+    a[*it] = ++i;
   return a;
 }
 
 template <class J>
-auto indices(J&& x) {
+auto indices(const J& x) {
   return indices(x.begin(), x.end());
-}
-
-
-
-
-// IDENTIFIERS
-// -----------
-
-template <class I>
-auto identifiers(I ib, I ie) {
-  using K = typename iterator_traits<I>::value_type;
-  unordered_map<K, int> a; int i = 0;
-  for (I it=ib; it!=ie; ++it)
-    if (a.count(*it)==0) a[*it] = i++;
-  return a;
-}
-
-template <class J>
-auto identifiers(const J& x) {
-  return identifiers(x.begin(), x.end());
 }
 
 
@@ -227,10 +236,36 @@ auto identifiers(const J& x) {
 
 // TRANSFORM
 // ---------
+// Switch around your portfolio.
+
+template <class J, class K, class F>
+void transform(const J& x, K& a, F fn) {
+  transform(x.begin(), x.end(), a.begin(), fn);
+}
 
 template <class J, class F>
-void transform(J& x, F fn) {
-  transform(x.begin(), x.end(), x.begin(), fn);
+void transform(J& a, F fn) {
+  transform(a, a, fn);
+}
+
+
+
+
+// SORT
+// ----
+// Arrange your portfolio by ROCE.
+
+template <class J>
+void sort(J& x, int i, int n) {
+  sort(x.begin()+i, x.end()+i+n);
+}
+template <class J>
+void sort(J& x, int i) {
+  sort(x.begin()+i, x.end());
+}
+template <class J>
+void sort(J& x) {
+  sort(x.begin(), x.end());
 }
 
 
@@ -240,17 +275,17 @@ void transform(J& x, F fn) {
 // --------------
 
 template <class L, class J, class K>
-void setDifference(L&& a, J&& x, K&& y) {
+void setDifference(L& a, const J& x, const K& y) {
   set_difference(x.begin(), x.end(), y.begin(), y.end(), a.begin());
 }
 
 template <class T, class J, class K>
-void setDifference(vector<T>& a, J&& x, K&& y) {
+void setDifference(vector<T>& a, const J& x, const K& y) {
   set_difference(x.begin(), x.end(), y.begin(), y.end(), back_inserter(a));
 }
 
 template <class J, class K>
-auto setDifference(J&& x, K&& y) {
+auto setDifference(const J& x, const K& y) {
   using I = decltype(x.begin());
   using T = typename iterator_traits<I>::value_type;
   vector<T> a; setDifference(a, x, y);
@@ -260,31 +295,35 @@ auto setDifference(J&& x, K&& y) {
 
 
 
+// WRITE
+// -----
+
+template <class T, class I>
+void write(vector<T>& a, I ib, I ie) {
+  a.clear();
+  a.insert(a.begin(), ib, ie);
+}
+
+template <class T, class J>
+void write(vector<T>& a, const J& vs) {
+  write(a, vs.begin(), vs.end());
+}
+
+
+
+
 // TO-*
 // ----
 
 template <class T, class I>
-void toVector(vector<T>& a, I ib, I ie) {
-  a.clear();
-  for (I it=ib; it!=ie; ++it)
-    a.push_back(*it);;
-}
-
-template <class I>
 auto toVector(I ib, I ie) {
-  using T = typename I::value_type;
-  vector<T> a; toVector(a, ib, ie);
+  vector<T> a; write(a, ib, ie);
   return a;
 }
 
 template <class T, class J>
-void toVector(vector<T>& a, const J& x) {
-  toVector(a, x.begin(), x.end());
-}
-
-template <class J>
 void toVector(const J& x) {
-  return toVector(x.begin(), x.end());
+  return toVector<T>(x.begin(), x.end());
 }
 
 
@@ -296,8 +335,7 @@ void toVector(const J& x) {
 template <class T, class I>
 size_t hashValue(vector<T>& vs, I ib, I ie) {
   size_t a = 0;
-  toVector(vs, ib, ie);
-  sort(vs.begin(), vs.end());
+  write(vs, ib, ie); sort(vs);
   for (const T& v : vs)
     a ^= hash<T>{}(v) + 0x9e3779b9 + (a<<6) + (a>>2); // from boost::hash_combine
   return a;

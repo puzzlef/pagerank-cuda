@@ -6,6 +6,10 @@ using std::string;
 
 
 
+// COUNT-LINES
+// -----------
+// For counting temporal edges.
+
 int countLines(const char *x) {
   int a = 1;
   for (; *x; x++) {

@@ -13,7 +13,7 @@ using std::transform;
 // --------------
 
 template <class G, class J>
-auto sourceOffsets(const G& x, J&& ks) {
+auto sourceOffsets(const G& x, const J& ks) {
   int i = 0;
   vector<int> a;
   a.reserve(x.order()+1);
@@ -37,7 +37,7 @@ auto sourceOffsets(const G& x) {
 // -------------------
 
 template <class G, class J, class F>
-auto destinationIndices(const G& x, J&& ks, F fp) {
+auto destinationIndices(const G& x, const J& ks, F fp) {
   vector<int> a;
   auto ids = indices(ks);
   for (int u : ks) {
@@ -49,7 +49,7 @@ auto destinationIndices(const G& x, J&& ks, F fp) {
 }
 
 template <class G, class J>
-auto destinationIndices(const G& x, J&& ks) {
+auto destinationIndices(const G& x, const J& ks) {
   return destinationIndices(x, ks, [](auto ib, auto ie) {});
 }
 

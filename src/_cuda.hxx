@@ -1,13 +1,14 @@
 #pragma once
+#include <cmath>
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
 #include <cuda_runtime.h>
 #include <cuda_profiler_api.h>
-#include "_main.hxx"
 
 using std::min;
 using std::max;
+using std::abs;
 using std::fprintf;
 using std::exit;
 
@@ -121,21 +122,12 @@ __device__ void unusedCuda(T&&) {}
 // REMOVE IDE SQUIGGLES
 // --------------------
 
-#ifndef __SYNCTHREADS
-void __syncthreads();
-#define __SYNCTHREADS() __syncthreads()
-#endif
-
 #ifndef __global__
 #define __global__
-#endif
-
-#ifndef __device__
+#define __host__
 #define __device__
-#endif
-
-#ifndef __shared__
 #define __shared__
+void __syncthreads();
 #endif
 
 
@@ -256,6 +248,33 @@ void multiplyCu(T *a, const T *x, const T* y, int N) {
 
 
 
+// MULTIPLY-VALUE
+// --------------
+
+template <class T>
+__device__ void multiplyValueKernelLoop(T *a, const T *x, T v, int N, int i, int DI) {
+  for (; i<N; i+=DI)
+    a[i] = x[i] * v;
+}
+
+
+template <class T>
+__global__ void multiplyValueKernel(T *a, const T *x, T v, int N) {
+  DEFINE(t, b, B, G);
+  multiplyValueKernelLoop(a, x, v, N, B*b+t, G*B);
+}
+
+
+template <class T>
+void multiplyValueCu(T *a, const T *x, T v, int N) {
+  const int B = BLOCK_DIM_M<T>();
+  const int G = min(ceilDiv(N, B), GRID_DIM_M<T>());
+  multiplyValueKernel<<<G, B>>>(a, x, v, N);
+}
+
+
+
+
 // MAX
 // ---
 
@@ -361,6 +380,96 @@ void sumInplaceCu(T *a, const T *x, int N) {
 template <class T>
 void sumCu(T *a, const T *x, int N) {
   sumMemcpyCu(a, x, N);
+}
+
+
+
+
+// SUM-ABS
+// -------
+
+template <class T>
+__device__ T sumAbsKernelLoop(const T *x, int N, int i, int DI) {
+  T a = T();
+  for (; i<N; i+=DI)
+    a += abs(x[i]);
+  return a;
+}
+
+
+template <class T, int S=BLOCK_LIMIT>
+__global__ void sumAbsKernel(T *a, const T *x, int N) {
+  DEFINE(t, b, B, G);
+  __shared__ T cache[S];
+  cache[t] = sumAbsKernelLoop(x, N, B*b+t, G*B);
+  sumKernelReduce(cache, B, t);
+  if (t==0) a[b] = cache[0];
+}
+
+
+template <class T>
+void sumAbsMemcpyCu(T *a, const T *x, int N) {
+  const int B = BLOCK_DIM_R<T>();
+  const int G = min(ceilDiv(N, B), GRID_DIM_R<T>());
+  sumAbsKernel<<<G, B>>>(a, x, N);
+}
+
+template <class T>
+void sumAbsInplaceCu(T *a, const T *x, int N) {
+  const int B = BLOCK_DIM_R<T>();
+  const int G = min(ceilDiv(N, B), GRID_DIM_R<T>());
+  sumAbsKernel<<<G, B>>>(a, x, N);
+  sumAbsKernel<<<1, G>>>(a, a, G);
+}
+
+template <class T>
+void sumAbsCu(T *a, const T *x, int N) {
+  sumAbsMemcpyCu(a, x, N);
+}
+
+
+
+
+// SUM-SQR
+// -------
+
+template <class T>
+__device__ T sumSqrKernelLoop(const T *x, int N, int i, int DI) {
+  T a = T();
+  for (; i<N; i+=DI)
+    a += x[i]*x[i];
+  return a;
+}
+
+
+template <class T, int S=BLOCK_LIMIT>
+__global__ void sumSqrKernel(T *a, const T *x, int N) {
+  DEFINE(t, b, B, G);
+  __shared__ T cache[S];
+  cache[t] = sumSqrKernelLoop(x, N, B*b+t, G*B);
+  sumKernelReduce(cache, B, t);
+  if (t==0) a[b] = cache[0];
+}
+
+
+template <class T>
+void sumSqrMemcpyCu(T *a, const T *x, int N) {
+  const int B = BLOCK_DIM_R<T>();
+  const int G = min(ceilDiv(N, B), GRID_DIM_R<T>());
+  sumSqrKernel<<<G, B>>>(a, x, N);
+}
+
+template <class T>
+void sumSqrInplaceCu(T *a, const T *x, int N) {
+  const int B = BLOCK_DIM_R<T>();
+  const int G = min(ceilDiv(N, B), GRID_DIM_R<T>());
+  sumSqrKernel<<<G, B>>>(a, x, N);
+  sumSqrKernel<<<1, G>>>(a, a, G);
+}
+
+template <class T>
+void sumSqrCu(T *a, const T *x, int N) {
+  sumSqrMemcpyCu(a, x, N);
 }
 
 

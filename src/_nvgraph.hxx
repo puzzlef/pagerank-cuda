@@ -11,7 +11,7 @@ using std::fprintf;
 
 #ifndef TRY_NVGRAPH
 void tryNvgraph(nvgraphStatus_t err, const char* exp, const char* func, int line, const char* file) {
-  if (err == NVGRAPH_STATUS_SUCCESS) return;
+  if (err == NVGRAPH_STATUS_SUCCESS || err == NVGRAPH_STATUS_NOT_CONVERGED) return;
   fprintf(stderr,
     "ERROR: nvGraph-%d\n"
     "  in expression %s\n"
