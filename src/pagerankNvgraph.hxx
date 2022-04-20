@@ -30,11 +30,11 @@ PagerankResult<T> pagerankNvgraphCore(const G& xt, const vector<T> *q=nullptr, P
   vector<cudaDataType_t> etype {type};
   vector<T> ranks(N);
   if (N==0) return {ranks};
-  auto ks    = vertices(xt);
-  auto vfrom = sourceOffsets(xt);
-  auto efrom = destinationIndices(xt);
-  auto vdata = vertexData(xt, ks, [&](int v) { return xt.vertexData(v)==0? T(1) : T(); });
-  auto edata = edgeData(xt, ks, [&](int v, int u) { return T(1)/xt.vertexData(u); });
+  auto ks    = vertexKeys(xt);
+  auto vfrom = sourceOffsetsAs(xt, int());
+  auto efrom = destinationIndicesAs(xt, int());
+  auto vdata = vertexData(xt, ks, [&](auto v, auto d) { return xt.vertexValue(v)==0? T(1) : T(); });
+  auto edata = edgeData(xt, ks, [&](auto v, auto u, auto w) { return T(1)/xt.vertexValue(u); });
   if (q) ranks = compressContainer(xt, *q);
 
   TRY_NVGRAPH( nvgraphCreate(&h) );

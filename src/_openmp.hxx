@@ -80,7 +80,7 @@ inline void fillValueOmp(vector<T>& a, size_t i, size_t N, const V& v) {
 
 template <class T, class V=T>
 V sumValuesOmp(const T *x, size_t N, V a=V()) {
-  if (N<SIZE_MIN_OMPR) return sum(x, N, a);
+  if (N<SIZE_MIN_OMPR) return sumValues(x, N, a);
   #pragma omp parallel for num_threads(32) schedule(auto) reduction(+:a)
   for (size_t i=0; i<N; ++i)
     a += x[i];

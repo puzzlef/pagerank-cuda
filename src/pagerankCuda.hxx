@@ -42,7 +42,7 @@ void pagerankPartition(const H& xt, vector<int>& ks) {
 // For contribution factors of vertices (unchanging).
 
 template <class T>
-__global__ void pagerankFactorKernel(T *a, const int *vdata, int i, int n, T p) {
+__global__ void pagerankFactorKernelW(T *a, const int *vdata, int i, int n, T p) {
   DEFINE(t, b, B, G);
   for (int v=i+B*b+t; v<i+n; v+=G*B) {
     int d = vdata[v];
@@ -51,10 +51,10 @@ __global__ void pagerankFactorKernel(T *a, const int *vdata, int i, int n, T p) 
 }
 
 template <class T>
-void pagerankFactorCu(T *a, const int *vdata, int i, int n, T p) {
+void pagerankFactorCuW(T *a, const int *vdata, int i, int n, T p) {
   int B = BLOCK_DIM_M<T>();
   int G = min(ceilDiv(n, B), GRID_DIM_M<T>());
-  pagerankFactorKernel<<<G, B>>>(a, vdata, i, n, p);
+  pagerankFactorKernelW<<<G, B>>>(a, vdata, i, n, p);
 }
 
 
@@ -64,23 +64,23 @@ void pagerankFactorCu(T *a, const int *vdata, int i, int n, T p) {
 // --------------
 
 template <class T, int S=BLOCK_LIMIT>
-__global__ void pagerankBlockKernel(T *a, const T *c, const int *vfrom, const int *efrom, int i, int n, T c0) {
+__global__ void pagerankBlockKernelW(T *a, const T *c, const int *vfrom, const int *efrom, int i, int n, T c0) {
   DEFINE(t, b, B, G);
   __shared__ T cache[S];
   for (int v=i+b; v<i+n; v+=G) {
     int ebgn = vfrom[v];
     int ideg = vfrom[v+1]-vfrom[v];
     cache[t] = sumAtKernelLoop(c, efrom+ebgn, ideg, t, B);
-    sumKernelReduce(cache, B, t);
+    sumKernelReduceW(cache, B, t);
     if (t==0) a[v] = c0 + cache[0];
   }
 }
 
 template <class T>
-void pagerankBlockCu(T *a, const T *c, const int *vfrom, const int *efrom, int i, int n, T c0) {
+void pagerankBlockCuW(T *a, const T *c, const int *vfrom, const int *efrom, int i, int n, T c0) {
   int B = BLOCK_DIM_PRCB<T>();
   int G = min(n, GRID_DIM_PRCB<T>());
-  pagerankBlockKernel<<<G, B>>>(a, c, vfrom, efrom, i, n, c0);
+  pagerankBlockKernelW<<<G, B>>>(a, c, vfrom, efrom, i, n, c0);
 }
 
 
@@ -90,7 +90,7 @@ void pagerankBlockCu(T *a, const T *c, const int *vfrom, const int *efrom, int i
 // ---------------
 
 template <class T>
-__global__ void pagerankThreadKernel(T *a, const T *c, const int *vfrom, const int *efrom, int i, int n, T c0) {
+__global__ void pagerankThreadKernelW(T *a, const T *c, const int *vfrom, const int *efrom, int i, int n, T c0) {
   DEFINE(t, b, B, G);
   for (int v=i+B*b+t; v<i+n; v+=G*B) {
     int ebgn = vfrom[v];
@@ -100,10 +100,10 @@ __global__ void pagerankThreadKernel(T *a, const T *c, const int *vfrom, const i
 }
 
 template <class T>
-void pagerankThreadCu(T *a, const T *c, const int *vfrom, const int *efrom, int i, int n, T c0) {
+void pagerankThreadCuW(T *a, const T *c, const int *vfrom, const int *efrom, int i, int n, T c0) {
   int B = BLOCK_DIM_PRCT<T>();
   int G = min(ceilDiv(n, B), GRID_DIM_PRCT<T>());
-  pagerankThreadKernel<<<G, B>>>(a, c, vfrom, efrom, i, n, c0);
+  pagerankThreadKernelW<<<G, B>>>(a, c, vfrom, efrom, i, n, c0);
 }
 
 
@@ -113,10 +113,10 @@ void pagerankThreadCu(T *a, const T *c, const int *vfrom, const int *efrom, int 
 // -----------------
 
 template <class T, class J>
-void pagerankSwitchedCu(T *a, const T *c, const int *vfrom, const int *efrom, int i, const J& ns, T c0) {
+void pagerankSwitchedCuW(T *a, const T *c, const int *vfrom, const int *efrom, int i, const J& ns, T c0) {
   for (int n : ns) {
-    if (n>0) pagerankBlockCu (a, c, vfrom, efrom, i,  n, c0);
-    else     pagerankThreadCu(a, c, vfrom, efrom, i, -n, c0);
+    if (n>0) pagerankBlockCuW (a, c, vfrom, efrom, i,  n, c0);
+    else     pagerankThreadCuW(a, c, vfrom, efrom, i, -n, c0);
     i += abs(n);
   }
 }
@@ -141,7 +141,7 @@ int pagerankSwitchPoint(const H& xt, const J& ks) {
 // -------------
 
 template <class H>
-void pagerankPairWave(vector<array<int,2>>& a, const H& xt, const vector2d<int>& cs) {
+void pagerankPairWaveW(vector<array<int,2>>& a, const H& xt, const vector2d<int>& cs) {
   for (const auto& ks : cs) {
     int N = ks.size();
     int s = pagerankSwitchPoint(xt, ks);
@@ -151,39 +151,39 @@ void pagerankPairWave(vector<array<int,2>>& a, const H& xt, const vector2d<int>&
 
 template <class H>
 auto pagerankPairWave(const H& xt, const vector2d<int>& cs) {
-  vector<array<int,2>> a; pagerankPairWave(a, xt, cs);
+  vector<array<int,2>> a; pagerankPairWaveW(a, xt, cs);
   return a;
 }
 
 
-void pagerankAddStep(vector<int>& a, int n) {
+void pagerankAddStepU(vector<int>& a, int n) {
   if (n==0) return;
   if (a.empty() || sgn(a.back())!=sgn(n)) a.push_back(n);
   else a.back() += n;
 }
 
 template <class H, class J>
-void pagerankWave(vector<int>& a, const H& xt, const J& ks) {
+void pagerankWaveW(vector<int>& a, const H& xt, const J& ks) {
   int N = ks.size();
   int s = pagerankSwitchPoint(xt, ks);
-  pagerankAddStep(a,  -s);
-  pagerankAddStep(a, N-s);
+  pagerankAddStepU(a,  -s);
+  pagerankAddStepU(a, N-s);
 }
 
 template <class H, class J>
 auto pagerankWave(const H& xt, const J& ks) {
-  vector<int> a; pagerankWave(a, xt, ks);
+  vector<int> a; pagerankWaveW(a, xt, ks);
   return a;
 }
 
 template <class H, class J>
-void pagerankComponentWave(vector<int>& a, const H& xt, const J& cs) {
+void pagerankComponentWaveW(vector<int>& a, const H& xt, const J& cs) {
   for (const auto& ks : cs)
-    pagerankWave(a, xt, ks);
+    pagerankWaveW(a, xt, ks);
 }
 template <class H, class J>
 auto pagerankComponentWave(const H& xt, const J& cs) {
-  vector<int> a; pagerankComponentWave(a, xt, cs);
+  vector<int> a; pagerankComponentWaveW(a, xt, cs);
   return a;
 }
 
@@ -195,20 +195,20 @@ auto pagerankComponentWave(const H& xt, const J& cs) {
 // For convergence check.
 
 template <class T>
-void pagerankErrorCu(T *a, const T *x, const T *y, int N, int EF) {
+void pagerankErrorCuW(T *a, const T *x, const T *y, int N, int EF) {
   switch (EF) {
-    case 1:  l1NormCu(a, x, y, N); break;
-    case 2:  l2NormCu(a, x, y, N); break;
-    default: liNormCu(a, x, y, N); break;
+    case 1:  l1NormCuW(a, x, y, N); break;
+    case 2:  l2NormCuW(a, x, y, N); break;
+    default: liNormCuW(a, x, y, N); break;
   }
 }
 
 template <class T>
 T pagerankErrorReduce(const T *x, int N, int EF) {
   switch (EF) {
-    case 1:  return sum(x, N);
-    case 2:  return sqrt(sum(x, N));
-    default: return max(x, N);
+    case 1:  return sumValues(x, N);
+    case 2:  return sqrt(sumValues(x, N));
+    default: return maxValue(x, N);
   }
 }
 
@@ -227,8 +227,8 @@ PagerankResult<T> pagerankCuda(const H& xt, const J& ks, int i, const M& ns, FL 
   int  L  = o.maxIterations, l = 0;
   int  EF = o.toleranceNorm;
   int  R  = reduceSizeCu<T>(N);
-  auto vfrom = sourceOffsets(xt, ks);
-  auto efrom = destinationIndices(xt, ks);
+  auto vfrom = sourceOffsetsAs(xt, ks, int());
+  auto efrom = destinationIndicesAs(xt, ks, int());
   auto vdata = vertexData(xt, ks);
   int VFROM1 = vfrom.size() * sizeof(int);
   int EFROM1 = efrom.size() * sizeof(int);
@@ -259,11 +259,11 @@ PagerankResult<T> pagerankCuda(const H& xt, const J& ks, int i, const M& ns, FL 
   TRY( cudaMemcpy(vdataD, vdata.data(), VDATA1, cudaMemcpyHostToDevice) );
 
   float t = measureDurationMarked([&](auto mark) {
-    if (q) copy(r, qc);    // copy old ranks (qc), if given
-    else fill(r, T(1)/N);
+    if (q) copyValuesW(r, qc);   // copy old ranks (qc), if given
+    else fillValueU(r, T(1)/N);
     TRY( cudaMemcpy(aD, r.data(), N1, cudaMemcpyHostToDevice) );
     TRY( cudaMemcpy(rD, r.data(), N1, cudaMemcpyHostToDevice) );
-    mark([&] { pagerankFactorCu(fD, vdataD, 0, N, p); multiplyCu(cD, aD, fD, N); });                       // calculate factors (fD) and contributions (cD)
+    mark([&] { pagerankFactorCuW(fD, vdataD, 0, N, p); multiplyCuW(cD, aD, fD, N); });                       // calculate factors (fD) and contributions (cD)
     mark([&] { l = fl(e, r0, eD, r0D, aD, rD, cD, fD, vfromD, efromD, vdataD, i, ns, N, p, E, L, EF); });  // calculate ranks of vertices
   }, o.repeat);
   TRY( cudaMemcpy(a.data(), aD, N1, cudaMemcpyDeviceToHost) );
