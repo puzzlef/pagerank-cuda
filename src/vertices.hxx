@@ -1,58 +1,31 @@
 #pragma once
+#include <type_traits>
 #include <vector>
-#include <unordered_set>
-#include <iterator>
-#include <algorithm>
 #include "_main.hxx"
 
+using std::remove_reference_t;
 using std::vector;
-using std::unordered_set;
-using std::transform;
-using std::back_inserter;
-using std::equal;
 
 
 
 
-// VERTICES
-// --------
-
-template <class G, class F, class D>
-auto vertices(const G& x, F fm, D fp) {
-  vector<int> a;
-  append(a, x.vertices());
-  auto ie = a.end(), ib = a.begin();
-  fp(ib, ie); transform(ib, ie, ib, fm);
-  return a;
-}
-
-template <class G, class F>
-auto vertices(const G& x, F fm) {
-  return vertices(x, fm, [](auto ib, auto ie) {});
-}
+// VERTEX-KEYS
+// -----------
 
 template <class G>
-auto vertices(const G& x) {
-  return vertices(x, [](int u) { return u; });
+inline auto vertexKeys(const G& x) {
+  return copyVector(x.vertexKeys());
 }
 
 
 
 
-// VERTEX-SET
-// ----------
-
-template <class G, class F, class D>
-auto vertexSet(const G& x, F fm) {
-  unordered_set<int> a;
-  for (int u : x.vertices())
-    a.insert(fm(u));
-  return a;
-}
+// VERTEX-VALUES
+// -------------
 
 template <class G>
-auto vertexSet(const G& x) {
-  return vertexSet(x, [](int u) { return u; });
+inline auto vertexValues(const G& x) {
+  return copyVector(x.vertexValues());
 }
 
 
@@ -61,92 +34,91 @@ auto vertexSet(const G& x) {
 // VERTEX-DATA
 // -----------
 
-template <class G, class J, class F, class D>
-auto vertexData(const G& x, const J& ks, F fm, D fp) {
-  using V = decltype(fm(0));
-  vector<V> a;
-  vector<int> b;
-  append(b, ks);
-  auto ie = b.end(), ib = b.begin();
-  fp(ib, ie); transform(ib, ie, back_inserter(a), fm);
+template <class G, class J, class FM>
+inline auto vertexData(const G& x, const J& ks, FM fm) {
+  using K = typename G::key_type;
+  using V = typename G::vertex_value_type;
+  using T = remove_reference_t<decltype(fm(K(), V()))>;
+  vector<T> a;
+  for (auto u : ks)
+    a.push_back(fm(u, x.vertexValue(u)));
   return a;
 }
-
-template <class G, class J, class F>
-auto vertexData(const G& x, const J& ks, F fm) {
-  return vertexData(x, ks, fm, [](auto ib, auto ie) {});
-}
-
 template <class G, class J>
-auto vertexData(const G& x, const J& ks) {
-  return vertexData(x, ks, [&](int u) { return x.vertexData(u); });
+inline auto vertexData(const G& x, const J& ks) {
+  auto fm = [&](auto u, auto d) { return d; };
+  return vertexData(x, ks, fm);
 }
-
 template <class G>
-auto vertexData(const G& x) {
-  return vertexData(x, x.vertices());
+inline auto vertexData(const G& x) {
+  return copyVector(x.vertexValues());
 }
 
 
 
 
-// CONTAINER
-// ---------
+// CREATE-CONTAINER
+// ----------------
 
 template <class G, class T>
-auto createContainer(const G& x, const T& _) {
+inline auto createContainer(const G& x, const T& _) {
   return vector<T>(x.span());
 }
-
 template <class G, class T>
-auto createCompressedContainer(const G& x, const T& _) {
+inline auto createCompressedContainer(const G& x, const T& _) {
   return vector<T>(x.order());
 }
 
 
-template <class G, class T, class J>
-void decompressContainer(vector<T>& a, const G& x, const vector<T>& vs, const J& ks) {
-  scatter(a, vs, ks);
-}
 
+
+// DECOMPRESS-CONTAINER
+// --------------------
+
+template <class G, class T, class J>
+inline void decompressContainerW(vector<T>& a, const G& x, const vector<T>& vs, const J& ks) {
+  scatterValuesW(a, vs, ks);
+}
 template <class G, class T>
-void decompressContainer(vector<T>& a, const G& x, const vector<T>& vs) {
-  decompressContainer(a, x, vs, x.vertices());
+inline void decompressContainerW(vector<T>& a, const G& x, const vector<T>& vs) {
+  decompressContainerW(a, x, vs, x.vertexKeys());
 }
 
 template <class G, class T, class J>
-auto decompressContainer(const G& x, const vector<T>& vs, const J& ks) {
+inline auto decompressContainer(const G& x, const vector<T>& vs, const J& ks) {
   auto a = createContainer(x, T());
-  decompressContainer(a, x, vs, ks);
+  decompressContainerW(a, x, vs, ks);
   return a;
 }
-
 template <class G, class T>
-auto decompressContainer(const G& x, const vector<T>& vs) {
-  return decompressContainer(x, vs, x.vertices());
+inline auto decompressContainer(const G& x, const vector<T>& vs) {
+  return decompressContainer(x, vs, x.vertexKeys());
 }
 
+
+
+
+// COMPRESS-CONTAINER
+// ------------------
 
 template <class G, class T, class J>
-void compressContainer(vector<T>& a, const G& x, const vector<T>& vs, const J& ks) {
-  gather(a, vs, ks);
+inline void compressContainerW(vector<T>& a, const G& x, const vector<T>& vs, const J& ks) {
+  gatherValuesW(a, vs, ks);
 }
-
 template <class G, class T>
-void compressContainer(vector<T>& a, const G& x, const vector<T>& vs) {
-  return compressContainer(a, x, vs, x.vertices());
+inline void compressContainerW(vector<T>& a, const G& x, const vector<T>& vs) {
+  return compressContainerW(a, x, vs, x.vertexKeys());
 }
 
 template <class G, class T, class J>
-auto compressContainer(const G& x, const vector<T>& vs, const J& ks) {
+inline auto compressContainer(const G& x, const vector<T>& vs, const J& ks) {
   auto a = createCompressedContainer(x, T());
-  compressContainer(a, x, vs, ks);
+  compressContainerW(a, x, vs, ks);
   return a;
 }
-
 template <class G, class T>
-auto compressContainer(const G& x, const vector<T>& vs) {
-  return compressContainer(x, vs, x.vertices());
+inline auto compressContainer(const G& x, const vector<T>& vs) {
+  return compressContainer(x, vs, x.vertexKeys());
 }
 
 
@@ -155,14 +127,12 @@ auto compressContainer(const G& x, const vector<T>& vs) {
 // VERTICES-EQUAL
 // --------------
 
-template <class G>
-bool verticesEqual(const G& x, int u, const G& y, int v) {
+template <class G, class K>
+inline bool verticesEqual(const G& x, K u, const G& y, K v) {
   if (x.degree(u) != y.degree(v)) return false;
-  auto xe = x.edges(u), ye = y.edges(v);
-  return equal(xe.begin(), xe.end(), ye.begin());
+  return equalValues(x.edgeKeys(u), y.edgeKeys(v));
 }
-
-template <class G, class H>
-bool verticesEqual(const G& x, const H& xt, int u, const G& y, const H& yt, int v) {
-  return verticesEqual(x, u, y, v) && verticesEqual(xt, u, yt, v);
+template <class G, class H, class K>
+inline bool verticesEqual(const G& x, const H& xt, K u, const G& y, const H& yt, K v) {
+  return verticesEqual(x, u, y, u) && verticesEqual(xt, u, yt, u);
 }

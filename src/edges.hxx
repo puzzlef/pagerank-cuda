@@ -1,54 +1,38 @@
 #pragma once
+#include <type_traits>
 #include <vector>
-#include <iterator>
-#include <algorithm>
 #include "_main.hxx"
 
+using std::remove_reference_t;
 using std::vector;
-using std::transform;
-using std::back_inserter;
 
 
 
 
-// EDGES
-// -----
+// EDGE-KEYS
+// ---------
 
-template <class G, class F, class D>
-auto edges(const G& x, int u, F fm, D fp) {
-  vector<int> a;
-  append(a, x.edges(u));
-  auto ie = a.end(), ib = a.begin();
-  fp(ib, ie); transform(ib, ie, ib, fm);
-  return a;
+template <class G, class K>
+inline auto edgeKeys(const G& x, K u) {
+  return copyVector(x.edgeKeys(u));
 }
 
-template <class G, class F>
-auto edges(const G& x, int u, F fm) {
-  return edges(x, u, fm, [](auto ib, auto ie) {});
-}
-
-template <class G>
-auto edges(const G& x, int u) {
-  return edges(x, u, [](int v) { return v; });
+template <class G, class K>
+inline auto edgeKey(const G& x, K u) {
+  for (auto v : x.edgeKeys(u))
+    return v;
+  return K(-1);
 }
 
 
 
 
-// EDGE
-// ----
+// EDGE-VALUES
+// -----------
 
-template <class G, class F>
-auto edge(const G& x, int u, F fm) {
-  for (int v : x.edges(u))
-    return fm(v);
-  return -1;
-}
-
-template <class G>
-auto edge(const G& x, int u) {
-  return edge(x, u, [](int v) { return v; });
+template <class G, class K>
+inline auto edgeValues(const G& x, K u) {
+  return copyVector(x.edgeValues(u));
 }
 
 
@@ -57,50 +41,22 @@ auto edge(const G& x, int u) {
 // EDGE-DATA
 // ---------
 
-template <class G, class J, class F, class D>
-auto edgeData(const G& x, const J& ks, F fm, D fp) {
-  using E = decltype(fm(0, 0));
-  vector<E> a;
-  vector<int> b;
-  for (int u : ks) {
-    b.clear(); append(b, x.edges(u));
-    auto ie = b.end(), ib = b.begin();
-    fp(ib, ie); transform(ib, ie, back_inserter(a), [&](int v) { return fm(u, v); });
-  }
+template <class G, class J, class FM>
+auto edgeData(const G& x, const J& ks, FM fm) {
+  using K = typename G::key_type;
+  using E = typename G::edge_value_type;
+  using T = remove_reference_t<decltype(fm(K(), K(), E()))>;
+  vector<T> a;
+  for (auto u : ks)
+    x.forEachEdge(u, [&](auto v, auto w) { a.push_back(fm(u, v, w)); });
   return a;
 }
-
-template <class G, class J, class F>
-auto edgeData(const G& x, const J& ks, F fm) {
-  return edgeData(x, ks, fm, [](auto ib, auto ie) {});
-}
-
 template <class G, class J>
-auto edgeData(const G& x, const J& ks) {
-  return edgeData(x, ks, [&](int u, int v) { return x.edgeData(u, v); });
+inline auto edgeData(const G& x, const J& ks) {
+  auto fm = [&](auto u, auto v, auto w) { return w; };
+  return edgeData(x, ks, fm);
 }
-
 template <class G>
-auto edgeData(const G& x) {
-  return edgeData(x, x.vertices());
-}
-
-
-
-
-// EDGES-VISITED
-// -------------
-
-template <class G>
-bool allEdgesVisited(const G& x, int u, const vector<bool>& vis) {
-  for (int v : x.edges(u))
-    if (!vis[v]) return false;
-  return true;
-}
-
-template <class G>
-bool someEdgesVisited(const G& x, int u, const vector<bool>& vis) {
-  for (int v : x.edges(u))
-    if (vis[v]) return true;
-  return false;
+inline auto edgeData(const G& x) {
+  return edgeData(x, x.vertexKeys());
 }

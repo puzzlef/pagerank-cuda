@@ -1,14 +1,14 @@
 #pragma once
-#include "copy.hxx"
+#include "duplicate.hxx"
 
 
 
 
-// HAS SELF-LOOP
+// HAS-SELF-LOOP
 // -------------
 
-template <class G>
-bool hasSelfLoop(const G& x, int u) {
+template <class G, class K>
+inline bool hasSelfLoop(const G& x, K u) {
   return x.hasEdge(u, u);
 }
 
@@ -19,21 +19,19 @@ bool hasSelfLoop(const G& x, int u) {
 // ----------
 
 template <class G, class F>
-void selfLoopForEach(const G& x, F fn) {
-  for (int u : x.vertices())
-    if (x.hasEdge(u, u)) fn(u);
+inline void selfLoopForEach(const G& x, F fn) {
+  x.forEachVertexKey([&](auto u) { if (hasSelfLoop(x, u)) fn(u); });
 }
-
-
 template <class G>
-auto selfLoops(const G& x) {
-  vector<int> a; selfLoopForEach(x, [&](int u) { a.push_back(u); });
+inline auto selfLoops(const G& x) {
+  using K = typename G::key_type; vector<K> a;
+  selfLoopForEach(x, [&](auto u) { a.push_back(u); });
   return a;
 }
-
 template <class G>
-int selfLoopCount(const G& x) {
-  int a = 0; selfLoopForEach(x, [&](int u) { ++a; });
+inline auto selfLoopCount(const G& x) {
+  using K = typename G::key_type; K a = 0;
+  selfLoopForEach(x, [&](auto u) { ++a; });
   return a;
 }
 
@@ -44,13 +42,12 @@ int selfLoopCount(const G& x) {
 // ----------
 
 template <class G, class F>
-void selfLoopTo(G& a, F fn) {
-  for (int u : a.vertices())
-    if (fn(u)) a.addEdge(u, u);
+void selfLoopW(G& a, F fn) {
+  a.forEachVertexKey([&](auto u) { if (fn(u)) a.addEdge(u, u); });
+  a.correct();
 }
-
 template <class G, class F>
 auto selfLoop(const G& x, F fn) {
-  auto a = copy(x); selfLoopTo(a, fn);
+  auto a = duplicate(x); selfLoopW(a, fn);
   return a;
 }

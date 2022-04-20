@@ -5,7 +5,7 @@
 #include <fstream>
 #include <algorithm>
 #include "_main.hxx"
-#include "DiGraph.hxx"
+#include "Graph.hxx"
 
 using std::string;
 using std::istream;
@@ -20,8 +20,20 @@ using std::max;
 // READ-MTX
 // --------
 
+#define READ_MTX_RETURN(R, unq) \
+  inline auto readMtx##R(istream& s) { \
+    R<> a; readMtxW(a, s, unq); \
+    return a; \
+  } \
+  inline auto readMtx##R(const char *pth) { \
+    R<> a; readMtxW(a, pth, unq); \
+    return a; \
+  }
+
+
 template <class G>
-void readMtx(G& a, istream& s) {
+void readMtxW(G& a, istream& s, bool unq=false) {
+  using K = typename G::key_type;
   string ln, h0, h1, h2, h3, h4;
 
   // read header
@@ -36,40 +48,32 @@ void readMtx(G& a, istream& s) {
   bool sym = h4=="symmetric" || h4=="skew-symmetric";
 
   // read rows, cols, size
-  int r, c, sz;
+  size_t r, c, sz;
   stringstream ls(ln);
   ls >> r >> c >> sz;
-  int n = max(r, c);
-  for (int u=1; u<=n; u++)
+  size_t n = max(r, c);
+  for (K u=1; u<=n; u++)
     a.addVertex(u);
 
   // read edges (from, to)
   while (getline(s, ln)) {
-    int u, v;
+    K u, v;
     ls = stringstream(ln);
     if (!(ls >> u >> v)) break;
     a.addEdge(u, v);
     if (sym) a.addEdge(v, u);
   }
+  a.correct(unq);
 }
-
-auto readMtx(istream& s) {
-  DiGraph<> a; readMtx(a, s);
-  return a;
-}
-
-
 template <class G>
-void readMtx(G& a, const char *pth) {
+void readMtxW(G& a, const char *pth, bool unq=false) {
   string buf = readFile(pth);
   stringstream s(buf);
-  return readMtx(a, s);
+  return readMtxW(a, s, unq);
 }
-
-auto readMtx(const char *pth) {
-  DiGraph<> a; readMtx(a, pth);
-  return a;
-}
+READ_MTX_RETURN(DiGraph, true)
+READ_MTX_RETURN(OutDiGraph, true)
+READ_MTX_RETURN(Graph, false)
 
 
 
@@ -81,14 +85,14 @@ template <class G>
 void writeMtx(ostream& a, const G& x) {
   a << "%%MatrixMarket matrix coordinate real asymmetric\n";
   a << x.order() << " " << x.order() << " " << x.size() << "\n";
-  for (int u : x.vertices()) {
-    for (int v : x.edges(u))
-      a << u << " " << v << " " << x.edgeData(u) << "\n";
-  }
+  x.forEachVertexKey([&](auto u) {
+    x.forEachEdge(u, [&](auto v, auto w) {
+      a << u << " " << v << " " << w << "\n";
+    });
+  });
 }
-
 template <class G>
-void writeMtx(string pth, const G& x) {
+inline void writeMtx(string pth, const G& x) {
   string s0; stringstream s(s0);
   writeMtx(s, x);
   ofstream f(pth);

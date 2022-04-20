@@ -1,9 +1,30 @@
 #pragma once
+#include <utility>
 #include <chrono>
 
+using std::pair;
 using std::chrono::microseconds;
 using std::chrono::high_resolution_clock;
 using std::chrono::duration_cast;
+
+
+
+
+// PAIR
+// ----
+
+template <class K, class V>
+struct PairFirst  { inline K& operator()(pair<K, V>& x) noexcept { return x.first; } };
+template <class K, class V>
+struct PairSecond { inline V& operator()(pair<K, V>& x) noexcept { return x.second; } };
+template <class K, class V>
+struct ConstPairFirst  { inline const K& operator()(const pair<K, V>& x) noexcept { return x.first; } };
+template <class K, class V>
+struct ConstPairSecond { inline const V& operator()(const pair<K, V>& x) noexcept { return x.second; } };
+template <class K, class V>
+struct PairFirstValue  { inline K operator()(const pair<K, V>& x) noexcept { return x.first; } };
+template <class K, class V>
+struct PairSecondValue { inline V operator()(const pair<K, V>& x) noexcept { return x.second; } };
 
 
 
