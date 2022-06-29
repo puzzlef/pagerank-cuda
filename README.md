@@ -43,6 +43,13 @@ $ ...
 - [Managed memory vs cudaHostAlloc - TK1](https://forums.developer.nvidia.com/t/managed-memory-vs-cudahostalloc-tk1/34281)
 - [SuiteSparse Matrix Collection]
 
+<br>
+<br>
+
+
+[![DOI](https://zenodo.org/badge/446433086.svg)](https://zenodo.org/badge/latestdoi/446433086)
+
+
 [SuiteSparse Matrix Collection]: https://sparse.tamu.edu
 [pull]: https://github.com/puzzlef/pagerank-push-vs-pull
 [CSR]: https://github.com/puzzlef/pagerank-class-vs-csr
