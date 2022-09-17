@@ -65,6 +65,7 @@ $ ...
 <br>
 
 [![](https://i.imgur.com/RTLTH4Q.jpg)](https://www.youtube.com/watch?v=1b8F1qa5-eM)
+[![ORG](https://img.shields.io/badge/org-puzzlef-green?logo=Org)](https://puzzlef.github.io)
 [![DOI](https://zenodo.org/badge/373940339.svg)](https://zenodo.org/badge/latestdoi/373940339)
 
 [Prof. Dip Sankar Banerjee]: https://sites.google.com/site/dipsankarban/
