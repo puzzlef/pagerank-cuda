@@ -181,6 +181,7 @@ $ ...
 <br>
 
 [![](https://i.imgur.com/uOYmbJZ.jpg)](https://www.youtube.com/watch?v=EQy5YjewJeU)
+[![ORG](https://img.shields.io/badge/org-puzzlef-green?logo=Org)](https://puzzlef.github.io)
 [![DOI](https://zenodo.org/badge/374990003.svg)](https://zenodo.org/badge/latestdoi/374990003)
 
 [Prof. Dip Sankar Banerjee]: https://sites.google.com/site/dipsankarban/
