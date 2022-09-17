@@ -110,6 +110,7 @@ $ ...
 <br>
 
 [![](https://i.imgur.com/4Slx4Ma.jpg)](https://www.youtube.com/watch?v=4EG2up-jcKM)
+[![ORG](https://img.shields.io/badge/org-puzzlef-green?logo=Org)](https://puzzlef.github.io)
 [![DOI](https://zenodo.org/badge/368730692.svg)](https://zenodo.org/badge/latestdoi/368730692)
 
 [Prof. Dip Sankar Banerjee]: https://sites.google.com/site/dipsankarban/
