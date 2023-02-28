@@ -1,170 +1,218 @@
-Comparing various switch points for CUDA **switched-per-vertex** based
-PageRank ([pull], [CSR], [switched-partition]).
+Design of **CUDA-based** *PageRank algorithm* for link analysis.
 
-For this experiment, `switch_degree` was varied from `2` - `1024`, and
-`switch_limit` was varied from `1` - `1024`. `switch_degree` defines the
-*in-degree* at which *pagerank kernel* switches from **thread-per-vertex**
-approach to **block-per-vertex**. `switch_limit` defines the minimum block
-size for **thread-per-vertex** / **block-per-vertex** approach (if a block
-size is too small, it is merged with the other approach block). Each case is
-run on multiple graphs, running each 5 times per graph for good time measure.
-It seems `switch_degree` of **64** and `switch_limit` of **32** would be a
-good choice.
-
-All outputs are saved in [out](out/) and a small part of the output is listed
-here. Some [charts] are also included below, generated from [sheets]. The input
-data used for this experiment is available at ["graphs"] (for small ones), and
-the [SuiteSparse Matrix Collection]. This experiment was done with guidance
-from [Prof. Dip Sankar Banerjee] and [Prof. Kishore Kothapalli].
+All *seventeen* graphs used in below experiments are
+stored in the *MatrixMarket (.mtx)* file format, and obtained from the
+*SuiteSparse* *Matrix Collection*. These include: *web-Stanford, web-BerkStan,*
+*web-Google, web-NotreDame, soc-Slashdot0811, soc-Slashdot0902,*
+*soc-Epinions1, coAuthorsDBLP, coAuthorsCiteseer, soc-LiveJournal1,*
+*coPapersCiteseer, coPapersDBLP, indochina-2004, italy_osm,*
+*great-britain_osm, germany_osm, asia_osm*. The experiments are implemented
+in *C++*, and compiled using *GCC 9* with *optimization level 3 (-O3)*.
+The *iterations* taken with each test case is measured. `500` is the
+*maximum iterations* allowed. Statistics of each test case is
+printed to *standard output (stdout)*, and redirected to a *log file*,
+which is then processed with a *script* to generate a *CSV file*, with
+each *row* representing the details of a *single test case*.
 
 <br>
 
-```bash
-$ nvcc -std=c++17 -Xcompiler -lnvgraph -O3 main.cu
-$ ./a.out ~/data/min-1DeadEnd.mtx
-$ ./a.out ~/data/min-2SCC.mtx
-$ ...
 
-# ...
-#
-# Loading graph /home/subhajit/data/web-Stanford.mtx ...
-# order: 281903 size: 2312497 {}
-# order: 281903 size: 2312497 {} (transposeWithDegree)
-# [00011.364 ms; 000 iters.] [0.0000e+00 err.] pagerankNvgraph
-# [00027.595 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda [degree=2; limit=1]
-# [00026.095 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda [degree=2; limit=2]
-# [00025.927 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda [degree=2; limit=4]
-# [00025.961 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda [degree=2; limit=8]
-# [00025.879 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda [degree=2; limit=16]
-# [00025.896 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda [degree=2; limit=32]
-# [00025.945 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda [degree=2; limit=64]
-# [00025.916 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda [degree=2; limit=128]
-# [00025.934 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda [degree=2; limit=256]
-# [00025.954 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda [degree=2; limit=512]
-# [00025.947 ms; 063 iters.] [7.1483e-07 err.] pagerankCuda [degree=2; limit=1024]
-# [00026.654 ms; 063 iters.] [7.1593e-07 err.] pagerankCuda [degree=4; limit=1]
-# [00026.688 ms; 063 iters.] [7.1593e-07 err.] pagerankCuda [degree=4; limit=2]
-# [00026.649 ms; 063 iters.] [7.1593e-07 err.] pagerankCuda [degree=4; limit=4]
-# [00026.639 ms; 063 iters.] [7.1593e-07 err.] pagerankCuda [degree=4; limit=8]
-# [00026.663 ms; 063 iters.] [7.1593e-07 err.] pagerankCuda [degree=4; limit=16]
-# [00026.594 ms; 063 iters.] [7.1593e-07 err.] pagerankCuda [degree=4; limit=32]
-# [00026.619 ms; 063 iters.] [7.1593e-07 err.] pagerankCuda [degree=4; limit=64]
-# [00026.627 ms; 063 iters.] [7.1593e-07 err.] pagerankCuda [degree=4; limit=128]
-# [00026.593 ms; 063 iters.] [7.1593e-07 err.] pagerankCuda [degree=4; limit=256]
-# [00026.655 ms; 063 iters.] [7.1593e-07 err.] pagerankCuda [degree=4; limit=512]
-# [00026.677 ms; 063 iters.] [7.1593e-07 err.] pagerankCuda [degree=4; limit=1024]
-# [00023.966 ms; 063 iters.] [7.1677e-07 err.] pagerankCuda [degree=8; limit=1]
-# [00023.966 ms; 063 iters.] [7.1677e-07 err.] pagerankCuda [degree=8; limit=2]
-# [00023.940 ms; 063 iters.] [7.1677e-07 err.] pagerankCuda [degree=8; limit=4]
-# [00023.995 ms; 063 iters.] [7.1677e-07 err.] pagerankCuda [degree=8; limit=8]
-# [00023.986 ms; 063 iters.] [7.1677e-07 err.] pagerankCuda [degree=8; limit=16]
-# [00023.944 ms; 063 iters.] [7.1677e-07 err.] pagerankCuda [degree=8; limit=32]
-# [00023.954 ms; 063 iters.] [7.1677e-07 err.] pagerankCuda [degree=8; limit=64]
-# [00023.965 ms; 063 iters.] [7.1677e-07 err.] pagerankCuda [degree=8; limit=128]
-# [00023.903 ms; 063 iters.] [7.1677e-07 err.] pagerankCuda [degree=8; limit=256]
-# [00023.975 ms; 063 iters.] [7.1677e-07 err.] pagerankCuda [degree=8; limit=512]
-# [00024.208 ms; 063 iters.] [7.1677e-07 err.] pagerankCuda [degree=8; limit=1024]
-# [00023.770 ms; 063 iters.] [7.1813e-07 err.] pagerankCuda [degree=16; limit=1]
-# [00023.777 ms; 063 iters.] [7.1813e-07 err.] pagerankCuda [degree=16; limit=2]
-# [00023.780 ms; 063 iters.] [7.1813e-07 err.] pagerankCuda [degree=16; limit=4]
-# [00023.778 ms; 063 iters.] [7.1813e-07 err.] pagerankCuda [degree=16; limit=8]
-# [00023.791 ms; 063 iters.] [7.1813e-07 err.] pagerankCuda [degree=16; limit=16]
-# [00023.739 ms; 063 iters.] [7.1813e-07 err.] pagerankCuda [degree=16; limit=32]
-# [00023.725 ms; 063 iters.] [7.1813e-07 err.] pagerankCuda [degree=16; limit=64]
-# [00023.747 ms; 063 iters.] [7.1813e-07 err.] pagerankCuda [degree=16; limit=128]
-# [00023.730 ms; 063 iters.] [7.1813e-07 err.] pagerankCuda [degree=16; limit=256]
-# [00023.790 ms; 063 iters.] [7.1813e-07 err.] pagerankCuda [degree=16; limit=512]
-# [00023.766 ms; 063 iters.] [7.1813e-07 err.] pagerankCuda [degree=16; limit=1024]
-# [00024.701 ms; 063 iters.] [7.2183e-07 err.] pagerankCuda [degree=32; limit=1]
-# [00024.673 ms; 063 iters.] [7.2183e-07 err.] pagerankCuda [degree=32; limit=2]
-# [00024.689 ms; 063 iters.] [7.2183e-07 err.] pagerankCuda [degree=32; limit=4]
-# [00024.691 ms; 063 iters.] [7.2183e-07 err.] pagerankCuda [degree=32; limit=8]
-# [00024.664 ms; 063 iters.] [7.2183e-07 err.] pagerankCuda [degree=32; limit=16]
-# [00024.676 ms; 063 iters.] [7.2183e-07 err.] pagerankCuda [degree=32; limit=32]
-# [00024.680 ms; 063 iters.] [7.2183e-07 err.] pagerankCuda [degree=32; limit=64]
-# [00024.684 ms; 063 iters.] [7.2183e-07 err.] pagerankCuda [degree=32; limit=128]
-# [00024.681 ms; 063 iters.] [7.2183e-07 err.] pagerankCuda [degree=32; limit=256]
-# [00024.739 ms; 063 iters.] [7.2183e-07 err.] pagerankCuda [degree=32; limit=512]
-# [00024.659 ms; 063 iters.] [7.2183e-07 err.] pagerankCuda [degree=32; limit=1024]
-# [00023.101 ms; 063 iters.] [7.3103e-07 err.] pagerankCuda [degree=64; limit=1]
-# [00023.078 ms; 063 iters.] [7.3103e-07 err.] pagerankCuda [degree=64; limit=2]
-# [00023.076 ms; 063 iters.] [7.3103e-07 err.] pagerankCuda [degree=64; limit=4]
-# [00023.070 ms; 063 iters.] [7.3103e-07 err.] pagerankCuda [degree=64; limit=8]
-# [00023.047 ms; 063 iters.] [7.3103e-07 err.] pagerankCuda [degree=64; limit=16]
-# [00023.055 ms; 063 iters.] [7.3103e-07 err.] pagerankCuda [degree=64; limit=32]
-# [00023.046 ms; 063 iters.] [7.3103e-07 err.] pagerankCuda [degree=64; limit=64]
-# [00023.071 ms; 063 iters.] [7.3103e-07 err.] pagerankCuda [degree=64; limit=128]
-# [00023.075 ms; 063 iters.] [7.3103e-07 err.] pagerankCuda [degree=64; limit=256]
-# [00023.071 ms; 063 iters.] [7.3103e-07 err.] pagerankCuda [degree=64; limit=512]
-# [00023.047 ms; 063 iters.] [7.3103e-07 err.] pagerankCuda [degree=64; limit=1024]
-# [00023.858 ms; 063 iters.] [7.6088e-07 err.] pagerankCuda [degree=128; limit=1]
-# [00024.118 ms; 063 iters.] [7.6088e-07 err.] pagerankCuda [degree=128; limit=2]
-# [00023.876 ms; 063 iters.] [7.6088e-07 err.] pagerankCuda [degree=128; limit=4]
-# [00023.853 ms; 063 iters.] [7.6088e-07 err.] pagerankCuda [degree=128; limit=8]
-# [00023.897 ms; 063 iters.] [7.6088e-07 err.] pagerankCuda [degree=128; limit=16]
-# [00023.855 ms; 063 iters.] [7.6088e-07 err.] pagerankCuda [degree=128; limit=32]
-# [00023.903 ms; 063 iters.] [7.6088e-07 err.] pagerankCuda [degree=128; limit=64]
-# [00023.876 ms; 063 iters.] [7.6088e-07 err.] pagerankCuda [degree=128; limit=128]
-# [00023.887 ms; 063 iters.] [7.6088e-07 err.] pagerankCuda [degree=128; limit=256]
-# [00023.871 ms; 063 iters.] [7.6088e-07 err.] pagerankCuda [degree=128; limit=512]
-# [00023.894 ms; 063 iters.] [7.6088e-07 err.] pagerankCuda [degree=128; limit=1024]
-# [00023.572 ms; 063 iters.] [7.8018e-07 err.] pagerankCuda [degree=256; limit=1]
-# [00023.588 ms; 063 iters.] [7.8018e-07 err.] pagerankCuda [degree=256; limit=2]
-# [00023.575 ms; 063 iters.] [7.8018e-07 err.] pagerankCuda [degree=256; limit=4]
-# [00023.590 ms; 063 iters.] [7.8018e-07 err.] pagerankCuda [degree=256; limit=8]
-# [00023.593 ms; 063 iters.] [7.8018e-07 err.] pagerankCuda [degree=256; limit=16]
-# [00023.558 ms; 063 iters.] [7.8018e-07 err.] pagerankCuda [degree=256; limit=32]
-# [00023.565 ms; 063 iters.] [7.8018e-07 err.] pagerankCuda [degree=256; limit=64]
-# [00023.565 ms; 063 iters.] [7.8018e-07 err.] pagerankCuda [degree=256; limit=128]
-# [00023.592 ms; 063 iters.] [7.8018e-07 err.] pagerankCuda [degree=256; limit=256]
-# [00023.565 ms; 063 iters.] [7.8018e-07 err.] pagerankCuda [degree=256; limit=512]
-# [00117.923 ms; 063 iters.] [4.9303e-06 err.] pagerankCuda [degree=256; limit=1024]
-# [00025.107 ms; 063 iters.] [9.2778e-07 err.] pagerankCuda [degree=512; limit=1]
-# [00025.128 ms; 063 iters.] [9.2778e-07 err.] pagerankCuda [degree=512; limit=2]
-# [00025.110 ms; 063 iters.] [9.2778e-07 err.] pagerankCuda [degree=512; limit=4]
-# [00025.110 ms; 063 iters.] [9.2778e-07 err.] pagerankCuda [degree=512; limit=8]
-# [00025.128 ms; 063 iters.] [9.2778e-07 err.] pagerankCuda [degree=512; limit=16]
-# [00025.114 ms; 063 iters.] [9.2778e-07 err.] pagerankCuda [degree=512; limit=32]
-# [00025.133 ms; 063 iters.] [9.2778e-07 err.] pagerankCuda [degree=512; limit=64]
-# [00025.112 ms; 063 iters.] [9.2778e-07 err.] pagerankCuda [degree=512; limit=128]
-# [00025.116 ms; 063 iters.] [9.2778e-07 err.] pagerankCuda [degree=512; limit=256]
-# [00121.039 ms; 063 iters.] [4.9303e-06 err.] pagerankCuda [degree=512; limit=512]
-# [00121.513 ms; 063 iters.] [4.9303e-06 err.] pagerankCuda [degree=512; limit=1024]
-# [00026.246 ms; 063 iters.] [1.0596e-06 err.] pagerankCuda [degree=1024; limit=1]
-# [00026.232 ms; 063 iters.] [1.0596e-06 err.] pagerankCuda [degree=1024; limit=2]
-# [00026.225 ms; 063 iters.] [1.0596e-06 err.] pagerankCuda [degree=1024; limit=4]
-# [00026.233 ms; 063 iters.] [1.0596e-06 err.] pagerankCuda [degree=1024; limit=8]
-# [00026.234 ms; 063 iters.] [1.0596e-06 err.] pagerankCuda [degree=1024; limit=16]
-# [00026.235 ms; 063 iters.] [1.0596e-06 err.] pagerankCuda [degree=1024; limit=32]
-# [00026.231 ms; 063 iters.] [1.0596e-06 err.] pagerankCuda [degree=1024; limit=64]
-# [00026.222 ms; 063 iters.] [1.0596e-06 err.] pagerankCuda [degree=1024; limit=128]
-# [00126.255 ms; 063 iters.] [4.9303e-06 err.] pagerankCuda [degree=1024; limit=256]
-# [00126.344 ms; 063 iters.] [4.9303e-06 err.] pagerankCuda [degree=1024; limit=512]
-# [00126.223 ms; 063 iters.] [4.9303e-06 err.] pagerankCuda [degree=1024; limit=1024]
-#
-# ...
-```
+### Finding Launch config for Block-per-vertex
 
-[![](https://i.imgur.com/CzE33L3.gif)][sheetp]
-[![](https://i.imgur.com/LfwTsKA.gif)][sheetp]
-[![](https://i.imgur.com/hnzcjjP.gif)][sheetp]
-[![](https://i.imgur.com/aJIeelH.gif)][sheetp]
-[![](https://i.imgur.com/TiKRMFU.gif)][sheetp]
-[![](https://i.imgur.com/sJ7nRLX.gif)][sheetp]
-[![](https://i.imgur.com/Z58cLk1.gif)][sheetp]
-[![](https://i.imgur.com/WbB8X99.gif)][sheetp]
-[![](https://i.imgur.com/Qz4MaQu.gif)][sheetp]
-[![](https://i.imgur.com/WGhdeCy.gif)][sheetp]
-[![](https://i.imgur.com/Z8fwD1m.gif)][sheetp]
-[![](https://i.imgur.com/51OGaWq.gif)][sheetp]
-[![](https://i.imgur.com/Xd9byhu.gif)][sheetp]
-[![](https://i.imgur.com/MOOBk46.gif)][sheetp]
-[![](https://i.imgur.com/edjSyiU.gif)][sheetp]
-[![](https://i.imgur.com/WWS1N4M.gif)][sheetp]
-[![](https://i.imgur.com/zdXhaKj.gif)][sheetp]
+This experiment ([block-adjust-launch]) was for finding a suitable **launch**
+**config** for **CUDA block-per-vertex**. For the launch config, the
+**block-size** (threads) was adjusted from `32`-`1024`, and the **grid-limit**
+(max grid-size) was adjusted from `1024`-`32768`. Each config was run 5 times
+per graph to get a good time measure.
 
-[![](https://i.imgur.com/zMUzVxe.png)][sheetp]
-[![](https://i.imgur.com/Bv4ojjz.png)][sheetp]
+`MAXx64` appears to be a good config for most graphs. Here `MAX` is the
+**grid-limit**, and `64` is the **block-size**. This launch config is for the
+entire graph, and could be slightly different for subset of graphs. Also note
+that this applies to *Tesla V100 PCIe 16GB*, and could be different for other
+GPUs. In order to measure error, [nvGraph] pagerank is taken as a reference.
+
+[block-adjust-launch]: https://github.com/puzzlef/pagerank-cuda/tree/block-adjust-launch
+
+<br>
+
+
+### Finding Launch config for Thread-per-vertex
+
+This experiment ([thread-adjust-launch]) was for finding a suitable **launch**
+**config** for **CUDA thread-per-vertex**. For the launch config, the
+**block-size** (threads) was adjusted from `32`-`1024`, and the **grid-limit**
+(max grid-size) was adjusted from `1024`-`32768`. Each config was run 5 times
+per graph to get a good time measure.
+
+On average, the launch config doesn't seem to have a good enough impact on
+performance. However `8192x128` appears to be a good config. Here `8192` is the
+*grid-limit*, and `128` is the *block-size*. Comparing with [graph properties],
+seems it would be better to use `8192x512` for graphs with **high** *avg.
+density*, and `8192x32` for graphs with **high** *avg. degree*. Maybe, sorting
+the vertices by degree can have a good effect (due to less warp divergence).
+Note that this applies to **Tesla V100 PCIe 16GB**, and would be different for
+other GPUs. In order to measure error, [nvGraph] pagerank is taken as a
+reference.
+
+[thread-adjust-launch]: https://github.com/puzzlef/pagerank-cuda/tree/thread-adjust-launch
+
+<br>
+
+
+### Sorting vertices by in-degree for Block-per-vertex?
+
+This experiment ([block-sort-by-indegree]) was for finding the effect of sorting
+vertices and/or edges by in-degree for CUDA **block-per-vertex** based PageRank.
+For this experiment, sorting of vertices and/or edges was either `NO`, `ASC`, or
+`DESC`. This gives a total of `3 * 3 = 9` cases. Each case is run on multiple
+graphs, running each 5 times per graph for good time measure.
+
+Results show that sorting in *most cases* is **not faster**. In fact, in a
+number of cases, sorting actually slows dows performance. Maybe (just maybe)
+this is because sorted arrangement tend to overflood certain memory chunks with
+too many requests. In order to measure error, [nvGraph] pagerank is taken as a
+reference.
+
+[block-sort-by-indegree]: https://github.com/puzzlef/pagerank-cuda/tree/block-sort-by-indegree
+
+<br>
+
+
+### Sorting vertices by in-degree for Thread-per-vertex?
+
+This experiment ([thread-sort-by-indegree]) was for finding the effect of
+sorting vertices and/or edges by in-degree for CUDA **thread-per-vertex** based
+PageRank. For this experiment, sorting of vertices and/or edges was either `NO`,
+`ASC`, or `DESC`. This gives a total of `3 * 3 = 9` cases. Each case is run on
+multiple graphs, running each 5 times per graph for good time measure.
+
+Results show that sorting in *most cases* is **slower**. Maybe this is because
+sorted arrangement tends to overflood certain memory chunks with too many
+requests. In order to measure error, [nvGraph] pagerank is taken as a reference.
+
+[thread-sort-by-indegree]: https://github.com/puzzlef/pagerank-cuda/tree/thread-sort-by-indegree
+
+<br>
+
+
+### Sorting vertices by in-degree for Switched-per-vertex?
+
+This experiment ([switched-sort-by-indegree]) was for finding the effect of
+sorting vertices and/or edges by in-degree for CUDA **switched-per-vertex**
+based PageRank. For this experiment, sorting of vertices and/or edges was either
+`NO`, `ASC`, or `DESC`. This gives a total of `3 * 3 = 9` cases. `NO` here means
+that vertices are partitioned by in-degree (edges remain unchanged). Each case
+is run on multiple graphs, running each 5 times per graph for good time measure.
+
+Results show that **sorting** in most cases is **not faster**. Its better to
+simply **partition** *vertices* by *degree*. In order to measure error,
+[nvGraph] pagerank is taken as a reference.
+
+[switched-sort-by-indegree]: https://github.com/puzzlef/pagerank-cuda/tree/switched-sort-by-indegree
+
+<br>
+
+
+### Finding Block Launch config for Switched-per-vertex
+
+This experiment ([switched-adjust-block-launch]) was for finding a suitable
+**launch config** for **CUDA switched-per-vertex** for block approach. For the
+launch config, the **block-size** (threads) was adjusted from `32`-`1024`, and
+the **grid-limit** (max grid-size) was adjusted from `1024`-`32768`. Each config
+was run 5 times per graph to get a good time measure.
+
+`MAXx256` appears to be a good config for most graphs. Here `MAX` is the
+*grid-limit*, and `256` is the *block-size*. Note that this applies to **Tesla**
+**V100 PCIe 16GB**, and would be different for other GPUs. In order to measure
+error, [nvGraph] pagerank is taken as a reference.
+
+[switched-adjust-block-launch]: https://github.com/puzzlef/pagerank-cuda/tree/switched-adjust-block-launch
+
+<br>
+
+
+### Finding Block Launch config for Switched-per-vertex
+
+This experiment ([switched-adjust-thread-launch]) was for finding a suitable
+**launch config** for **CUDA switched-per-vertex** for thread approach. For the
+launch config, the **block-size** (threads) was adjusted from `32`-`1024`, and
+the **grid-limit** (max grid-size) was adjusted from `1024`-`32768`. Each config
+was run 5 times per graph to get a good time measure.
+
+`MAXx512` appears to be a good config for most graphs. Here `MAX` is the
+*grid-limit*, and `512` is the *block-size*. Note that this applies to **Tesla**
+**V100 PCIe 16GB**, and would be different for other GPUs. In order to measure
+error, [nvGraph] pagerank is taken as a reference.
+
+[switched-adjust-thread-launch]: https://github.com/puzzlef/pagerank-cuda/tree/switched-adjust-thread-launch
+
+<br>
+
+
+### Finding Switch point for Switched-per-vertex
+
+For this experiment ([switched-adjust-switch-point]), `switch_degree` was varied
+from `2` - `1024`, and `switch_limit` was varied from `1` - `1024`.
+`switch_degree` defines the *in-degree* at which *pagerank kernel* switches from
+**thread-per-vertex** approach to **block-per-vertex**. `switch_limit` defines
+the minimum block size for **thread-per-vertex** / **block-per-vertex** approach
+(if a block size is too small, it is merged with the other approach block). Each
+case is run on multiple graphs, running each 5 times per graph for good time
+measure. It seems `switch_degree` of **64** and `switch_limit` of **32** would
+be a good choice.
+
+[switched-adjust-switch-point]: https://github.com/puzzlef/pagerank-cuda/tree/switched-adjust-switch-point
+
+<br>
+
+
+### Adjusting Per-iteration Rank scaling
+
+[nvGraph PageRank] appears to use [L2-norm per-iteration scaling]. This is
+(probably) required for finding a solution to **eigenvalue problem**. However,
+as the *eigenvalue* for PageRank is `1`, this is not necessary. This experiement
+was for observing if this was indeed true, and that any such *per-iteration
+scaling* doesn't affect the number of *iterations* needed to converge.
+
+In this experiment ([adjust-iteration-scaling]), PageRank was computed with
+**L1**, **L2**, or **L∞-norm** and the effect of **L1** or **L2-norm** *scaling*
+*of ranks* was compared with **baseline (L0)**. Results match the above
+assumptions, and indeed no performance benefit is observed (except a reduction
+in a single iteration for *soc-Slashdot0811*, *soc-Slashdot-0902*,
+*soc-LiveJournal1*, and *italy_osm* graphs).
+
+[adjust-iteration-scaling]: https://github.com/puzzlef/pagerank-cuda/tree/adjust-iteration-scaling
+[nvGraph PageRank]: https://github.com/rapidsai/nvgraph/blob/main/cpp/src/pagerank.cu
+[L2-norm per-iteration scaling]: https://github.com/rapidsai/nvgraph/blob/main/cpp/src/pagerank.cu#L145
+
+<br>
+
+
+### Comparing with nvGraph PageRank
+
+This experiment ([compare-nvgraph]) was for comparing the performance between
+finding pagerank using [nvGraph], finding pagerank using **CUDA**, and finding
+pagerank using a single thread ([sequential]). Each technique was attempted on
+different types of graphs, running each technique 5 times per graph to get a
+good time measure. **CUDA** is the [switched-per-vertex] approach running on
+GPU. **CUDA** based pagerank is indeed much faster than **sequential** (CPU). In
+order to measure error, [nvGraph] pagerank is taken as a reference.
+
+[![](https://i.imgur.com/vDeiY1n.gif)][sheetp]
+
+[![](https://i.imgur.com/N1EUPCS.png)][sheetp]
+[![](https://i.imgur.com/5LaxhV4.png)][sheetp]
+
+[compare-nvgraph]: https://github.com/puzzlef/pagerank-cuda/tree/compare-nvgraph
+
+<br>
+
+
+### Other experiments
+
+- [adjust-damping-factor](https://github.com/puzzlef/pagerank-cuda/tree/adjust-damping-factor)
+- [adjust-tolerance](https://github.com/puzzlef/pagerank-cuda/tree/adjust-tolerance)
+- [adjust-tolerance-function](https://github.com/puzzlef/pagerank-cuda/tree/adjust-tolerance-function)
 
 <br>
 <br>
@@ -180,20 +228,18 @@ $ ...
 <br>
 <br>
 
-[![](https://i.imgur.com/uOYmbJZ.jpg)](https://www.youtube.com/watch?v=EQy5YjewJeU)
+
+[![](https://i.imgur.com/fjeKRUf.jpg)](https://www.youtube.com/watch?v=TtTHBmL7N5U)
 [![ORG](https://img.shields.io/badge/org-puzzlef-green?logo=Org)](https://puzzlef.github.io)
 [![DOI](https://zenodo.org/badge/374990003.svg)](https://zenodo.org/badge/latestdoi/374990003)
+
 
 [Prof. Dip Sankar Banerjee]: https://sites.google.com/site/dipsankarban/
 [Prof. Kishore Kothapalli]: https://cstar.iiit.ac.in/~kkishore/
 [SuiteSparse Matrix Collection]: https://suitesparse-collection-website.herokuapp.com
 [nvGraph]: https://github.com/rapidsai/nvgraph
-["graphs"]: https://github.com/puzzlef/graphs
-[pull]: https://github.com/puzzlef/pagerank-push-vs-pull
-[csr]: https://github.com/puzzlef/pagerank-class-vs-csr
-[block-launch]: https://github.com/puzzlef/pagerank-cuda-block-adjust-launch
-[thread-launch]: https://github.com/puzzlef/pagerank-cuda-thread-adjust-launch
-[switched-partition]: https://github.com/puzzlef/pagerank-cuda-switched-sort-by-indegree
-[charts]: https://photos.app.goo.gl/67DDHrtivnEGvXzQ7
-[sheets]: https://docs.google.com/spreadsheets/d/186GuFf02uKEp2C1gQtpjenWyTTAh6IXOpLJOPxdOlPA/edit?usp=sharing
-[sheetp]: https://docs.google.com/spreadsheets/d/e/2PACX-1vSG0poJFboumWa1JWwdebq8k5DF3Q92MaVw7v1-Ggcl2GgRgbViVFjyUAFIKEVpkmo8-_Q5EByChnEC/pubhtml
+[sequential]: https://github.com/puzzlef/pagerank-sequential-vs-openmp
+[switched-per-vertex]: https://github.com/puzzlef/pagerank-cuda-switched-adjust-switch-point
+[charts]: https://photos.app.goo.gl/MLcbhUPmLEC7iaEm9
+[sheets]: https://docs.google.com/spreadsheets/d/12u5yq49MLS2QRhWHkZF7SWs1JSS4u1sb7wKl8ExrJgg/edit?usp=sharing
+[sheetp]: https://docs.google.com/spreadsheets/d/e/2PACX-1vTijFuWx76ZnNfJs5U0IEY1jMEWffi6Pc8uw4FbnXB1R3Puduyn-mPvq4kdMFyyhq0V7GJZQ0722nDS/pubhtml
