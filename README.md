@@ -232,7 +232,7 @@ order to measure error, [nvGraph] pagerank is taken as a reference.
 [![](https://i.imgur.com/fjeKRUf.jpg)](https://www.youtube.com/watch?v=TtTHBmL7N5U)
 [![ORG](https://img.shields.io/badge/org-puzzlef-green?logo=Org)](https://puzzlef.github.io)
 [![DOI](https://zenodo.org/badge/374990003.svg)](https://zenodo.org/badge/latestdoi/374990003)
-
+![](https://ga-beacon.deno.dev/G-KD28SG54JQ:hbAybl6nQFOtmVxW4if3xw/github.com/puzzlef/pagerank-cuda)
 
 [Prof. Dip Sankar Banerjee]: https://sites.google.com/site/dipsankarban/
 [Prof. Kishore Kothapalli]: https://cstar.iiit.ac.in/~kkishore/
